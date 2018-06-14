@@ -6,6 +6,21 @@ import subprocess
 from subprocess import PIPE
 from pprint import pprint
 import datetime
+def convert(filename,fname):
+    current = os.getcwd()
+    os.chdir(fname)
+    c = "jupyter nbconvert %s"%filename
+    p = subprocess.Popen(c,shell=True,stdout=subprocess.PIPE,stdin=subprocess.PIPE)
+    print(str(p.communicate()[0],"utf-8"),p.communicate()[1])
+    p.wait()
+    if p.returncode != 0:
+        print("转换失败!")
+        os.chdir(current)
+        return 0
+    os.chdir(current)
+    return 1
+
+
 from_source = "source"
 to_source = "new_source"
 
@@ -122,5 +137,21 @@ def submit(pull_first=True):
                         return 1
     print("失败！")
     return 0
-    
+
+def main():
+    pass
+
+
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
+    convert("week5_problem_soving.ipynb","notebook")
+    # if transfile(fast=True,from_source=from_source,\
+    #     to_source=to_source): submit()
+    

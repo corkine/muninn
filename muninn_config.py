@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 GITHUB_REP_ADDRESS = "https://github.com/corkine/notebook"
 
-COURSE_INFO = {
+COURSE_INFO2 = {
     "pr1":
     {
         "show_menu_name_1st":"Probability",
@@ -105,7 +105,7 @@ COURSE_INFO = {
     }
 }
 
-COURSE_INFO2 = {
+COURSE_INFO = {
     "mt":
     {
         "show_menu_name_1st":"Model Thinking",

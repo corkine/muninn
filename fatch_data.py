@@ -85,7 +85,7 @@ def makeHead(clist):
             
     menu_html = """
                 <nav class="navbar navbar-expand navbar-dark bg-dark">
-                    <a class="navbar-brand" href="#">MUNINN <small>by Corine Ma</small></a>
+                    <a class="navbar-brand" href="/">MUNINN <small>by Corine Ma</small></a>
                     <div class="navbar-collapse collapse justify-content-between">
                         <ul class="navbar-nav">
                             %s
@@ -118,20 +118,21 @@ def makeHTMLPage(course_info,menu_html,is_chapter=False,chapter_id="",chapter_ad
             current_h1 = ""
             html_now = """  <ul class="list-group">
                             <li class="list-group-item list-group-item-light">章节目录</li>"""
-            for head in ch.get_header():
-                if not current_h1: current_h1 = head
-                if head.startswith("<h1>") and current_h1 != head:
-                    html_now += """</ul>
-                        </li>"""
-                    current_h1 = head                   
-                if head.startswith("<h1>"):
-                    html_now += """
-                    <li class="list-group-item">
-                            %s
-                            <ul class="list-group list-group-flush">"""%head.replace("<h1>","")
-                if head.startswith("<h2>"):
-                    html_now += """<li class="list-group-item">%s</li>"""%head.replace("<h2>","")
-            html_now += """</ul></li>"""
+            if ch.get_header():
+                for head in ch.get_header():
+                    if not current_h1: current_h1 = head
+                    if head.startswith("<h1>") and current_h1 != head:
+                        html_now += """</ul>
+                            </li>"""
+                        current_h1 = head                   
+                    if head.startswith("<h1>"):
+                        html_now += """
+                        <li class="list-group-item">
+                                %s
+                                <ul class="list-group list-group-flush">"""%head.replace("<h1>","")
+                    if head.startswith("<h2>"):
+                        html_now += """<li class="list-group-item">%s</li>"""%head.replace("<h2>","")
+                html_now += """</ul></li>"""
 
             #这里是寻找<intro>标签，然后返回右侧上方的章节总体概要信息。
             intro_content = ch.get_description()
@@ -244,17 +245,17 @@ def makeHTMLPage(course_info,menu_html,is_chapter=False,chapter_id="",chapter_ad
             """.format_map(map_c)
 
     header = """<!DOCTYPE html>
-            <html lang="en">
+            <html lang="zh_cn">
             <head>
                 <meta charset="UTF-8">
                 <title>{page_name} - 笔记和写作扩展</title>
-                <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet">
+                <link rel="stylesheet" href="/css/bootstrap.css">
                 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
                 <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
                 <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
             </head>
             <body>""".format_map(map_c)
-
+# <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet">
     footer = """
             <footer class="mt-5 pt-5 pl-5 text-muted text-center text-small">
                 <ul class="list-inline">
@@ -305,5 +306,5 @@ def writeToFile(c,html,suffix="_overview.html"):
     
 if __name__ == "__main__":
     main(update_data=True,file_path="2018-06-12.data")
-    input()
+    # input()
     

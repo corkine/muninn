@@ -110,8 +110,11 @@ class Course:
         一般在这里进行章节信息的重载"""
         print("%s\n正在进行章节的信息获取，此过程可能需要较长的时间..."%("="*10))
         for ch in self.chapters:
-            ch.fetch_from_HTML(chapter_address=chapter_address,get_header=get_header,
+            try:
+                ch.fetch_from_HTML(chapter_address=chapter_address,get_header=get_header,
                             get_description=get_description,get_notes=get_notes,reload_info=reload_info)
+
+            except: print("没有找到HTML文件")
         return self
 
 class Chapter:
@@ -123,7 +126,7 @@ class Chapter:
     - get_header() 返回章节包含的h1和h2标题
     - get_description() 返回章节的描述
     - fetch_from_HTML() header、description、related_notes都需要从此函数获取，不自动初始化"""
-    def __init__(self, course=None, id=None, name=None, sourceuri=None, mark=None, description="", *args, **kwargs):
+    def __init__(self, course=None, id=None, name=None, sourceuri=None, mark=None, description="", update="",*args, **kwargs):
         if id:self.id = id
         else: self.id = random.randint(1000,9999)
         self.course = course
@@ -133,6 +136,8 @@ class Chapter:
         self.related_notes = []
         self.description = description
         self.chapter_head = None
+        self.update = update
+
 
     def __str__(self):
         return str(self.course)+"::"+self.name
@@ -189,19 +194,20 @@ class Chapter:
             f = open(chapter_address + self.sourceuri,"r",encoding="utf8")
             print("\t\t获取描述性信息中，请稍后...")
             soup = BeautifulSoup(f,"lxml")
-            res = soup.find_all("intro")
+            res = soup.find_all("span",type="intro")
             if res: 
                 #因为只有一个结果，所以选用索引的第一个即可
-                self.description = str(res[0]).replace("<intro>","").replace("</intro>","").replace("¶","")
+                self.description = str(res[0]).replace("""<span class="intro">""","").replace("</span>","").replace("¶","")
             f.close()
         #获取相关笔记描述，并且构建Note OO对象。
         if get_notes:
             f = open(chapter_address + self.sourceuri,"r",encoding="utf8")
             print("\t\t获取相关笔记信息中，请稍后...")
             soup = BeautifulSoup(f,'lxml')
-            res = soup.find_all("div",type="related_note")
+            res = soup.find_all("span",type="related_note")
             if res:
                 for note in res:
+                    # print(note,res)
                     try:
                         footer = note["footer"]
                     except:
@@ -230,10 +236,19 @@ class Chapter:
 
             if reload_info:
                 print("\t\t检测到源文件的名称和标题，正在获取并配置，请稍后...")
-                res2 = soup.find_all("div",type="chapter_info")
-                if res2:res2 = res2[0]
-                if "title" in res2:self.name = res2["title"] 
-                if "mark" in res2:self.mark = res2["mark"]                     
+                res2 = soup.find_all("span",type="title")
+                if res2:
+                    res2 = res2[0]
+                    self.name = res2.get_text()                
+                res2 = soup.find_all("span",type="version")
+                if res2:
+                    res2 = res2[0]
+                    self.mark = res2.get_text()
+                res2 = soup.find_all("span",type="update")
+                if res2:
+                    res2 = res2[0]
+                    self.update = res2.get_text()
+                
             f.close()
 
 
@@ -259,7 +274,7 @@ if __name__ == "__main__":
         "show_menu_name_1st":"Probability",
         "show_menu_name_2st":None,
         "2st_addr":None,
-        "address":"/probability",
+        "address":"/probabielity",
         "id":"pr1",
         "chapter_list":[
             ("概率导论","0.9","probability/Week1&2_Probability.html","w12"),
