@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Model Thinking - 笔记和写作扩展</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+
+</head>
+<body>
+<!--<nav class="navbar navbar-expand navbar-dark bg-dark">-->
+    <!--&lt;!&ndash;<div class="container">&ndash;&gt;-->
+    <!--<a class="navbar-brand" href="#">MUNINN <small>by Corine Ma</small></a>-->
+    <!--<div class="navbar-collapse collapse justify-content-between">-->
+    <!--<ul class="navbar-nav">-->
+        <!--<li class="nav-item">-->
+            <!--<a class="nav-link" href="#">Probability</a>-->
+        <!--</li>-->
+        <!--<li class="nav-item">-->
+            <!--<a class="nav-link active" href="#">Model Thinking</a>-->
+        <!--</li>-->
+        <!--<li class="nav-item dropdown">-->
+            <!--<a class="nav-link dropdown-toggle" href="#" id="mllink" data-toggle="dropdown">Machine Learning</a>-->
+            <!--<div class="dropdown-menu" aria-labelledby="mllink">-->
+                <!--<a class="dropdown-item" href="#">Andrew Ng ML <small>课程笔记</small></a>-->
+                <!--<a class="dropdown-item" href="#">UW GraphLab <small>课程笔记</small></a>-->
+            <!--</div>-->
+        <!--</li>-->
+        <!--<li class="nav-item dropdown">-->
+            <!--<a class="nav-link dropdown-toggle" href="#" id="cslink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Computer Science</a>-->
+            <!--<div class="dropdown-menu" aria-labelledby="cslink">-->
+                <!--<a class="dropdown-item" href="#">可计算思想和计算机概论</a>-->
+                <!--<a class="dropdown-item" href="#">C Primer Plus <small>读书笔记</small></a>-->
+                <!--<a class="dropdown-item" href="#">C++ Primer <small>读书笔记</small></a>-->
+                <!--<a class="dropdown-item" href="#">算法 <small>课程笔记</small></a>-->
+            <!--</div>-->
+        <!--</li>-->
+    <!--</ul>-->
+    <!--</div>-->
+    <!--<div class="collapse navbar-collapse justify-content-end">-->
+        <!--<span class="text-white-50">知而不行，只是未知</span>-->
+    <!--</div>-->
+
+
+<!--</nav>-->
+<!--动态生成菜单-->
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">MUNINN <small>by Corine Ma</small></a>
+    <div class="navbar-collapse collapse
+justify-content-between">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="Probability">Probability</a>
+            </li> <li class="nav-item">
+            <a class="nav-link" href="ModelThinking">Model Thinking</a>
+        </li>  <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="1651" data-toggle="dropdown">Computer Science</a>
+            <div class="dropdown-menu" aria-labelledby="1651"><a class="dropdown-item" href="ComputerScience/可计算思想和计算机概论">可计算思想和计算机概论 <small></small></a><a class="dropdown-item" href="ComputerScience/CPrimerPlus">C Primer Plus <small></small></a><a class="dropdown-item" href="ComputerScience/C++Primer">C++ Primer <small></small></a></div></li>  <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="4194" data-toggle="dropdown">Neuro Science</a>
+            <div class="dropdown-menu" aria-labelledby="4194"><a class="dropdown-item" href="NeuroScience/VisualPercipience">Visual Percipience <small></small></a></div></li>  <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="9375" data-toggle="dropdown">Machine Learning</a>
+            <div class="dropdown-menu" aria-labelledby="9375"><a class="dropdown-item" href="MachineLearning/AndrewNgML">Andrew Ng ML <small></small></a><a class="dropdown-item" href="MachineLearning/UWGraphLab">UW GraphLab <small></small></a></div></li>
+        </ul>
+    </div>
+    <div class="collapse navbar-collapse
+justify-content-end">
+                    <span class="text-white-50">知而
+不行，只是未知</span>
+    </div></nav>
+<nav class="nav nav-tabs bg-light">
+    <li class="nav-item">
+        <small><a class="nav-link">Model Thinking</a></small>
+    </li>
+    <li class="nav-item">
+        <small><a class="nav-link" href="#">Overview</a></small>
+    </li>
+    <li class="nav-item">
+        <small><a class="nav-link" href="#">Course Info</a></small>
+    </li>
+    <!--<li class="nav-item dropdown">-->
+        <!--<a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Section</a>-->
+        <!--<div class="dropdown-menu">-->
+            <!--<a class="dropdown-item" href="#">Action</a>-->
+            <!--<a class="dropdown-item" href="#">Another action</a>-->
+            <!--<a class="dropdown-item" href="#">Something else here</a>-->
+            <!--<div class="dropdown-divider"></div>-->
+            <!--<a class="dropdown-item" href="#">Separated link</a>-->
+        <!--</div>-->
+    <!--</li>-->
+    <li class="nav-item">
+        <small><a class="nav-link active" href="#">Notebook</a></small>
+    </li>
+</nav>
+
+<div class="container mt-5 ml-auto">
+    <div class="row">
+        <!--左侧-->
+        <div class="col-md-4">
+            <!--章节名称-->
+            <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active">
+                    Modeling People & Modeling Data
+                    <span class="badge badge-primary badge-pill">1.2</span>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    Aggregation & Decision
+                    <span class="badge badge-primary badge-pill">0.9</span>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    Tipping Point & Marklv Model
+                    <span class="badge badge-primary badge-pill">1.0</span>
+                </a>
+            </div>
+            <!--章节详细信息-->
+            <div class="card mt-4">
+                <!--<div class="card-body">-->
+                    <!--<h5 class="card-title"><small>章节概要</small></h5>-->
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-light">章节目录</li>
+                        <li class="list-group-item">
+                            Rational Actor Model
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item list">概要</li>
+                                <li class="list-group-item">举例</li>
+                                <li class="list-group-item">分类</li>
+                                <li class="list-group-item">适用</li>
+                            </ul>
+                        </li>
+                        <li class="list-group-item">
+                            Behavioral Model
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item list">概要</li>
+                                <li class="list-group-item">常见误差 <small><br>前景理论，双曲贴现，现状保持，参照偏差</small></li>
+                                <li class="list-group-item">关于这个模型</li>
+                            </ul>
+                        </li>
+                        <li class="list-group-item">
+                            Rule Based Model
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item list">分类</li>
+                                <li class="list-group-item">说明</li>
+                            </ul>
+                        </li>
+                        <li class="list-group-item">
+                            三种模型的选择
+                        </li>
+                    </ul>
+                <!--</div>-->
+            </div>
+        </div>
+        <!--右侧-->
+        <div class="col-md-8 pl-3">
+            <!--本章概览-->
+            <div class="card">
+                <div class="card-header">本章概览</div>
+                <div class="card-body">
+                    <!--<h5 class="card-title">对于人或者数据进行建模</h5>-->
+                    <p class="card-text">
+                        本章关注的重点是对于人以及数据进行建模的过程。
+                        这是模型最开始的地方——无论是什么模型，必须要有的东西就是数据。
+                    </p>
+                    <p>
+                        本章主要探讨对人的心智进行建模以预测人们采用什么方式进行抉择这一问题。
+                        此外，很多数据并非直接来自于人本身。对这些数据进行建模的第一步，就是
+                        选用合适的统计模型，比如回归或者Logistic方程进行模拟。
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted">最后更新于 2018-06-09 <a href="http://blog.mazhangjing.com/notebook" class="card-link">查看笔记</a></small>
+                    </p>
+                </div>
+            </div>
+            <!--笔记详情-->
+            <div class="card-columns mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a class="card-link" href="http://blog.mazhangjing.com">对于人的心智的探讨</a> </h5>
+                        <p class="card-text">本文主要探讨了对人的心智建模和心理学理论的区别。</p>
+                        <small class="card-text text-muted">2018-06-09</small>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a class="card-link" href="http://blog.mazhangjing.com">理论和经验，选谁？</a> </h5>
+                        <p class="card-text">这是一个重要的问题，即建立一个模型，而不是根据生活经验
+                        来进行问题的解决。主要观点是这样的：经验是很长时间的积累形成的，我们从进化上
+                        相信它。而一个好的模型则是更加理性并且有更多收益的，现实中，我们怎么衡量
+                        模型的好坏，以及在其和经验之间抉择？</p>
+                        <small class="card-text text-muted">2018-06-09</small>
+
+                    </div>
+                </div>
+                <div class="card text-right p-3">
+                    <blockquote class="blockquote mb-0">
+                        <p>未有知而不行者。知而不行，只是未知。
+                            ....... 有如知痛，必已自痛了，方知痛。知寒，必已自寒了。知饥，必已自饥了。知行如何分得开？</p>
+                        <footer class="blockquote-footer">
+                            <small class="text-muted">王阳明,1827</small>
+                        </footer>
+                    </blockquote>
+                </div>
+                <div class="card border-danger">
+                    <div class="card-body">
+                        <p class="card-text">如何将人心智决定的模型应用到实践中去？</p>
+                        <span class="card-text"><small>2018-06-09</small></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="mt-5 pt-5 pl-5 text-muted text-center text-small">
+    <ul class="list-inline">
+        <li class="list-inline-item">&copy; 2017-2018 Marvin Studio</li>
+        <li class="list-inline-item"><a href="#">About Project Muninn</a></li>
+    </ul>
+</footer>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</html>
