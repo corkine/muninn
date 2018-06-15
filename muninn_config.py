@@ -129,11 +129,8 @@ JUPYTER_NOTEBOOK_ALLOWED_FOLDER = [
     "coursera_learn_ml",
     "coursera_learn_models",
     "coursera_learn_perception",
-    "coursera_leasrn_plotting",
     "learn_c",
-    "learn_django",
     "learn_machine_learning",
-    "learn_mysql",
 ]
 
 HTML_DST_FOLDER = "./source"
