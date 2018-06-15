@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 GITHUB_REP_ADDRESS = "https://github.com/corkine/notebook"
 
-COURSE_INFO2 = {
+COURSE_INFO = {
     "pr1":
     {
         "show_menu_name_1st":"Probability",
@@ -21,13 +21,13 @@ COURSE_INFO2 = {
         "show_menu_name_1st":"Model Thinking",
         "show_menu_name_2st":None,
         "2st_addr":None,
-        "address":"/model_thinking",
+        "address":"/coursera_learn_models",
         "id":"mt",
         "chapter_list":[
-            ("[O] Aggragation(S) & Decision(P)","1.3","model_thinking/WEEK2_model_thinking.html","ad"),
-            ("[I] How People Think & Modeling Data","1.1","model_thinking/Week3_Model_Thinking.html","pd"),
-            ("[F] Tipping Point & Growth Model","0.8","model_thinking/week4_tipping_point.html","tg"),
-            ("[F] Perspectives & Marklv Processing","0.8","model_thinking/week5_problem_soving.html","pm"),
+            ("[O] Aggragation(S) & Decision(P)","1.3","coursera_learn_models/WEEK2_model_thinking.html","ad"),
+            ("[I] How People Think & Modeling Data","1.1","coursera_learn_models/Week3_Model_Thinking.html","pd"),
+            ("[F] Tipping Point & Growth Model","0.8","coursera_learn_models/week4_tipping_point.html","tg"),
+            ("[F] Perspectives & Marklv Processing","0.8","coursera_learn_models/week5_problem_soving.html","pm"),
         ],
     },
     "c1":
@@ -69,12 +69,12 @@ COURSE_INFO2 = {
         "show_menu_name_1st":"Neuro Science",
         "show_menu_name_2st":"Visual Percipience",
         "2st_addr":None,
-        "address":"/visual_percipience",
+        "address":"/coursera_learn_perception",
         "id":"visual1",
         "chapter_list":[
-            ("角度、长度、大小、距离、深度感知","1","visual_percipience/Week 3_see_space.html","sp"),
-            ("运动、方向、速度感知","1","visual_percipience/Week_4_Seeing_Motion.html","sm"),
-            ("一个整合视觉错觉的统一理论","1","visual_percipience/Week_5_SumUp.html","su"),
+            ("角度、长度、大小、距离、深度感知","1","coursera_learn_perception/Week 3_see_space.html","sp"),
+            ("运动、方向、速度感知","1","coursera_learn_perception/Week_4_Seeing_Motion.html","sm"),
+            ("一个整合视觉错觉的统一理论","1","coursera_learn_perception/Week_5_SumUp.html","su"),
         ],
     },
     "ml1":
@@ -82,11 +82,11 @@ COURSE_INFO2 = {
         "show_menu_name_1st":"Machine Learning",
         "show_menu_name_2st":"Andrew Ng ML",
         "2st_addr":"课程笔记",
-        "address":"/machine_learning",
+        "address":"/learn_machine_learning",
         "id":"ml1",
         "chapter_list":[
-            ("K-Means & PCA","1","machine_learning/chapter7_clustering.html","cl"),
-            ("异常检测 & 推荐系统","1","machine_learning/chapter8.html","ca"),
+            ("K-Means & PCA","1","learn_machine_learning/chapter7_clustering.html","cl"),
+            ("异常检测 & 推荐系统","1","learn_machine_learning/chapter8.html","ca"),
         ],
     },
     "mluw":
@@ -94,31 +94,47 @@ COURSE_INFO2 = {
         "show_menu_name_1st":"Machine Learning",
         "show_menu_name_2st":"UW GraphLab",
         "2st_addr":"课程笔记",
-        "address":"/machine_learning",
+        "address":"/learn_machine_learning",
         "id":"mluw",
         "chapter_list":[
-            ("使用回归预测房价","0.9","machine_learning/Regression_Predicting_house_prices.html","re"),
-            ("使用分类预测商品评分","0.9","machine_learning/logistic_classification_ex.html","lo"),
-            ("使用聚类评估多人关系(KNN)","0.9","machine_learning/knn_model.html","kn"),
-            ("使用因式分解推荐歌曲","0.9","machine_learning/song_recommender.html","sr"),
+            ("使用回归预测房价","0.9","learn_machine_learning/Regression_Predicting_house_prices.html","re"),
+            ("使用分类预测商品评分","0.9","learn_machine_learning/logistic_classification_ex.html","lo"),
+            ("使用聚类评估多人关系(KNN)","0.9","learn_machine_learning/knn_model.html","kn"),
+            ("使用因式分解推荐歌曲","0.9","learn_machine_learning/song_recommender.html","sr"),
         ],
     }
 }
 
-COURSE_INFO = {
+COURSE_INFO2 = {
     "mt":
     {
         "show_menu_name_1st":"Model Thinking",
         "show_menu_name_2st":None,
         "2st_addr":None,
-        "address":"/model_thinking",
+        "address":"/coursera_learn_models",
         "id":"mt",
         "chapter_list":[
-            ("[O] Aggragation(S) & Decision(P)","1.3","model_thinking/WEEK2_model_thinking.html","ad"),
-            ("[I] How People Think & Modeling Data","1.1","model_thinking/Week3_Model_Thinking.html","pd"),
-            ("[F] Tipping Point & Growth Model","0.8","model_thinking/week4_tipping_point.html","tg"),
-            ("[F] Perspectives & Marklv Processing","0.8","model_thinking/week5_problem_soving.html","pm"),
+            ("[O] Aggragation(S) & Decision(P)","1.3","coursera_learn_models/WEEK2_model_thinking.html","ad"),
+            ("[I] How People Think & Modeling Data","1.1","coursera_learn_models/Week3_Model_Thinking.html","pd"),
+            ("[F] Tipping Point & Growth Model","0.8","coursera_learn_models/week4_tipping_point.html","tg"),
+            ("[F] Perspectives & Marklv Processing","0.8","coursera_learn_models/week5_problem_soving.html","pm"),
         ],
     },
 }
+
+# JUPYTER_NOTEBOOK_ROOT_FOLDER = "/home/ubuntu/.jupyter"
+JUPYTER_NOTEBOOK_ROOT_FOLDER = "C:/Users/Administrator/Desktop/.jupyter"
+
+JUPYTER_NOTEBOOK_ALLOWED_FOLDER = [
+    "coursera_learn_ml",
+    "coursera_learn_models",
+    "coursera_learn_perception",
+    "coursera_leasrn_plotting",
+    "learn_c",
+    "learn_django",
+    "learn_machine_learning",
+    "learn_mysql",
+]
+
+HTML_DST_FOLDER = "./source"
 

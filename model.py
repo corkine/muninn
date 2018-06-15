@@ -197,7 +197,7 @@ class Chapter:
             res = soup.find_all("span",type="intro")
             if res: 
                 #因为只有一个结果，所以选用索引的第一个即可
-                self.description = str(res[0]).replace("""<span class="intro">""","").replace("</span>","").replace("¶","")
+                self.description = str(res[0]).replace("""<span type="intro">""","").replace("</span>","").replace("¶","")
             f.close()
         #获取相关笔记描述，并且构建Note OO对象。
         if get_notes:
