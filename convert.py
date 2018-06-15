@@ -33,8 +33,8 @@ def convert_all(root_folder=".",file_type=".ipynb"):
         for f in fo[2]:
         #对于每个文件夹进行遍历
             if (f.endswith(file_type) and 
-                str(fo[0]).split("\\")[-1] in JUPYTER_NOTEBOOK_ALLOWED_FOLDER):
-                #如果以ipynb结尾，那么进行转换
+                str(fo[0]).split("/")[-1] in JUPYTER_NOTEBOOK_ALLOWED_FOLDER):
+                #print("here is split result",)
                 try:
                     if convert(f,fo[0]):
                         print("Find ipynb file ",str(fo[0]),str(f)," == Convert Suscessful")
@@ -60,7 +60,7 @@ def fast_copytree(src,dst,symlinks=False,ignore_exist_dirs=True,allowed_folder=[
     """一个copytree的简化版本"""
     names = os.listdir(src)
     if ignore_exist_dirs:
-        if dst.split("\\")[-1] in allowed_folder:
+        if dst.split("/")[-1] in allowed_folder:
             try: os.makedirs(dst)
             # except: print("文件夹已存在，跳过创建文件夹...")
             except: pass
@@ -73,7 +73,8 @@ def fast_copytree(src,dst,symlinks=False,ignore_exist_dirs=True,allowed_folder=[
             if os.path.isdir(srcname):
                 fast_copytree(srcname,dstname,symlinks,allowed_folder=allowed_folder)
             else:
-                if src.split("\\")[-1] in allowed_folder:
+                if src.split("/")[-1] in allowed_folder:
+                    #print(src,"i am here,")
                     copy2(srcname,dstname)
         except OSError as why:
             errors.append((srcname,dstname,str(why)))
@@ -81,10 +82,8 @@ def fast_copytree(src,dst,symlinks=False,ignore_exist_dirs=True,allowed_folder=[
             errors.extend(err.args[0])
     try:
         copystat(src, dst)
-    except OSError as why:
-        # can't copy file access times on Windows
-        if why.winerror is None:
-            errors.extend((src, dst, str(why)))
+    except:
+        pass
     if errors:
         raise Error(errors)
 
