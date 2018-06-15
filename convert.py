@@ -114,7 +114,7 @@ def add_stuff():
 def commit_stuff():
     # i = input("请输入提交内容：____\b\b\b\b")
     i = datetime.datetime.today()
-    c = "git commit -m %s"%i
+    c = "git commit -m last"
     process = subprocess.Popen(c,shell=True,stdout=PIPE,stdin=PIPE)
     print("提交本地仓库中...\n")
     print(process.communicate()[0])
