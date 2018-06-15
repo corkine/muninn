@@ -122,8 +122,8 @@ COURSE_INFO2 = {
     },
 }
 
-# JUPYTER_NOTEBOOK_ROOT_FOLDER = "/home/ubuntu/.jupyter"
-JUPYTER_NOTEBOOK_ROOT_FOLDER = "C:/Users/Administrator/Desktop/.jupyter"
+JUPYTER_NOTEBOOK_ROOT_FOLDER = "/home/root/.jupyter"
+# JUPYTER_NOTEBOOK_ROOT_FOLDER = "C:/Users/Administrator/Desktop/.jupyter"
 
 JUPYTER_NOTEBOOK_ALLOWED_FOLDER = [
     "coursera_learn_ml",

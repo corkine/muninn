@@ -2,8 +2,11 @@ import sys,datetime
 import convert
 import fatch_data
 temperr, tempout = sys.stderr, sys.stdout
-sys.stderr = sys.stdout = open("muninn_server.log","a+")
-print("="*30,"脚本正在运行...%s"%str(datetime.datetime.today()))
+#此处的Log不能放在Git文件夹内。
+#对于正式部署，需要有相关库的访问权限，有jupyter convent的快捷命令行，
+# 安装以下包：lxml，BeautifulSoup4
+sys.stderr = sys.stdout = open("/home/root/.jupyter/muninn_server.log","a+")
+print("\n"*3,"="*30,"...%s..."%str(datetime.datetime.today()),"="*30)
 print("正在迁移 Jupyter Notebook 文件夹，并进行文件转换")
 convert.get_file()
 print("正在构建HTML文档...")
