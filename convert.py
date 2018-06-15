@@ -147,6 +147,7 @@ def push_stuff():
     else: return 1
 
 def submit():
+    """将当前文件夹提交到Git服务器"""
     if get_status():
         if add_stuff():
             if commit_stuff():
@@ -156,7 +157,8 @@ def submit():
     print("失败！")
     return 0
 
-def main():
+def get_file():
+    """获取Jupyter笔记文件夹，根据允许列表，自动进行html的转换"""
     if transfile(from_source=JUPYTER_NOTEBOOK_ROOT_FOLDER,
                 to_source=HTML_DST_FOLDER,
                 allowed_folder=JUPYTER_NOTEBOOK_ALLOWED_FOLDER):
