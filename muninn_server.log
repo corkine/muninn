@@ -1,0 +1,27 @@
+============================== 脚本正在运行...2018-06-15 19:28:25.781590
+正在迁移 Jupyter Notebook 文件夹，并进行文件转换
+Find ipynb file  ./source\coursera_learn_models Untitled.ipynb  == Convert Suscessful
+Find ipynb file  ./source\coursera_learn_models WEEK2_model_thinking.ipynb  == Convert Suscessful
+Find ipynb file  ./source\coursera_learn_models Week3_Model_Thinking.ipynb  == Convert Suscessful
+Find ipynb file  ./source\coursera_learn_models week4_tipping_point.ipynb  == Convert Suscessful
+Find ipynb file  ./source\coursera_learn_models week5_problem_soving.ipynb  == Convert Suscessful
+转换失败!
+Find ipynb file  ./source\coursera_learn_perception Week_4_Seeing_Motion.ipynb  == Convert Suscessful
+Find ipynb file  ./source\coursera_learn_perception Week_5_SumUp.ipynb  == Convert Suscessful
+Find ipynb file  ./source\learn_c chapter_3_data_and_c.ipynb  == Convert Suscessful
+Find ipynb file  ./source\learn_c chapter_4_string_and_scanf.ipynb  == Convert Suscessful
+Find ipynb file  ./source\learn_c chapter_5_operator.ipynb  == Convert Suscessful
+Find ipynb file  ./source\learn_c learn_c_1.ipynb  == Convert Suscessful
+Find ipynb file  ./source\learn_django django_deployed.ipynb  == Convert Suscessful
+Find ipynb file  ./source\learn_django learn_django_1.ipynb  == Convert Suscessful
+Find ipynb file  ./source\learn_machine_learning applied_machine_learning.ipynb  == Convert Suscessful
+Find ipynb file  ./source\learn_machine_learning applied_machine_learning_coursera.ipynb  == Convert Suscessful
+Find ipynb file  ./source\learn_machine_learning chapter7_clustering.ipynb  == Convert Suscessful
+Find ipynb file  ./source\learn_machine_learning chapter8.ipynb  == Convert Suscessful
+Find ipynb file  ./source\learn_mysql mysql_basic.ipynb  == Convert Suscessful
+Convert all done!
+正在构建HTML文档...
+Traceback (most recent call last):
+  File "c:\Users\Administrator\Desktop\muninn\muninn_server.py", line 9, in <module>
+    main(update_data=True,file_path="last.data")
+NameError: name 'main' is not defined

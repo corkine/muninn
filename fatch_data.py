@@ -494,6 +494,5 @@ def writeToFile(c=None,html="",suffix="_overview.html",index=False):
     
     
 if __name__ == "__main__":
-    main(update_data=False,file_path="2018-06-12.data")
-    # input()
+    main(update_data=True,file_path="last.data")
     

@@ -173,5 +173,6 @@ if __name__ == "__main__":
     # if transfile(fast=True,from_source=from_source,\
     #     to_source=to_source): submit()
     # main()
+    get_file()
     submit()
     
