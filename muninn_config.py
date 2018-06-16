@@ -8,12 +8,13 @@ COURSE_INFO = {
         "show_menu_name_1st":"Probability",
         "show_menu_name_2st":None,
         "2st_addr":None,
-        "address":"/probability",
+        "address":"/book_learn_stats",
         "id":"pr1",
         "chapter_list":[
-            ("概率导论","0.9","probability/Week1&2_Probability.html","w12"),
-            ("独立概率和古典概率","0.9","probability/Week_3.html","w3"),
-            ("离散分布模型","0.8","probability/Week4_PMF_CDF.html","w4"),
+            ("概率导论","0.9","book_learn_stats/Week1&2_Probability.html","w12"),
+            ("独立概率和古典概率","0.9","book_learn_stats/Week_3.html","w3"),
+            ("离散分布模型","0.8","book_learn_stats/Week4_PMF_CDF.html","w4"),
+            ("连续分布模型","0","book_learn_stats/week5.html","w5"),
         ],
     },
     "mt":
