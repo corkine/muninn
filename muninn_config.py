@@ -1,6 +1,20 @@
 #/usr/bin/env python3
 # -*- coding: utf8 -*-
-GITHUB_REP_ADDRESS = "https://github.com/corkine/notebook"
+GITHUB_REP_ADDRESS = "https://github.com/corkine/muninn"
+
+JUPYTER_NOTEBOOK_ROOT_FOLDER = "/root/.jupyter"
+# JUPYTER_NOTEBOOK_ROOT_FOLDER = "C:/Users/Administrator/Desktop/.jupyter"
+
+JUPYTER_NOTEBOOK_ALLOWED_FOLDER = [
+    "coursera_learn_ml",
+    "coursera_learn_models",
+    "coursera_learn_perception",
+    "book_learn_stats",
+    "learn_c",
+    "learn_machine_learning",
+]
+
+HTML_DST_FOLDER = "./source"
 
 COURSE_INFO = {
     "pr1":
@@ -123,16 +137,5 @@ COURSE_INFO2 = {
     },
 }
 
-JUPYTER_NOTEBOOK_ROOT_FOLDER = "/root/.jupyter"
-# JUPYTER_NOTEBOOK_ROOT_FOLDER = "C:/Users/Administrator/Desktop/.jupyter"
 
-JUPYTER_NOTEBOOK_ALLOWED_FOLDER = [
-    "coursera_learn_ml",
-    "coursera_learn_models",
-    "coursera_learn_perception",
-    "learn_c",
-    "learn_machine_learning",
-]
-
-HTML_DST_FOLDER = "./source"
 
