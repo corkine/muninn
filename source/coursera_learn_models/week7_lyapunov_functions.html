@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>week5</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>week7_lyapunov_functions</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <style type="text/css">
@@ -11775,8 +11775,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><span type="title">概率密度函数PDF、连续概率分布</span> | <span type="version">0.8</span> | <span type="update">2018-06-17</span></p>
-<p><span type="intro">本周主要介绍概率密度函数PDF的定义、期望值和变异数的定义，并且介绍了几种连续的概率分布形式的PDF、CDF以及其变异数和期望值。</span></p>
+<p><span type="title">Lyapunov Function</span> | <span type="version">0.9</span> | <span type="update">2018-06-17</span></p>
+<p><span type="intro"><p class="card-text">本章讲解Lyapunov函数，此函数用来表示一个过程是否可以达到平衡。困难之处在于找到构建这样一个函数。</p></span></p>
 
 </div>
 </div>
@@ -11785,200 +11785,14 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#36830;&#32493;&#27010;&#29575;&#20998;&#24067;&#30340;-PDF">&#36830;&#32493;&#27010;&#29575;&#20998;&#24067;&#30340; PDF<a class="anchor-link" href="#&#36830;&#32493;&#27010;&#29575;&#20998;&#24067;&#30340;-PDF">&#182;</a></h1><h2 id="PDF">PDF<a class="anchor-link" href="#PDF">&#182;</a></h2><p>对于连续分布而言，没有PMF，因为有无穷多的点，而这些点对应的PMF则为0，但是合起来的话，值又为1.因此采用PDF的定义来代替PMF，定义如下：</p>
-<p>$$PDF = f_X(x)=lim_{\Delta x -&gt; 0}\frac{P(x\le X\le x + \Delta x)}{\Delta x} = lim_{\Delta -&gt; 0}\frac{F_X(x+\Delta x)-F_X(x)}{\Delta x} = F^{'}_X(x)$$</p>
-<p>此外，PDF还有以下两点性质：$（1）：\int_{-∞}^∞f_X(x)dx=1;（2）：f_X(x)\ge0$</p>
-<p>对于每个点来说，其PDF为0。对于第一点性质，需要注意：对于一小段来说，其PDF($f_X$)可以大于1。只要保证 $f_X{(x)}*\Delta x$ 小于1即可。</p>
-<h2 id="CDF">CDF<a class="anchor-link" href="#CDF">&#182;</a></h2><p>连续分布的PDF的定义建立起了CDF和PDF的关系：PDF是CDF的导数。如下：</p>
-<p>$$CDF = F_X(x) = \int_{-∞}^xf_X(u)du$$</p>
-<h2 id="Probability">Probability<a class="anchor-link" href="#Probability">&#182;</a></h2><p>根据这个定义，很容易求出来一段的概率，使用CDF的差，也就是PDF的积分即可。</p>
-<p><strong>对于一段概率</strong></p>
-<p>$$P(a\lt X \le b)=F_X(b)-F_X(a) = \int_{-∞}^{b}f_X(x)dx - \int_{-∞}^af_X(x)dx = \int_a^bf_X(x)dx$$</p>
-<p><strong>对于一点概率</strong></p>
-<p>$$f_X(x)=lim_{\Delta x -&gt; 0}\frac{P(x\le X\le x + \Delta x)}{\Delta x}$$</p>
-<p>约等于这一点的长度乘以其PDF</p>
-<p>$$P(x\le X \le x+\Delta x)≈f_X(x)\Delta x$$</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#36830;&#32493;&#27010;&#29575;&#20998;&#24067;&#27169;&#22411;">&#36830;&#32493;&#27010;&#29575;&#20998;&#24067;&#27169;&#22411;<a class="anchor-link" href="#&#36830;&#32493;&#27010;&#29575;&#20998;&#24067;&#27169;&#22411;">&#182;</a></h1><h2 id="Uniform-&#27010;&#29575;&#20998;&#24067;">Uniform &#27010;&#29575;&#20998;&#24067;<a class="anchor-link" href="#Uniform-&#27010;&#29575;&#20998;&#24067;">&#182;</a></h2><p>这种分布和离散Uniform很类似，不过，也有一定的不同。</p>
-<p><img src="w5p1.png" alt=""></p>
-<p>一个例子就是公交车每10分钟一班，一个人随机到站台等车。等到车所需的时间的分布，是一个Uniform的连续分布，X~UNIF(0,10)</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Exponential-&#27010;&#29575;&#20998;&#24067;">Exponential &#27010;&#29575;&#20998;&#24067;<a class="anchor-link" href="#Exponential-&#27010;&#29575;&#20998;&#24067;">&#182;</a></h2><p>其只有一个参数，$\lambda$，如下所示，此分布<strong>没有记忆性</strong>，这一点需要注意。可以被用来对于出门化妆所用时间，打游戏所有时间建模。不能对于寿命建模，因为80岁的时候，其寿命取决于80岁这一时间点，如果使用 Exp 分布，那么其和0岁的寿命有相同的分布。</p>
-<p>此外，它的CDF可以推导出来一个很漂亮的表达式，$PDF = \lambda e^{-\lambda x}; CDF = 1-e^{-\lambda x}$</p>
-<p><img src="w5p2.png" alt=""></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Erlang-&#27010;&#29575;&#20998;&#24067;">Erlang &#27010;&#29575;&#20998;&#24067;<a class="anchor-link" href="#Erlang-&#27010;&#29575;&#20998;&#24067;">&#182;</a></h2><p>其相当于包含一件有多个关卡的时间，每个关卡的时间都是随机的。类似于多重的 Exponential 分布，接受两个参数，$n,\lambda$。比如，打完三盘游戏的所需时间：$Erlang(3,\lambda)$</p>
-<p><img src="w5p3.png" alt=""></p>
-<p><img src="w5p4.png" alt=""></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Gaussian-&#27010;&#29575;&#20998;&#24067;">Gaussian &#27010;&#29575;&#20998;&#24067;<a class="anchor-link" href="#Gaussian-&#27010;&#29575;&#20998;&#24067;">&#182;</a></h2><p>此分布又称作常态分布，典型的钟形曲线。其在自然界很常见，比如人口身高的分布、体重的分布。更有意思的是，对于<strong>大量的随机量的和的分布</strong>，比如100个人吃饭的总时间，和高斯分布也非常拟合。</p>
-<p>$$高斯分布可以写成这两种形式：X~-Gaussian(\mu,\sigma) ~~ X ~- N(\mu,\sigma^2)$$</p>
-<p>$$PDF = f_X(x) = \frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2𝝈^2}}$$</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>因为 Gaussian 分布的 CDF 不可积分，因此使用查表的方法计算。</p>
-<p>规定标准高斯分布如下：</p>
-<p>$$Z -~ N(0,1) ~~~ f_Z(z)=\frac{1}{\sqrt{2\pi}}e^{-\frac{z^2}{2}}$$</p>
-<p>$$简写CDF为：F_Z(z) = \Phi(z) = \int_{-∞}^z\frac{1}{\sqrt{2\pi}}e^{-\frac{\mu^2}{2}}d\mu$$</p>
-<p>仔细思考，可以得到：$$\Phi(-z)=1-\Phi{z}$$</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>高斯分布的归一化</strong></p>
-<p><strong>1. 对于任何$X~- N(\mu,\sigma^2)$而言，$\frac{X-\mu}{\sigma} ~- N(0,1)$</strong></p>
-<p>对于X的CDF,如下表示：</p>
-<p>$$f_X(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$</p>
-<p>如果$\frac{X-\mu}{\sigma}$的CDF如下，等于$\Phi(z)$,那么即可证明：</p>
-<p>$$P(\frac{X-\mu}{\sigma}\le z)=P(X\le\mu+\sigma z)=\int_{-∞}^{\mu+\sigma z}\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}dx\\
-令 w=\frac{x-\mu}{\sigma} =&gt; P(\frac{X-\mu}{\sigma}\le z) =&gt; \int_{-∞}^z\frac{1}{2\pi}e^{-\frac{w^2}{2}}dw = \Phi(z)$$</p>
-<p><strong>2. 对于任何$X~- N(\mu,\sigma^2)$而言，$F_X(x) = \Phi(\frac{x-\mu}{\sigma})$</strong></p>
-<p>这个很容易证明，根据CDF定义和上式的推导：</p>
-<p>$F_X(x)=P(X\le x) = P(X-\mu \le x-\mu)=P(\frac{X-\mu}{\sigma}\le\frac{x-\mu}{\sigma})=\Phi(\frac{x-\mu}{\sigma})$</p>
-<p><u>通过以上两条的证明，可以得到，对于任意随机变数X，减去u，除以σ，得到的随机变数服从标准高斯分布。</u></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#26399;&#26395;&#20540;">&#26399;&#26395;&#20540;<a class="anchor-link" href="#&#26399;&#26395;&#20540;">&#182;</a></h1><h2 id="&#20174;&#22823;&#25968;&#27861;&#21017;&#35828;&#36215;">&#20174;&#22823;&#25968;&#27861;&#21017;&#35828;&#36215;<a class="anchor-link" href="#&#20174;&#22823;&#25968;&#27861;&#21017;&#35828;&#36215;">&#182;</a></h2><p>大数法则指的是，对于多次实验N，记录的事件A出现的比率接近于实际的概率。</p>
-<p>$$P(A)=lim_{N-&gt;∞}\frac{N_A}{N}$$</p>
-<p>对于一个样本空间 {1,2,3...,n}，做实验N次，那么记录各结果出现的次数，分别为$N_1,N_2...$，那么，$mean = \sum_{x=1}^n\frac{xN_x}{N}$ （次数乘以其概率之和）</p>
-<p>根据大数法则：</p>
-<p>$$\lim_{N-&gt;∞}\frac{N_x}{N}=P_X(x) =&gt; \lim_{N-&gt;∞} mean = \lim_{N-&gt;∞}\sum_{n=1}^nx\frac{N_x}{N}=\sum_{x=1}^nxP_X(x)$$</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="&#26399;&#26395;&#20540;&#30340;&#23450;&#20041;">&#26399;&#26395;&#20540;&#30340;&#23450;&#20041;<a class="anchor-link" href="#&#26399;&#26395;&#20540;&#30340;&#23450;&#20041;">&#182;</a></h2><p>因此，定义期望值，也就是 mean 为：</p>
-<p>$$E[X]=\mu_X = \sum_{x=-∞}^{∞}xP_X(x)$$</p>
-<h2 id="&#26399;&#26395;&#20540;&#30340;&#36816;&#31639;">&#26399;&#26395;&#20540;&#30340;&#36816;&#31639;<a class="anchor-link" href="#&#26399;&#26395;&#20540;&#30340;&#36816;&#31639;">&#182;</a></h2><p>对于期望值的函数运算，只改变其本身，而不改变$P_X(x)$</p>
-<p>对于常数乘法可以提出来，对于加法可以分开算。</p>
-<p>$$E[g(X)]=\mu_X = \sum_{x=-∞}^{∞}g(x)P_X(x)$$</p>
-<p>$$E[a·g(X) + b·h(x)]= \sum_{x=-∞}^{∞}[a·g(x)+b·h(x)]P_X(x)=a E[g(X)] + b E[h(X)]$$</p>
-<p>$$E[3]=\mu_X = \sum_{x=-∞}^{∞}3*P_X(x) = 3*1 = 3$$</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="&#21464;&#24322;&#25968;-Variance">&#21464;&#24322;&#25968; Variance<a class="anchor-link" href="#&#21464;&#24322;&#25968;-Variance">&#182;</a></h2><p>定义 $$\sigma_X^2 = E [(X-\mu_X)^2] = \sum_{x=-∞}^∞(x-\mu_x)^2P_X(x)$$</p>
-<p>其暗示了随机变量X有多乱的信息。注意，其和概率关系，纯粹和X的值的分布情况有关，如果X分布很紧凑，只有一两个值，不论其概率差异如何悬殊，其变异数也很小。而对于很多不同X的值，如果其概率相似，但是其变异数依旧很大。变异数开平方就是标准差 $\sigma_X$</p>
-<p>Variance 的一种快速计算方法是：</p>
-<p>$$\sigma_X^2=e[(x-\mu_X^2)] = E[X^2] - \mu_X^2 =&gt; E[X^2] = \sigma_X^2 + \mu_X^2$$</p>
-<p>就是说，X的2th moment的值减去 mean 值，就是 variance 的值。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#24120;&#35265;&#20998;&#24067;&#30340;&#26399;&#26395;&#21644;&#21464;&#24322;">&#24120;&#35265;&#20998;&#24067;&#30340;&#26399;&#26395;&#21644;&#21464;&#24322;<a class="anchor-link" href="#&#24120;&#35265;&#20998;&#24067;&#30340;&#26399;&#26395;&#21644;&#21464;&#24322;">&#182;</a></h1><p>在前面讲到了不同分布的PDF，在这里，可以根据期望值和变异数的定义来推导其期望和随机变数的变异情况。</p>
-<h2 id="Bernouli-&#20998;&#24067;">Bernouli &#20998;&#24067;<a class="anchor-link" href="#Bernouli-&#20998;&#24067;">&#182;</a></h2><p>$\mu_X = 1·p + 0·(1-p) = p\\\sigma_X^2= 1·p^2 - 0·(1-p)^2 - \mu_X = p(1-p)$</p>
-<h2 id="Bin-&#20998;&#24067;">Bin &#20998;&#24067;<a class="anchor-link" href="#Bin-&#20998;&#24067;">&#182;</a></h2><p>$\mu_X = np\\
-\sigma_X^2 = np(1-p)$</p>
-<h2 id="Geo-&#20998;&#24067;">Geo &#20998;&#24067;<a class="anchor-link" href="#Geo-&#20998;&#24067;">&#182;</a></h2><p>$\mu_X = \frac{1}{p}\\
-\sigma_X^2 = \frac{1-p}{p^2}$</p>
-<h2 id="PASKAL-&#20998;&#24067;">PASKAL &#20998;&#24067;<a class="anchor-link" href="#PASKAL-&#20998;&#24067;">&#182;</a></h2><p>$\mu_X = \frac{k}{p}\\
-\sigma_X^2 = \frac{k(1-p)}{p^2}$</p>
-<h2 id="POI-&#20998;&#24067;">POI &#20998;&#24067;<a class="anchor-link" href="#POI-&#20998;&#24067;">&#182;</a></h2><p>$\mu_X = \sigma_X^2 = a$</p>
-<h2 id="UNIF-&#20998;&#24067;">UNIF &#20998;&#24067;<a class="anchor-link" href="#UNIF-&#20998;&#24067;">&#182;</a></h2><p>$\mu_X = \frac{a+b}{2}\\
-\sigma_X^2=\frac{1}{12}(b-a)(b-a+2)$</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#38468;&#24405;&#65306;Bin-&#20998;&#24067;&#30340;&#26399;&#26395;&#21644;&#26041;&#24046;&#30340;&#25512;&#23548;">&#38468;&#24405;&#65306;Bin &#20998;&#24067;&#30340;&#26399;&#26395;&#21644;&#26041;&#24046;&#30340;&#25512;&#23548;<a class="anchor-link" href="#&#38468;&#24405;&#65306;Bin-&#20998;&#24067;&#30340;&#26399;&#26395;&#21644;&#26041;&#24046;&#30340;&#25512;&#23548;">&#182;</a></h1><p>对于平均数而言</p>
-<p>$$P(X=k) = {n\choose k}p^kq^{n-k}, k = 0,1,2,..,n,q = 1-p\\
-EX = \sum_{k=0}^n k {n\choose k}p^kq^{n-k} \\
-= \sum_{k=1}^n k {n\choose k}p^kq^{n-k} \\
-=  \sum_{k=1}^n k {\frac{n!}{k!(n-k)!}}p^kq^{n-k} \\
-=  np\sum_{k=1}^n  {\frac{(n-1)!}{(k-1)!(n-k)!}}p^{k-1}q^{(n-1)-(k-1)} \\
-= np\sum_{k=1}^n{n-1\choose k-1}p^{k-1}q^{(n-1)-(k-1)}\\
-= np[{n-1\choose 0}p^0q^{n-1}+{n-1\choose 1}p^1q^{n-2}+...+{n-1\choose n-1}p^{n-1}q^0] \\
-= np$$</p>
-<p>对于方差而言：</p>
-<p>$$
-EX^2 =  \sum_{k=1}^nk^2{n\choose k}p^kq^{n-k}, k = 0,1,2,..,n,q = 1-p\\
-= \sum_{k=1}^n[k(k-1)+k]{n\choose k}p^kq^{n-k}\\
-= \sum_{k=1}^nk(k-1){n\choose k}p^kq^{n-k} + \sum_{k=1}^nk{n\choose k}p^kq^{n-k}\\
-其中，
-\sum_{k=1}^nk{n\choose k}p^kq^{n-k} = EX = np\\
-\sum_{k=1}^nk(k-1){n\choose k}p^kq^{n-k} \\
-= \sum_{k=1}^nk(k-1){\frac{n!}{k!(n-k)!}}p^2p^{k-2}q^{n-k} \\
-= \sum_{k=2}^nk(k-1){\frac{n!}{k!(n-k)!}}p^2p^{k-2}q^{n-k} \\
-注：特别注意这里k=1时项为0，所以可以从k=2开始计算。\\
-= \sum_{k=1}^n{\frac{n(n-1)(n-2)!}{(k-2)!(n-k)!}}p^2p^{k-2}q^{[(n-2)-(k-2)]} \\
-= n(n-1)p^2\sum_{k=2}^n{\frac{(n-2)!}{(k-2)!(n-k)!}}p^{k-2}q^{[(n-2)-(k-2)]}\\
-= n(n-1)p^2\sum_{k=2}^n{n-2\choose k-2}p^{k-2}q^{[(n-2)-(k-2)]}\\ 
-= n(n-1)p^2 \\
-\rightarrow EX^2 = n(n-1)p^2+np \\
-\rightarrow DX = EX^2-(EX)^2 = np-np^2 = np(1-p)$$</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>相关笔记</strong></p>
-<p><span type="related_note" update="2018-06-17" url="" mold="blog" description="这是我阅读《深入浅出统计学》一书的相关笔记和整理，这本书用了很多例子，读起来很好玩，在概念理解上让我很受启发。因此放在这里，以备日后查找。" url="http://blog.mazhangjing.com/2018/04/05/%E7%AE%80%E6%98%8E%E7%BB%9F%E8%AE%A1%E7%B2%BE%E8%A6%81/">简明统计精要（上）- 我的博客<span></p>
-
+<h1 id="Lyapunov-Functions">Lyapunov Functions<a class="anchor-link" href="#Lyapunov-Functions">&#182;</a></h1><h2 id="Define">Define<a class="anchor-link" href="#Define">&#182;</a></h2><p>F(x), a Lyaponuv function</p>
+<p>A1: has a maximum value.</p>
+<p>A2: There is a k &gt; 0 such that if $X_{t+1}\ne X_t, F(X_{t+1}) &gt; F(X_t) + k$</p>
+<p>Claim: At some point $X_{t+1} = X_{t}$</p>
+<h2 id="Example">Example<a class="anchor-link" href="#Example">&#182;</a></h2><p>在没有管理者的城市，如果人们都避免拥挤，那么，所有人将会合理分配自己在某个时间去的地方，这样的话，最终理想状态就是每个人都不见面。这就达到了一个Lyapunov平衡。如果每个人都见面， 这也会达到Lyapunov平衡。</p>
+<p>其余的例子，比如交易货物的时候的总幸福感，可以看作是Lyapunov函数。比如Dating，也可以将总体幸福感看作Lyapunov函数，如果两个人都高兴，那么有最大收益，直到平衡，不论让两人高兴的方式是在一起或者分手。</p>
+<p>如果说在交易的过程中存在着负向的外在效应，可能让没有参与交易的人感到损失，因此会带动模型运动，一直到完全平衡。</p>
+<h2 id="-"> <a class="anchor-link" href="#-">&#182;</a></h2>
 </div>
 </div>
 </div>
