@@ -11776,7 +11776,7 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><span type="title">控制语句：循环、分支和跳转</span> | <span type="update">2018-06-17</span> | <span type="version">0.1</span></p>
-<p><span type="intro">本章主要讲解C语言的循环、分支和跳转语句，这些语句/语法可以满足在C中进行逻辑控制的大多数需求。</span></p>
+<p><span type="intro">本章主要讲解C语言的循环(while/do..while/for)、分支(if/switch)和跳转语句，这些语句/语法可以满足在C中进行逻辑控制的大多数需求。在讲解语句的同时，穿插讲解了getchar()和putchar()等宏，以及ctype提供的字符函数，以及各种不同的关系运算符、算术运算符、逻辑运算符的优先级,以及逗号运算符和特殊条件运算符等C特色语句。</span></p>
 
 </div>
 </div>
@@ -11902,13 +11902,73 @@ i is 4</code></pre>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="if-&#20998;&#25903;&#35821;&#21477;">if &#20998;&#25903;&#35821;&#21477;<a class="anchor-link" href="#if-&#20998;&#25903;&#35821;&#21477;">&#182;</a></h1><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">expression1</span><span class="p">){</span>
+<h1 id="&#20998;&#25903;&#35821;&#21477;">&#20998;&#25903;&#35821;&#21477;<a class="anchor-link" href="#&#20998;&#25903;&#35821;&#21477;">&#182;</a></h1><h2 id="&#19968;&#33324;&#20998;&#25903;&#35821;&#21477;-if">&#19968;&#33324;&#20998;&#25903;&#35821;&#21477; if<a class="anchor-link" href="#&#19968;&#33324;&#20998;&#25903;&#35821;&#21477;-if">&#182;</a></h2><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">expression1</span><span class="p">){</span>
     <span class="n">statement1</span><span class="p">;</span>
 <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">expression2</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">statement2</span><span class="p">;</span>
 <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
     <span class="n">statement3</span><span class="p">;</span>
 <span class="p">}</span>
+</pre></div>
+<p><strong>一个可能出现的问题：</strong></p>
+
+<pre><code>if (a)
+    doA
+if (b)
+    doB
+else doC</code></pre>
+<p>会默认将 else 看作 内层的分支。尽量不要这么写，并且使用缩进，否则很容易造成逻辑问题。</p>
+<h2 id="&#22810;&#37325;&#20998;&#25903;&#35821;&#21477;-switch">&#22810;&#37325;&#20998;&#25903;&#35821;&#21477; switch<a class="anchor-link" href="#&#22810;&#37325;&#20998;&#25903;&#35821;&#21477;-switch">&#182;</a></h2><p>switch 适用于对某个值的多个不同情况进行判断和选择这一情况。</p>
+<div class="highlight"><pre><span></span><span class="k">switch</span><span class="p">(</span><span class="n">getchar</span><span class="p">()){</span>
+        <span class="k">case</span> <span class="sc">&#39;a&#39;</span><span class="o">:</span>
+        <span class="k">case</span> <span class="sc">&#39;b&#39;</span><span class="o">:</span>
+        <span class="k">case</span> <span class="sc">&#39;c&#39;</span><span class="o">:</span>
+        <span class="k">case</span> <span class="sc">&#39;d&#39;</span><span class="o">:</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;I got a or b or c or d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;e&#39;</span><span class="o">:</span>
+        <span class="k">case</span> <span class="sc">&#39;f&#39;</span><span class="o">:</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;I got e or f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="k">default</span><span class="o">:</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Wrong</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+</pre></div>
+<p>如果是 a or b or c or d, 返回语句并且停止。如果是 e or f，那么返回语句，同时因为没有break，所以继续走下去，返回默认语句；</p>
+
+<pre><code>a
+I got a or b or c or d
+e
+I got e or f
+Wrong</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="getchar()-&#12289;putchar()">getchar() &#12289;putchar()<a class="anchor-link" href="#getchar()-&#12289;putchar()">&#182;</a></h2><p>这两个预处理器宏是在 stdio.h 中进行定义的，<code>ch = getchar(); putchar(ch)</code>类似于 <code>scanf("%c",ch)</code> 和 <code>printf("%c",ch)</code>。</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;ctype.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">((</span><span class="n">ch</span> <span class="o">=</span> <span class="n">getchar</span><span class="p">())</span> <span class="o">!=</span> <span class="sc">&#39;\n&#39;</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">isalpha</span><span class="p">(</span><span class="n">ch</span><span class="p">))</span> <span class="n">putchar</span><span class="p">(</span><span class="n">ch</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span> <span class="c1">//判断是否为字母，ctype定义函数</span>
+        <span class="k">else</span> <span class="n">putchar</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<pre><code>Hello C
+Ifmmp D</code></pre>
+<h2 id="ctype.h">ctype.h<a class="anchor-link" href="#ctype.h">&#182;</a></h2><p><strong>ctype.h中对于字符的一些常用函数</strong></p>
+<div class="highlight"><pre><span></span><span class="n">tolower</span><span class="p">()</span> <span class="c1">//小写</span>
+<span class="n">toupper</span><span class="p">()</span> <span class="c1">//大写</span>
+<span class="n">iscntrl</span><span class="p">()</span> <span class="c1">//控制符</span>
+<span class="n">isdigit</span><span class="p">()</span> <span class="c1">//数字</span>
+<span class="n">isalnum</span><span class="p">()</span> <span class="c1">//字母数字</span>
+<span class="n">isalpha</span><span class="p">()</span> <span class="c1">//字母</span>
+<span class="n">isspace</span><span class="p">()</span> <span class="c1">//空格</span>
+<span class="n">issuper</span><span class="p">()</span> <span class="c1">//大写字母</span>
 </pre></div>
 
 </div>
@@ -11918,8 +11978,27 @@ i is 4</code></pre>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>getchar() putchar()</p>
-<p>这两个预处理器宏是在 stdio.h 中进行定义的，类似于 scanf("%c",&amp;ch)</p>
+<h2 id="&#36923;&#36753;&#36816;&#31639;&#31526;&#21644;&#34920;&#36798;&#24335;">&#36923;&#36753;&#36816;&#31639;&#31526;&#21644;&#34920;&#36798;&#24335;<a class="anchor-link" href="#&#36923;&#36753;&#36816;&#31639;&#31526;&#21644;&#34920;&#36798;&#24335;">&#182;</a></h2><p><strong>逻辑运算符优先级</strong></p>
+<p>在 while 循环中，介绍了关系运算符，在分支语句中，则重点介绍 逻辑运算符。同样的，逻辑运算符内部有先后问题：</p>
+<p><code>! &gt; &amp;&amp; &gt; ||</code></p>
+<p>和其余运算符合起来考虑，！运算符仅次于括号运算符。而其余逻辑运算符则低于关系运算符，其中 &amp;&amp; 大于 ||。</p>
+<p><code>if (ch != '\n' &amp;&amp; ch != 'a') =&gt; if ((ch != '\n') &amp;&amp; (ch != 'a'))</code></p>
+<p><strong>使用 iso646.h </strong></p>
+<p>在这个h文件中，你可以使用 and 代替 &amp;&amp;，使用 or 代替 ||，使用 not 代替 ！。</p>
+<p><strong>求值的顺序</strong></p>
+<p>在C中，我们说<code>(2*3) + (3+6)</code>，根据编译器来决定先计算左边还是右边。但逗号运算符则对顺序进行了强制，<code>(2+3),(3+6)</code>。此外，逻辑运算符也有顺序性，从左到右。</p>
+<p>这是因为： <code>while ((c = getchar()) != '\n' &amp;&amp; c != '\n')</code> 如果左边为否，那么就不会进行右边的运算，而是直接跳过。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#26465;&#20214;&#36816;&#31639;&#31526;&#65311;:">&#26465;&#20214;&#36816;&#31639;&#31526;&#65311;:<a class="anchor-link" href="#&#26465;&#20214;&#36816;&#31639;&#31526;&#65311;:">&#182;</a></h2><p><code>if (1 &gt; 2) printf('y'); else printf('n');
+等同于
+(1 &gt; 2) ? printf('y') : printf('n');</code></p>
 
 </div>
 </div>
