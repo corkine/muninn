@@ -11785,14 +11785,24 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Lyapunov-Functions">Lyapunov Functions<a class="anchor-link" href="#Lyapunov-Functions">&#182;</a></h1><h2 id="Define">Define<a class="anchor-link" href="#Define">&#182;</a></h2><p>F(x), a Lyaponuv function</p>
+<h1 id="Lyapunov-Functions">Lyapunov Functions<a class="anchor-link" href="#Lyapunov-Functions">&#182;</a></h1><h2 id="Define-of-Function">Define of Function<a class="anchor-link" href="#Define-of-Function">&#182;</a></h2><p>F(x), a Lyaponuv function</p>
 <p>A1: has a maximum value.</p>
 <p>A2: There is a k &gt; 0 such that if $X_{t+1}\ne X_t, F(X_{t+1}) &gt; F(X_t) + k$</p>
 <p>Claim: At some point $X_{t+1} = X_{t}$</p>
-<h2 id="Example">Example<a class="anchor-link" href="#Example">&#182;</a></h2><p>在没有管理者的城市，如果人们都避免拥挤，那么，所有人将会合理分配自己在某个时间去的地方，这样的话，最终理想状态就是每个人都不见面。这就达到了一个Lyapunov平衡。如果每个人都见面， 这也会达到Lyapunov平衡。</p>
+<h2 id="Example:-Exchange-and-Market">Example: Exchange and Market<a class="anchor-link" href="#Example:-Exchange-and-Market">&#182;</a></h2><p>在没有管理者的城市，如果人们都避免拥挤，那么，所有人将会合理分配自己在某个时间去的地方，这样的话，最终理想状态就是每个人都不见面。这就达到了一个Lyapunov平衡。如果每个人都见面， 这也会达到Lyapunov平衡。</p>
 <p>其余的例子，比如交易货物的时候的总幸福感，可以看作是Lyapunov函数。比如Dating，也可以将总体幸福感看作Lyapunov函数，如果两个人都高兴，那么有最大收益，直到平衡，不论让两人高兴的方式是在一起或者分手。</p>
 <p>如果说在交易的过程中存在着负向的外在效应，可能让没有参与交易的人感到损失，因此会带动模型运动，一直到完全平衡。</p>
-<h2 id="-"> <a class="anchor-link" href="#-">&#182;</a></h2>
+<h2 id="Time-to-Convergence-and-Optimality">Time to Convergence and Optimality<a class="anchor-link" href="#Time-to-Convergence-and-Optimality">&#182;</a></h2><p>Q1: How long will Lyapunov hava a balance?</p>
+
+<pre><code>There are 100 people divided between Waiting Room A and Waiting Room B. These people will switch rooms if one is too busy. They have varying thresholds for "too busy", but no one has a threshold below 58. In other words, so long as 58 or fewer people are in a room, no one will want to leave that room. In the first time period, there are 87 people in Room A and only 13 in Room B. What is the maximum number of time periods that it could take for this system to reach equilibrium?
+
+=&gt; 29, let k = 1, min = 58, init = 87</code></pre>
+<p>Q2: Does the process always stop at the min or max?</p>
+<p>NO. 因为每个人的评价标准可能不同</p>
+<p>Q3: 注意</p>
+<p>对于有<strong>指向相反方向的</strong>外部效应的事件，不能采用 Lyapunov Function 进行平衡。比如，分配办公室，每个人可能有自己特殊的偏好。但是对分配椅子这样的问题，则完全可以，因为每个人的椅子不会影响到别人，带来外部效应。</p>
+<p>如果交易带来外部效应，这外部效应指的是：会对所有人都有好处，那么这外部效应不会影响Lyapunov函数模型。只有指向相反方向的外部效应的事件才不容易达到平衡。</p>
+
 </div>
 </div>
 </div>

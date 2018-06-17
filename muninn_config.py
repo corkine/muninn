@@ -43,6 +43,7 @@ COURSE_INFO = {
             ("[I] How People Think & Modeling Data","1.1","coursera_learn_models/Week3_Model_Thinking.html","pd"),
             ("[F] Tipping Point & Growth Model","0.8","coursera_learn_models/week4_tipping_point.html","tg"),
             ("[F] Perspectives & Marklv Processing","0.8","coursera_learn_models/week5_problem_soving.html","pm"),
+            ("Lyapunov Functions","0.8","coursera_learn_models/week7_lyapunov_functions.html","lf"),
         ],
     },
     "c1":
