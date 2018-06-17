@@ -68,6 +68,7 @@ COURSE_INFO = {
             ("数据和C","1","learn_c/chapter_3_data_and_c.html","da"),
             ("字符串、格式化输入输出","1","learn_c/chapter_4_string_and_scanf.html","ss"),
             ("操作符、表达式和语句","1","learn_c/chapter_5_operator.html","op"),
+            ("控制语句","","learn_c/chapter6_control.html","c6")
         ],
     },
     "cpp":
