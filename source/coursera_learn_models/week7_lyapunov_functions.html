@@ -11810,7 +11810,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Coordination-and-Culture">Coordination and Culture<a class="anchor-link" href="#Coordination-and-Culture">&#182;</a></h1><p>Tylor(1871): Culture is complex whole which includes knowledge, belief, art, law, morals, customs.</p>
+<h1 id="Coordination-and-Culture">Coordination and Culture<a class="anchor-link" href="#Coordination-and-Culture">&#182;</a></h1><h2 id="What-is-culture&#65311;">What is culture&#65311;<a class="anchor-link" href="#What-is-culture&#65311;">&#182;</a></h2><p>Tylor(1871): Culture is complex whole which includes knowledge, belief, art, law, morals, customs.</p>
 <p>Trilling(1955): To make a coherent life, to confront the terrors of the outer and the inner world,the pieties and duties which make possible the life of the group and the individual - these are culture, and to contemplate these various enterprises which constitute a culture is inevitably moving.</p>
 
 </div>
@@ -11820,8 +11820,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Differences between</p>
-<p>Similarities within</p>
+<p><code>Differences between；Similarities within。</code></p>
 <p>Exp: 两个人分钱，看不同文化的人怎么分。如果分钱的人的分配方案，另一个人不能接受，则两人均得到0元。否则，将10元分给这两人。</p>
 <p>根据不同国家表现，如下：两个因素：生存/自我表现，传统信仰/世俗理性，可以将不同文化区分开。</p>
 <p><img src="w7p1.png" alt=""></p>
@@ -11842,7 +11841,9 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Pure-Coordination-Game">Pure Coordination Game<a class="anchor-link" href="#Pure-Coordination-Game">&#182;</a></h2><p>两个人的博弈，如果两个人都把番茄酱放到柜子里，那么每人得1分，如果都放到冰箱里，也都得1分，如果一个人放在柜子里，一个人放在冰箱里，则不得分。</p>
+<h2 id="Pure-Coordination-Game">Pure Coordination Game<a class="anchor-link" href="#Pure-Coordination-Game">&#182;</a></h2><p>这一部分主要讲解 为什么文化内一致的原因。</p>
+<p><strong>博弈是一个Lyapunov函数，最后会导致静态均衡/文化</strong></p>
+<p>两个人的博弈，如果两个人都把番茄酱放到柜子里，那么每人得1分，如果都放到冰箱里，也都得1分，如果一个人放在柜子里，一个人放在冰箱里，则不得分。</p>
 <p>文化像是多个人的纯协调博弈。如果处在不同的习惯的两个人中间，那么就会感到不协调。如下：</p>
 <p><img src="w7p2.png" alt=""></p>
 <p>如果将 Coordination 看作 Lyapunov Function，那么最终会移动产生相似性的隔离。这就是 Axelrod's culture model.</p>
@@ -11854,7 +11855,11 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>博弈和起立鼓掌模型的不同</strong></p>
 <p>协调博弈和Standing Ovation不同，因为在博弈中，如果不按照社会规则，那么有可能付出惨痛的代价。</p>
+<p><strong>博弈的不公平收益</strong></p>
+<p>一些时候，协同的收益并不相同，比如 Metric - English Game，只有英国使用英制，而其余国家使用公制，那么英国人的收益就比较低，但是，因为处于这个环境中，因此所有改变，必然导致当下收益/很长一段时间的收益为0.所以说，希望改变的人只有接受这个大家都在做出的选择。</p>
+<p><img src="w7p3.png" alt=""></p>
 
 </div>
 </div>
@@ -11863,8 +11868,35 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>一些时候，协同的收益并不相同，比如 Metric - English Game，只有英国使用英制，而其余国家使用公制，那么英国人的收益就比较低，但是，因为处于这个环境中，因此所有改变，必然导致当下收益/很长一段时间的收益为0.所以说，希望改变的人只有接受这个大家都在做出的选择。</p>
-<p><img src="w7p3.png" alt=""></p>
+<h2 id="Emergence-of-culture">Emergence of culture<a class="anchor-link" href="#Emergence-of-culture">&#182;</a></h2><p>Why Cultures differ？ According to Axelrod's culture model：</p>
+<p>定义一个特征向量，每个人都有一个特征向量，其中代表我们对事情的偏好。</p>
+<p>当两个人相遇，比较特征向量，如果向量有5个元素，两个元素相同，那么会面的概率为40%，这两个人中有一个是领导者，另一个是跟随者，那么跟随者会按照一定的比例改变自己不同的特征向量。</p>
+<p>PersionA:LEADER 12213</p>
+<p>PersonB：FOLLOWER 13343</p>
+<p>40% Probability Meeting</p>
+<p>PersonB：AFTER MEETING 12343（Change 1 Column）</p>
+<p>60% Probability Meeting</p>
+<p><img src="w7p4.png" alt=""></p>
+<p>结果显示，在这样的模型中，多个不同的文化会交流融合，形成更大的文化。但是，那些和主流文化有很深的边界的文化，因为和其余文化交流太少，并且距离太远，因此单独保留了下来。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Coordination-and-Consisten">Coordination and Consisten<a class="anchor-link" href="#Coordination-and-Consisten">&#182;</a></h2><p>Rule0：Coordination rule 和别人保持一致</p>
+<p>Rule1：Consistency rule 和自己更经常出现的行为保持一致/保持行为的一致性</p>
+<p>Rule2：Sometime people have some error/innovation（small）</p>
+<p>也就是说，我们可以和自己跨时间的行为保持一致，或者和别人跨空间的行为保持一致。</p>
+<p><img src="w7p5.png" alt=""></p>
+<p>G1 G2 代表时间维度，P1 P2 代表不同个体。第一个图是一致的，第二个代表了随机的变异。第三个表示和自己行为一致，但是和别人不一致。第四个表示第二个人改变了行为和第一个人一致，但是，它们两个时间维度不一致。第五个纯粹混乱。</p>
+<p><img src="w7p6.png" alt=""></p>
+<p>这个图代表了向不同位置变化的可能性。最上面的是“ALL MESS”。左边代表协调又一致。右边代表一致但不协调。</p>
+<p><img src="w7p7.png" alt=""></p>
+<p>根据马尔科夫动态平衡，如果引入 创新率/误差率 ε ，即便很小，也会导致显著的差异性。</p>
+<p><strong>这个模型用来解释在同一文化内部的不一致性。</strong></p>
 
 </div>
 </div>
