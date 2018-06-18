@@ -134,10 +134,18 @@ class Chapter:
         self.sourceuri = sourceuri
         self.mark = mark
         self.related_notes = []
+        self.realurl = ""
         self.description = description
         self.chapter_head = None
         self.update = update
 
+    def get_update(self):
+        return self.update
+
+    def get_url(self,real=False):
+        if real:
+            return self.realurl
+        else:return self.sourceuri
 
     def __str__(self):
         return str(self.course)+"::"+self.name
@@ -166,6 +174,7 @@ class Chapter:
 
     def fetch_from_HTML(self,chapter_address="",get_header=False,get_description=False,get_notes=False,reload_info=False):
         """获取课程描述信息以及构建相关笔记信息"""
+        self.realurl = chapter_address + self.sourceuri
         #获取标题信息，并返回到chapter_head中。
         if get_header:
             f = open(chapter_address + self.sourceuri,"r",encoding="utf8")

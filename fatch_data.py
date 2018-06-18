@@ -12,24 +12,26 @@ from muninn_config import *
 import random,os,re,pickle
 from model import *
 
-def constructWorld(courses,notes=None):
+def constructWorld(courses,head=None,notes=None):
     """构建OO对象，仅初始化课程及其包含的章节，不包括章节具体标题、描述和相关笔记。"""
     clist = []
-    for key in courses:
+    for key in head:
         #从config.py中配置Course信息，包括Course信息，其包含的Chapter信息（构建Chapter对象）
         # 以及对应地址包含的Chapter标题、描述和相关Note对象信息
-        c = Course().set_config(courses[key]).set_chapter(chapter_address="source/",
-            get_header=True,get_description=True,get_notes=True,reload_info=True)
-        #顺手读取了关联章节名称、id、地址和版本号
-        clist.append(c)
+        try:
+            c = Course().set_config(courses[key]).set_chapter(chapter_address="source/",
+                get_header=True,get_description=True,get_notes=True,reload_info=True)
+            #顺手读取了关联章节名称、id、地址和版本号
+            clist.append(c)
+        except: print("\n"+"X"*20,"\n课程添加出错，可能是索引不正确..\n","X"*20+"\n")
     return clist
 
-def main(update_data=False,file_path="data.pkl"):
+def main(update_data=False,file_path=""):
     #首先调用构建OO对象的函数，构建课程集
     print("="*20,"开始处理数据","="*20)
     if update_data:
         print("正在构建项目")
-        clist = constructWorld(COURSE_INFO)
+        clist = constructWorld(COURSE_INFO,COURSE_HEAD)
         p = pickle.dump(clist,open(file_path,"wb"))
         print("项目构建完毕，并且存放在:%s"%file_path)
     else:
@@ -49,7 +51,7 @@ def main(update_data=False,file_path="data.pkl"):
             print("\t\t生成HTML::章节信息",ch)
             ch_html = makeHTMLPage(c,menu_html,is_chapter=True,chapter_id=ch.id)
             writeToFile(c,ch_html,suffix="_ch_%s.html"%ch.id)
-    print("="*20,"FINISHED","="*20)
+    print("\n"+"="*20,"FINISHED","="*20+"\n")
 
 def makeHead(clist):
     """根据所有的课程信息返回一个HTML语言的导航条"""
@@ -110,6 +112,8 @@ def makeHTMLPage(course_info,menu_html,is_chapter=False,chapter_id="",chapter_ad
         "h1_title":"",
         "h2_html":"",
     }
+    chapter_update = "2018-01-01"
+    chapter_url = "#"
     for ch in c.chapters:
         #如果需要处理的是章节页面，找到当前章节并进行以下处理：
         if is_chapter and ch.id == chapter_id:
@@ -169,6 +173,13 @@ def makeHTMLPage(course_info,menu_html,is_chapter=False,chapter_id="",chapter_ad
                         <span class="card-text"><small>{note_date}</small></span>
                     </div>
                 </div>"""
+            explain_mold = """
+            <div class="card">
+                    <div class="card-body">
+                        <p class="card-text">{note_title}</p>
+                        <span class="card-text"><small>{note_date}</small></span>
+                    </div>
+            </div>"""
             for note in notes:
                 note_map = {
                 "note_url":note.sourceuri,
@@ -183,7 +194,12 @@ def makeHTMLPage(course_info,menu_html,is_chapter=False,chapter_id="",chapter_ad
                     notehtml = quote_mold.format_map(note_map)
                 elif note.mold == "question":
                     notehtml = question_mold.format_map(note_map)
+                elif note.mold == "explain":
+                    notehtml = explain_mold.format_map(note_map)
                 notes_html += notehtml
+            
+            chapter_update = ch.get_update()
+            chapter_url = "/" + ch.get_url(real=True)
 
                 
         else:
@@ -213,6 +229,8 @@ def makeHTMLPage(course_info,menu_html,is_chapter=False,chapter_id="",chapter_ad
         "intro_content":intro_content,
         "notes_html":notes_html,
         "page_name":c.get_name(),
+        "chapter_update":chapter_update,
+        "chapter_url":chapter_url,
     }
     head_nav = """
         <nav class="nav nav-tabs bg-light">
@@ -251,14 +269,14 @@ def makeHTMLPage(course_info,menu_html,is_chapter=False,chapter_id="",chapter_ad
             <html lang="zh_cn">
             <head>
                 <meta charset="UTF-8">
-                <title>{page_name} - 笔记和写作扩展</title>
+                <title>{page_name} - 课程和笔记</title>
                 <link rel="stylesheet" href="/css/bootstrap.css">
                 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
                 <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
                 <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
             </head>
             <body>""".format_map(map_c)
-# <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet">
+
     footer = """
             <footer class="mt-5 pt-5 pl-5 text-muted text-center text-small">
                 <ul class="list-inline">
@@ -278,7 +296,7 @@ def makeHTMLPage(course_info,menu_html,is_chapter=False,chapter_id="",chapter_ad
                 <div class="card-body">
                         {intro_content}
                     <p class="card-text">
-                        <small class="text-muted">最后更新于 2018-06-09 <a href="http://blog.mazhangjing.com/notebook" class="card-link">查看笔记</a></small>
+                        <small class="text-muted">最后更新于 {chapter_update} <a href="{chapter_url}" target="_black" class="card-link">查看笔记</a></small>
                     </p>
                 </div>
             </div>
@@ -293,9 +311,7 @@ def makeHTMLPage(course_info,menu_html,is_chapter=False,chapter_id="",chapter_ad
     output_html = header + menu_html + head_nav + left_nav + intro_html  + footer
     return output_html
 
-            # <script src="js/jquery.slim.min.js"></script>
-            # <script src="js/popper.min.js"></script>
-            # <script src="js/bootstrap.min.js"></script>
+
 def make_Index(html_head):
     index_map = {
         "html_head":html_head
@@ -459,7 +475,7 @@ def make_Index(html_head):
         </div>
         </div>
     </div>
-
+    <!--
     <footer class="mt-5 pt-5 pl-5 text-muted text-center text-small">
         <ul class="list-inline">
             <li class="list-inline-item">&copy; 2018 Marvin Studio</li>
@@ -467,7 +483,7 @@ def make_Index(html_head):
             <li class="list-inline-item"><a href="#">Jupyter Notebook</a></li>
             <li class="list-inline-item"><a href="#">Github@Corkine</a></li>
         </ul>
-    </footer>
+    </footer>-->
 
     </body>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -493,5 +509,5 @@ def writeToFile(c=None,html="",suffix="_overview.html",index=False):
     
     
 if __name__ == "__main__":
-    main(update_data=True,file_path="last.data")
+    main(update_data=True,file_path="muninn_test_last.data")
     

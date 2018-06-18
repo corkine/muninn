@@ -1,6 +1,5 @@
 #/usr/bin/env python3
 # -*- coding: utf8 -*-
-GITHUB_REP_ADDRESS = "https://github.com/corkine/muninn"
 
 JUPYTER_NOTEBOOK_ROOT_FOLDER = "/root/.jupyter"
 # JUPYTER_NOTEBOOK_ROOT_FOLDER = "C:/Users/Administrator/Desktop/.jupyter"
@@ -15,6 +14,8 @@ JUPYTER_NOTEBOOK_ALLOWED_FOLDER = [
 ]
 
 HTML_DST_FOLDER = "./source"
+
+COURSE_HEAD = ["pr1","mt","c1","c2","cpp","visual1","ml1","mluw"]
 
 COURSE_INFO = {
     "pr1":
