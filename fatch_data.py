@@ -276,7 +276,6 @@ def makeHTMLPage(course_info,menu_html,is_chapter=False,chapter_id="",chapter_ad
             <div class="card">
                 <div class="card-header">本章概览</div>
                 <div class="card-body">
-                    <p class="card-text">
                         {intro_content}
                     <p class="card-text">
                         <small class="text-muted">最后更新于 2018-06-09 <a href="http://blog.mazhangjing.com/notebook" class="card-link">查看笔记</a></small>
