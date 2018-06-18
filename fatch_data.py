@@ -1,16 +1,19 @@
 #/usr/bin/env python3
 # -*- coding: utf8 -*-
-__version__ = "0.0.4"
-__log__ = """2018-06-11 0.0.3 使用model提供的类方法而不是对象属性重构了项目，使用API解耦合。
-添加了Pickle存储对象，方便进行调试。
-对于从源HTML中获取Chapter的信息，提供了一个类方法，现在只需要一句话就可以完全自动构建Course对象，
-其中自动化Course的信息、包含章节的信息以及每个章节相关笔记的信息。
-2018-06-11 0.0.4 完善related_notes笔记接口，提供三种标准（问题、名言、博客类型），整个程序大体完成。
+server_version  = "0.1.1"
+server_log = """
+0.0.3 2018-06-11 使用model提供的类方法而不是对象属性重构了项目，使用API解耦合。
+                添加了Pickle存储对象，方便进行调试。
+                对于从源HTML中获取Chapter的信息，提供了一个类方法，现在只需要一句话就可以完全自动构建Course对象，
+                其中自动化Course的信息、包含章节的信息以及每个章节相关笔记的信息。
+0.0.4 2018-06-11 完善related_notes笔记接口，提供三种标准（问题、名言、博客类型），整个程序大体完成。
+0.1.0 Alpha 上线测试
+0.1.1 2018年6月18日 添加了 ‘explain’ 类型的笔记。给每个笔记添加了链接。解决了目录显示顺序随机的问题。
 """
-
 from muninn_config import *
 import random,os,re,pickle
 from model import *
+
 
 def constructWorld(courses,head=None,notes=None):
     """构建OO对象，仅初始化课程及其包含的章节，不包括章节具体标题、描述和相关笔记。"""
@@ -314,7 +317,8 @@ def makeHTMLPage(course_info,menu_html,is_chapter=False,chapter_id="",chapter_ad
 
 def make_Index(html_head):
     index_map = {
-        "html_head":html_head
+        "html_head":html_head,
+        "server_version":(server_version if server_version else "Beta"),
     }
     output_html = """
     <!DOCTYPE html>
@@ -470,11 +474,17 @@ def make_Index(html_head):
                 <p>我的 Jupyter 笔记系统 · 我的 Github 笔记展示仓库
                 <br>笔记博客系统部署指南 · Github 代码仓库
                 <br>Design & Developed by Corkine Ma (Github@corkine)
-
+                <br>Server Version: {server_version}
                 <br>© Marvin Studio 2018 </p>
         </div>
         </div>
     </div>
+    <footer class="mt-5 pt-5 pl-5 text-muted text-center text-small">
+        <ul class="list-inline">
+            <li class="list-inline-item"></li>
+            <li class="list-inline-item"></li>
+        </ul>
+    </footer>
     <!--
     <footer class="mt-5 pt-5 pl-5 text-muted text-center text-small">
         <ul class="list-inline">
