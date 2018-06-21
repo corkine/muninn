@@ -11880,7 +11880,42 @@ F(X) = 2 - 2X if X &gt; 0.5</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Network">Network<a class="anchor-link" href="#Network">&#182;</a></h1>
+<h1 id="Network">Network<a class="anchor-link" href="#Network">&#182;</a></h1><h2 id="Define-a-Network">Define a Network<a class="anchor-link" href="#Define-a-Network">&#182;</a></h2><p>how it froms？what is the structure？</p>
+<p>《Network：An introduction》by Newtter</p>
+<p>前提：No direction Network。</p>
+<p>Degree(node): 一个node有一条线，那么degree(node)就是1，如果有四条线，那么degree(node)为4。</p>
+<p>Degree(network): 整个网络的线段的个数。</p>
+<p>Average Degree(network): edges*2/nodes 线段×2/节点数</p>
+<p>Neighbors of a node：和一个node连接的其余node。</p>
+<p><strong>Fact1</strong>：一个人的朋友大多数情况下比他们自己受欢迎/朋友多。</p>
+<p>Path Length： 两个node交流需要经过的edge/线段数。</p>
+<p>Average Path Length：network的两个node线段平均数</p>
+<p><strong>Fact2</strong>：Markov过程可以表述成四个node的network</p>
+<p>Clustering Coefficient：聚合系数 network的线段能够形成多少个三角形？三角形个数/node数就是聚合系数。常用来表示网络鲁棒性，在创新研究上使用较多，三个人的三角形更能保持创新，使信息流动更有效。</p>
+<h2 id="Measure-Network">Measure Network<a class="anchor-link" href="#Measure-Network">&#182;</a></h2><h3 id="Random-Attachment">Random Attachment<a class="anchor-link" href="#Random-Attachment">&#182;</a></h3><p>N nodes &amp; P = probability two nodes connected</p>
+<p>当 P &gt; 1/(N-1) 时，对于很大的N，所有节点都将被连接。</p>
+<p>当到达这个P值的时候，类似于Tipping Point，所有的点突然一下子就被连接。</p>
+<p><img src="ctp.png" alt=""></p>
+<h3 id="Small-Worlds-Newwork">Small Worlds Newwork<a class="anchor-link" href="#Small-Worlds-Newwork">&#182;</a></h3><p>真实世界类似于熟人社交（比如亲属）+一部分的随机网络（比如室友和工作伙伴）。</p>
+<p><img src="swlogo.png" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>可见在这种情况下，每个人基本上和6个人连接。</p>
+<h3 id="Preferential-Attachment">Preferential Attachment<a class="anchor-link" href="#Preferential-Attachment">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Function-of-a-Network">Function of a Network<a class="anchor-link" href="#Function-of-a-Network">&#182;</a></h2>
 </div>
 </div>
 </div>
