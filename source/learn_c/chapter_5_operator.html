@@ -11775,7 +11775,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#31532;&#20116;&#31456;-&#36816;&#31639;&#31526;&#12289;&#34920;&#36798;&#24335;&#21644;&#35821;&#21477;-[1]">&#31532;&#20116;&#31456; &#36816;&#31639;&#31526;&#12289;&#34920;&#36798;&#24335;&#21644;&#35821;&#21477; [1]<a class="anchor-link" href="#&#31532;&#20116;&#31456;-&#36816;&#31639;&#31526;&#12289;&#34920;&#36798;&#24335;&#21644;&#35821;&#21477;-[1]">&#182;</a></h1><p>本章主要内容有C运算符，表达式和语句，自定类型、类型转换和带有参数的函数。</p>
+<p><span type="title">运算符、表达式、控制语句和文件I/O</span> | <span type="update">2018-06-21</span> | <span type="version">0.8</span></p>
+<p><span type="intro"><p class="card-text">本章第一部分主要讲解C运算符，表达式和语句基础，自定类型、类型转换和带有参数的函数。</p><p class="card-text">第二部分详细讲解C语言的循环(while/do..while/for)、分支(if/switch)和跳转语句，这些语句/语法可以满足在C中进行逻辑控制的大多数需求。本章亦讲解了关系运算符、算术运算符、逻辑运算符、逗号运算符和条件运算符等运算符的作用和优先级。在使用语句的时候，这些运算符的处理非常重要。</p><p class="card-text">在第二部分穿插讲解了 getchar() 和 putchar() 等宏，以及 ctype.h 提供的字符函数。在第三部分，重点介绍了文件I/O的基本知识，包括流，重定向以及如何确认输入内容。</span></p>
 
 </div>
 </div>
@@ -11784,14 +11785,14 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="5.1-C-&#36816;&#31639;&#31526;">5.1 C &#36816;&#31639;&#31526;<a class="anchor-link" href="#5.1-C-&#36816;&#31639;&#31526;">&#182;</a></h1><p>C 的基本运算符有 <code>+ - * / % pow(m,n)</code></p>
-<h2 id="5.1.1-&#36171;&#20540;&#36816;&#31639;&#31526;-=-">5.1.1 <strong>&#36171;&#20540;&#36816;&#31639;&#31526; = </strong><a class="anchor-link" href="#5.1.1-&#36171;&#20540;&#36816;&#31639;&#31526;-=-">&#182;</a></h2><p>answer = 42;</p>
+<h1 id="C-&#36816;&#31639;&#31526;">C &#36816;&#31639;&#31526;<a class="anchor-link" href="#C-&#36816;&#31639;&#31526;">&#182;</a></h1><p>C 的基本运算符有 <code>+ - * / % pow(m,n)</code></p>
+<h2 id="&#36171;&#20540;&#36816;&#31639;&#31526;-=">&#36171;&#20540;&#36816;&#31639;&#31526; =<a class="anchor-link" href="#&#36171;&#20540;&#36816;&#31639;&#31526;-=">&#182;</a></h2><p>answer = 42;</p>
 <p>以上是一个语句，其中 分号 是语句的中断处， <strong>lvalue 左值</strong>指的是用于标识一个特定数据对象的名字或表达式。<strong>对象</strong>指的是实际的数据储存，左值是<u>识别对象的标识符</u>。 <strong>rvalue 右值</strong>指的是<u>能够赋给可修改左值的量</u>。右值可以是常量、变量或者是任何可以产生值的表达式 （简要说，就是任何能够产生值的东西），比如：</p>
 <p>answer = ans = 42;</p>
 <p>answer = 21 * 2;</p>
 <p>这两个左值的量都是 42。</p>
-<h2 id="5.1.2-&#21152;&#12289;&#20943;&#12289;&#31526;&#21495;&#36816;&#31639;&#31526;-+--">5.1.2 <strong>&#21152;&#12289;&#20943;&#12289;&#31526;&#21495;&#36816;&#31639;&#31526; + -</strong><a class="anchor-link" href="#5.1.2-&#21152;&#12289;&#20943;&#12289;&#31526;&#21495;&#36816;&#31639;&#31526;-+--">&#182;</a></h2><p>没什么说的，需要注意，加减被认为是二元运算符，因为它们需要两个操作数。符号运算符可以表示或者改变一个值的符号。</p>
-<h2 id="5.1.3-&#20056;&#27861;&#12289;&#38500;&#27861;&#36816;&#31639;&#31526;-*-/">5.1.3 <strong>&#20056;&#27861;&#12289;&#38500;&#27861;&#36816;&#31639;&#31526; * /</strong><a class="anchor-link" href="#5.1.3-&#20056;&#27861;&#12289;&#38500;&#27861;&#36816;&#31639;&#31526;-*-/">&#182;</a></h2><p>需要注意，C 中 没有指数，需要使用 pow(m,n) 表示 $m^n$，这个函数在 math.h 头文件中。</p>
+<h2 id="&#21152;&#12289;&#20943;&#12289;&#31526;&#21495;&#36816;&#31639;&#31526;-+--">&#21152;&#12289;&#20943;&#12289;&#31526;&#21495;&#36816;&#31639;&#31526; + -<a class="anchor-link" href="#&#21152;&#12289;&#20943;&#12289;&#31526;&#21495;&#36816;&#31639;&#31526;-+--">&#182;</a></h2><p>没什么说的，需要注意，加减被认为是二元运算符，因为它们需要两个操作数。符号运算符可以表示或者改变一个值的符号。</p>
+<h2 id="&#20056;&#27861;&#12289;&#38500;&#27861;&#36816;&#31639;&#31526;-*-/">&#20056;&#27861;&#12289;&#38500;&#27861;&#36816;&#31639;&#31526; * /<a class="anchor-link" href="#&#20056;&#27861;&#12289;&#38500;&#27861;&#36816;&#31639;&#31526;-*-/">&#182;</a></h2><p>需要注意，C 中 没有指数，需要使用 pow(m,n) 表示 $m^n$，这个函数在 math.h 头文件中。</p>
 <p>除法运算符对于两个浮点数运算，则得到浮点数，对于两个整数运算得到整数，比如：</p>
 <p>3/2 = 1 这种过程被称之为截尾。</p>
 <p>你可以混合整数和浮点数的除法，但本质上，这是C在进行自动转换后运行的，实际上两者表达方式不同，不能相除，你可以试下：</p>
@@ -11799,8 +11800,8 @@ div#notebook {
 <p><strong>优先级问题</strong></p>
 <p>先计算括号内的数，然后按照乘除、加减进行运算。但是，对于以下运算：</p>
 <p>（1+23）+（2+12），对于不同的实现，先计算左边还是右边是不同的。因为不同的选择可能在不同平台上有较高的效率。</p>
-<h2 id="5.1.4-&#21462;&#27169;&#36816;&#31639;&#31526;%">5.1.4 <strong>&#21462;&#27169;&#36816;&#31639;&#31526;%</strong><a class="anchor-link" href="#5.1.4-&#21462;&#27169;&#36816;&#31639;&#31526;%">&#182;</a></h2><p>对于浮点数无效，一般用于控制多次执行。</p>
-<h2 id="5.1.5-&#22686;&#37327;&#21644;&#20943;&#37327;&#36816;&#31639;&#31526;++---">5.1.5 <strong>&#22686;&#37327;&#21644;&#20943;&#37327;&#36816;&#31639;&#31526;++ --</strong><a class="anchor-link" href="#5.1.5-&#22686;&#37327;&#21644;&#20943;&#37327;&#36816;&#31639;&#31526;++---">&#182;</a></h2><p><strong>有赋值的递增递减运算</strong></p>
+<h2 id="&#21462;&#27169;&#36816;&#31639;&#31526;%">&#21462;&#27169;&#36816;&#31639;&#31526;%<a class="anchor-link" href="#&#21462;&#27169;&#36816;&#31639;&#31526;%">&#182;</a></h2><p>对于浮点数无效，一般用于控制多次执行。</p>
+<h2 id="&#22686;&#37327;&#21644;&#20943;&#37327;&#36816;&#31639;&#31526;++---">&#22686;&#37327;&#21644;&#20943;&#37327;&#36816;&#31639;&#31526;++ --<a class="anchor-link" href="#&#22686;&#37327;&#21644;&#20943;&#37327;&#36816;&#31639;&#31526;++---">&#182;</a></h2><p><strong>有赋值的递增递减运算</strong></p>
 <p>对于下列程序：</p>
 <div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
@@ -11858,7 +11859,7 @@ div#notebook {
 <li><p>如果一个变量多次出现在一个表达式中时，不要使用增减运算符。 <code>ans = num/2 + 5*(1 + num++)</code></p>
 </li>
 </ul>
-<h2 id="5.1.6-sizeof-&#36816;&#31639;&#31526;">5.1.6 <strong><code>sizeof</code> &#36816;&#31639;&#31526;</strong><a class="anchor-link" href="#5.1.6-sizeof-&#36816;&#31639;&#31526;">&#182;</a></h2><p>sizeof 运算符 返回 以字节为单位的数的大小，其类型为 size_t, 你可以自己定义下：</p>
+<h2 id="sizeof-&#36816;&#31639;&#31526;">sizeof &#36816;&#31639;&#31526;<a class="anchor-link" href="#sizeof-&#36816;&#31639;&#31526;">&#182;</a></h2><p>sizeof 运算符 返回 以字节为单位的数的大小，其类型为 size_t, 你可以自己定义下：</p>
 <div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 <span class="kt">size_t</span> <span class="n">a_size</span><span class="p">;</span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
@@ -11885,7 +11886,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="5.2-&#34920;&#36798;&#24335;&#21644;&#35821;&#21477;">5.2 &#34920;&#36798;&#24335;&#21644;&#35821;&#21477;<a class="anchor-link" href="#5.2-&#34920;&#36798;&#24335;&#21644;&#35821;&#21477;">&#182;</a></h1><h2 id="5.2.1-&#34920;&#36798;&#24335;">5.2.1 &#34920;&#36798;&#24335;<a class="anchor-link" href="#5.2.1-&#34920;&#36798;&#24335;">&#182;</a></h2><p>表达式指的是由运算符和操纵数组合构成的，比如：</p>
+<h1 id="&#34920;&#36798;&#24335;&#21644;&#35821;&#21477;&#27010;&#35272;">&#34920;&#36798;&#24335;&#21644;&#35821;&#21477;&#27010;&#35272;<a class="anchor-link" href="#&#34920;&#36798;&#24335;&#21644;&#35821;&#21477;&#27010;&#35272;">&#182;</a></h1><h2 id="&#34920;&#36798;&#24335;">&#34920;&#36798;&#24335;<a class="anchor-link" href="#&#34920;&#36798;&#24335;">&#182;</a></h2><p>表达式指的是由运算符和操纵数组合构成的，比如：</p>
 
 <pre><code>1+1
 -4
@@ -11895,11 +11896,11 @@ x = ++q + 9 % 3
 x = 2</code></pre>
 <p>其中每个表达式都有一个值，甚至像 <code>x = 2</code> 这个表达式也有值，值为2。 像 <code>x &gt; 3</code> 这个表达式，如果为真，那么值为1，否则为0。</p>
 <p>因为这种定义，所以你可以这样写 <code>int a = b = 3 =2</code>。</p>
-<h2 id="5.2.2-&#35821;&#21477;">5.2.2 &#35821;&#21477;<a class="anchor-link" href="#5.2.2-&#35821;&#21477;">&#182;</a></h2><p>语句指的是由逗号分割的表达式。常见的有声明语句，赋值语句，while复合语句，函数语句(printf)等。考虑以下代码：</p>
+<h2 id="&#35821;&#21477;&#22522;&#30784;">&#35821;&#21477;&#22522;&#30784;<a class="anchor-link" href="#&#35821;&#21477;&#22522;&#30784;">&#182;</a></h2><p>语句指的是由逗号分割的表达式。常见的有声明语句，赋值语句，while复合语句，函数语句(printf)等。考虑以下代码：</p>
 <div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">x</span><span class="o">++</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="o">--</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span><span class="err">；</span>
 </pre></div>
 <p>不能够确定前半部分还是后半部分哪个先执行的原因是，这个表达式的语句中断一直到3）后才有。</p>
-<h1 id="5.3-&#31867;&#22411;&#36716;&#25442;">5.3 &#31867;&#22411;&#36716;&#25442;<a class="anchor-link" href="#5.3-&#31867;&#22411;&#36716;&#25442;">&#182;</a></h1><p>C可以进行类型自动转换，但是不太稳定，并且可能很危险。在两种类型的运算中，通常会被转换成较高级别，比如int/float，值被转换成float，之后根据要赋予的变量而再次进行类型转换。前者称之为提升，后者称之为降级。降级的问题很大。为了准确运算和避免自动类型转换，尤其是降级，可以<strong>指派运算符</strong>，比如如：</p>
+<h1 id="&#31867;&#22411;&#36716;&#25442;">&#31867;&#22411;&#36716;&#25442;<a class="anchor-link" href="#&#31867;&#22411;&#36716;&#25442;">&#182;</a></h1><p>C可以进行类型自动转换，但是不太稳定，并且可能很危险。在两种类型的运算中，通常会被转换成较高级别，比如int/float，值被转换成float，之后根据要赋予的变量而再次进行类型转换。前者称之为提升，后者称之为降级。降级的问题很大。为了准确运算和避免自动类型转换，尤其是降级，可以<strong>指派运算符</strong>，比如如：</p>
 <div class="highlight"><pre><span></span><span class="n">mice</span> <span class="o">=</span> <span class="mf">1.6</span> <span class="o">+</span> <span class="mf">1.7</span><span class="p">;</span><span class="c1">//3.3</span>
 <span class="n">mice</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="mf">1.6</span> <span class="o">+</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="mf">1.7</span><span class="p">;</span><span class="c1">//2</span>
 </pre></div>
@@ -11918,7 +11919,7 @@ x = 2</code></pre>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="5.4-&#24102;&#26377;&#21442;&#25968;&#30340;&#20989;&#25968;">5.4 &#24102;&#26377;&#21442;&#25968;&#30340;&#20989;&#25968;<a class="anchor-link" href="#5.4-&#24102;&#26377;&#21442;&#25968;&#30340;&#20989;&#25968;">&#182;</a></h1><p>函数接受一个输入，给出一个输出。C是静态语言，因此需要在原型中声明函数的输入类型，输出类型以及函数名称。</p>
+<h1 id="&#24102;&#26377;&#21442;&#25968;&#30340;&#20989;&#25968;">&#24102;&#26377;&#21442;&#25968;&#30340;&#20989;&#25968;<a class="anchor-link" href="#&#24102;&#26377;&#21442;&#25968;&#30340;&#20989;&#25968;">&#182;</a></h1><p>函数接受一个输入，给出一个输出。C是静态语言，因此需要在原型中声明函数的输入类型，输出类型以及函数名称。</p>
 <p>比如：</p>
 <div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
@@ -11945,11 +11946,249 @@ x = 2</code></pre>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<hr>
+<h1 id="&#19968;&#33324;&#24490;&#29615;&#35821;&#21477;">&#19968;&#33324;&#24490;&#29615;&#35821;&#21477;<a class="anchor-link" href="#&#19968;&#33324;&#24490;&#29615;&#35821;&#21477;">&#182;</a></h1><h2 id="&#29992;&#27861;&#65306;&#29992;&#20110;&#25509;&#21463;&#36755;&#20837;">&#29992;&#27861;&#65306;&#29992;&#20110;&#25509;&#21463;&#36755;&#20837;<a class="anchor-link" href="#&#29992;&#27861;&#65306;&#29992;&#20110;&#25509;&#21463;&#36755;&#20837;">&#182;</a></h2><p>C风格的循环常常用来连续读入数据：</p>
+<div class="highlight"><pre><span></span><span class="kt">long</span> <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%ld&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">num</span><span class="p">)){</span> <span class="c1">//返回值为1，判断为真，只要不是0，都判断为真</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;The number is %ld</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">num</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">233</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 
-<p><strong>更新日志</strong></p>
-<p>2018-05-26 SP0.9</p>
-<p>2018-05-26 SP1.0</p>
+<pre><code>12 23 321
+The number is 12
+The number is 23
+The number is 321
+23 3213 321 a 23
+The number is 23
+The number is 3213
+The number is 321</code></pre>
+<p>这里很巧妙的利用了 scanf 读数据的返回值，当 scanf 没有读到合适的数据，那么就会返回0，终止读取，循环结束。</p>
+<p>这里还有一个技巧是，如果想要跳过某种类型的输入，使用一个 while循环，比如：</p>
+<p><code>while (scanf("%ld",&amp;num) == 1);</code> 跳过整数输入，因为所有的整数输入都被读到循环中，并且抛弃了。在此语句之后，就可以开始读取我们想要的类型了。</p>
+<h2 id="&#29992;&#27861;&#65306;&#29992;&#20197;&#36941;&#21382;&#25968;&#32452;">&#29992;&#27861;&#65306;&#29992;&#20197;&#36941;&#21382;&#25968;&#32452;<a class="anchor-link" href="#&#29992;&#27861;&#65306;&#29992;&#20197;&#36941;&#21382;&#25968;&#32452;">&#182;</a></h2><p>C循环的另一个常见的操作是保存数组，比如下列语句计算了10个数的平均值，使用了数组。（虽然不使用计算更快）</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">SIZE</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">double</span> <span class="n">a</span><span class="p">[</span><span class="n">SIZE</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">SIZE</span><span class="p">){</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="n">i</span><span class="p">);</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%lf&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;SUM is %f&quot;</span><span class="p">,</span><span class="n">sum</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<h2 id="&#20851;&#31995;&#36816;&#31639;&#31526;&#21644;&#34920;&#36798;&#24335;">&#20851;&#31995;&#36816;&#31639;&#31526;&#21644;&#34920;&#36798;&#24335;<a class="anchor-link" href="#&#20851;&#31995;&#36816;&#31639;&#31526;&#21644;&#34920;&#36798;&#24335;">&#182;</a></h2><p><strong>浮点数的关系判断</strong></p>
+<p>循环语句需要接受一个或几个包含关系运算符的表达式，然后根据此决定是否需要循环。</p>
+<p>对于浮点数比较大小，尤其是要比较相等，是一个麻烦的问题，一般使用 fabs(a - b) &gt; 0.01，使用 <code>math.h</code> 的 fabs 返回一个绝对值。如果浮点数相差不大，那就判断算接受。</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">double</span> <span class="n">num</span><span class="p">,</span><span class="n">num2</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%lf %lf&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">num</span><span class="p">,</span><span class="o">&amp;</span><span class="n">num2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">){</span> <span class="c1">//需要注意，两个输入，返回2</span>
+        <span class="c1">//需要注意，lf才可以在 scanf 中接受到double，而f则不可以(float)。</span>
+        <span class="c1">//需要注意，这里不能写 == 1，或者省略，因为一旦输入的数是奇数个</span>
+        <span class="c1">//最后一次判断会出错</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;The number is %f %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">num</span><span class="p">,</span><span class="n">num2</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">num</span><span class="o">-</span><span class="n">num2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">){</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Eq&quot;</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Not Eq&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p><strong>运算符优先级</strong></p>
+<ul>
+<li>注意，使用 &lt;stdbool.h&gt; 可以使用 bool 类型。</li>
+<li>注意，逻辑相等的运算关系符号是 == 而不是 =。后者是赋值符号。</li>
+<li>注意，关系运算符优先级 高于 赋值运算符，但是低于 算数运算符。</li>
+<li>关系运算符内部，&lt; &gt; &lt;= &gt;= 的优先级高于 == 和 ！=</li>
+</ul>
+<p><code>x = a + b == c =&gt; x = ((a+b) == c)</code></p>
+<p><code>x = a &gt; b != c =&gt; x = ((a &gt; b) != c)</code></p>
+<p>总的来说，括号优先级最高，接着是！，接着是++ -- 正负号，接着是乘除加减，接着是关系运算符，最后是赋值运算符。</p>
+<h1 id="&#35745;&#25968;&#24490;&#29615;&#21644;&#19981;&#30830;&#23450;&#24490;&#29615;">&#35745;&#25968;&#24490;&#29615;&#21644;&#19981;&#30830;&#23450;&#24490;&#29615;<a class="anchor-link" href="#&#35745;&#25968;&#24490;&#29615;&#21644;&#19981;&#30830;&#23450;&#24490;&#29615;">&#182;</a></h1><h2 id="for-&#24490;&#29615;&#29992;&#20197;&#35745;&#25968;">for &#24490;&#29615;&#29992;&#20197;&#35745;&#25968;<a class="anchor-link" href="#for-&#24490;&#29615;&#29992;&#20197;&#35745;&#25968;">&#182;</a></h2><p>C中有一个叫做 for 循环的语句，可以用来进行计数。</p>
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="cm">/*do something*/</span>
+<span class="p">}</span>
+
+<span class="c1">//等同于</span>
+
+<span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">){</span>
+    <span class="cm">/*do something*/</span>
+    <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>它的变式为：</p>
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Do something first in one statment</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">),</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;i is %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<pre><code>Do something first in one statment
+i is 0
+i is 1
+i is 2
+i is 3
+i is 4</code></pre>
+<p>意思是，for循环接受三个语句作为表达式，第一个只会在循环开始前执行一次，最后一个则会在每次循环末尾执行一次，中间是是否要执行此循环的判断。这里有一个叫做都好运算符的东西。</p>
+<h2 id="&#36887;&#21495;&#36816;&#31639;&#31526;">&#36887;&#21495;&#36816;&#31639;&#31526;<a class="anchor-link" href="#&#36887;&#21495;&#36816;&#31639;&#31526;">&#182;</a></h2><p>逗号在C中有一个很奇妙的作用，就是作为运算符，其含义是，在逗号左边先执行，右边后执行。逗号运算符会保证运算顺序，右边会受到左边运算结果的影响。</p>
+<p><code>int i = 1; i++, result = i * 30;</code></p>
+<p><code>result = houseprice = 200, 450;</code> 并没有错误，但此语句返回值为450(result的值)。</p>
+<h2 id="do-while-&#24490;&#29615;">do while &#24490;&#29615;<a class="anchor-link" href="#do-while-&#24490;&#29615;">&#182;</a></h2><p>do while 循环用以对语句执行一次，如果之后结果不符合，则不继续执行。</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span> <span class="c1">//这里不能放在 do 循环内，虽然do 循环必然会执行一次</span>
+    <span class="k">do</span><span class="p">{</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">i</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;i is %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">i</span><span class="p">);</span>
+       <span class="p">}</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<h1 id="&#20998;&#25903;&#35821;&#21477;">&#20998;&#25903;&#35821;&#21477;<a class="anchor-link" href="#&#20998;&#25903;&#35821;&#21477;">&#182;</a></h1><h2 id="&#19968;&#33324;&#20998;&#25903;&#35821;&#21477;-if">&#19968;&#33324;&#20998;&#25903;&#35821;&#21477; if<a class="anchor-link" href="#&#19968;&#33324;&#20998;&#25903;&#35821;&#21477;-if">&#182;</a></h2><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">expression1</span><span class="p">){</span>
+    <span class="n">statement1</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">expression2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">statement2</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">statement3</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p><strong>一个可能出现的问题：</strong></p>
+
+<pre><code>if (a)
+    doA
+if (b)
+    doB
+else doC</code></pre>
+<p>会默认将 else 看作 内层的分支。尽量不要这么写，并且使用缩进，否则很容易造成逻辑问题。</p>
+<h2 id="&#22810;&#37325;&#20998;&#25903;&#35821;&#21477;-switch">&#22810;&#37325;&#20998;&#25903;&#35821;&#21477; switch<a class="anchor-link" href="#&#22810;&#37325;&#20998;&#25903;&#35821;&#21477;-switch">&#182;</a></h2><p>switch 适用于对某个值的多个不同情况进行判断和选择这一情况。</p>
+<div class="highlight"><pre><span></span><span class="k">switch</span><span class="p">(</span><span class="n">getchar</span><span class="p">()){</span>
+        <span class="k">case</span> <span class="sc">&#39;a&#39;</span><span class="o">:</span>
+        <span class="k">case</span> <span class="sc">&#39;b&#39;</span><span class="o">:</span>
+        <span class="k">case</span> <span class="sc">&#39;c&#39;</span><span class="o">:</span>
+        <span class="k">case</span> <span class="sc">&#39;d&#39;</span><span class="o">:</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;I got a or b or c or d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;e&#39;</span><span class="o">:</span>
+        <span class="k">case</span> <span class="sc">&#39;f&#39;</span><span class="o">:</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;I got e or f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="k">default</span><span class="o">:</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Wrong</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+</pre></div>
+<p>如果是 a or b or c or d, 返回语句并且停止。如果是 e or f，那么返回语句，同时因为没有break，所以继续走下去，返回默认语句；</p>
+
+<pre><code>a
+I got a or b or c or d
+e
+I got e or f
+Wrong</code></pre>
+<h2 id="getchar()-&#12289;putchar()">getchar() &#12289;putchar()<a class="anchor-link" href="#getchar()-&#12289;putchar()">&#182;</a></h2><p>这两个预处理器宏是在 stdio.h 中进行定义的，<code>ch = getchar(); putchar(ch)</code>类似于 <code>scanf("%c",ch)</code> 和 <code>printf("%c",ch)</code>。</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;ctype.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">((</span><span class="n">ch</span> <span class="o">=</span> <span class="n">getchar</span><span class="p">())</span> <span class="o">!=</span> <span class="sc">&#39;\n&#39;</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">isalpha</span><span class="p">(</span><span class="n">ch</span><span class="p">))</span> <span class="n">putchar</span><span class="p">(</span><span class="n">ch</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span> <span class="c1">//判断是否为字母，ctype定义函数</span>
+        <span class="k">else</span> <span class="n">putchar</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<pre><code>Hello C
+Ifmmp D</code></pre>
+<h2 id="ctype.h">ctype.h<a class="anchor-link" href="#ctype.h">&#182;</a></h2><p><strong>ctype.h中对于字符的一些常用函数</strong></p>
+<div class="highlight"><pre><span></span><span class="n">tolower</span><span class="p">()</span> <span class="c1">//小写</span>
+<span class="n">toupper</span><span class="p">()</span> <span class="c1">//大写</span>
+<span class="n">iscntrl</span><span class="p">()</span> <span class="c1">//控制符</span>
+<span class="n">isdigit</span><span class="p">()</span> <span class="c1">//数字</span>
+<span class="n">isalnum</span><span class="p">()</span> <span class="c1">//字母数字</span>
+<span class="n">isalpha</span><span class="p">()</span> <span class="c1">//字母</span>
+<span class="n">isspace</span><span class="p">()</span> <span class="c1">//空格</span>
+<span class="n">issuper</span><span class="p">()</span> <span class="c1">//大写字母</span>
+</pre></div>
+<h2 id="&#36923;&#36753;&#36816;&#31639;&#31526;&#21644;&#34920;&#36798;&#24335;">&#36923;&#36753;&#36816;&#31639;&#31526;&#21644;&#34920;&#36798;&#24335;<a class="anchor-link" href="#&#36923;&#36753;&#36816;&#31639;&#31526;&#21644;&#34920;&#36798;&#24335;">&#182;</a></h2><p><strong>逻辑运算符优先级</strong></p>
+<p>在 while 循环中，介绍了关系运算符，在分支语句中，则重点介绍 逻辑运算符。同样的，逻辑运算符内部有先后问题：</p>
+<p><code>! &gt; &amp;&amp; &gt; ||</code></p>
+<p>和其余运算符合起来考虑，！运算符仅次于括号运算符。而其余逻辑运算符则低于关系运算符，其中 &amp;&amp; 大于 ||。</p>
+<p><code>if (ch != '\n' &amp;&amp; ch != 'a') =&gt; if ((ch != '\n') &amp;&amp; (ch != 'a'))</code></p>
+<p><strong>使用 iso646.h </strong></p>
+<p>在这个h文件中，你可以使用 and 代替 &amp;&amp;，使用 or 代替 ||，使用 not 代替 ！。</p>
+<p><strong>求值的顺序</strong></p>
+<p>在C中，我们说<code>(2*3) + (3+6)</code>，根据编译器来决定先计算左边还是右边。但逗号运算符则对顺序进行了强制，<code>(2+3),(3+6)</code>。此外，逻辑运算符也有顺序性，从左到右。</p>
+<p>这是因为： <code>while ((c = getchar()) != '\n' &amp;&amp; c != '\n')</code> 如果左边为否，那么就不会进行右边的运算，而是直接跳过。</p>
+<h2 id="&#26465;&#20214;&#36816;&#31639;&#31526;&#65311;:">&#26465;&#20214;&#36816;&#31639;&#31526;&#65311;:<a class="anchor-link" href="#&#26465;&#20214;&#36816;&#31639;&#31526;&#65311;:">&#182;</a></h2><p><code>if (1 &gt; 2) printf('y'); else printf('n');
+等同于
+(1 &gt; 2) ? printf('y') : printf('n');</code></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="&#23383;&#31526;&#36755;&#20837;/&#36755;&#20986;&#21644;&#36755;&#20837;&#30830;&#35748;">&#23383;&#31526;&#36755;&#20837;/&#36755;&#20986;&#21644;&#36755;&#20837;&#30830;&#35748;<a class="anchor-link" href="#&#23383;&#31526;&#36755;&#20837;/&#36755;&#20986;&#21644;&#36755;&#20837;&#30830;&#35748;">&#182;</a></h1><h2 id="&#32531;&#20914;&#21306;">&#32531;&#20914;&#21306;<a class="anchor-link" href="#&#32531;&#20914;&#21306;">&#182;</a></h2><p>字符并非在键盘上按下后就立刻被处理。其分为两种情况。其一，直接作为非缓冲输入，显示在Output设备，比如显示器上，对于交互程序，比如Word以及游戏需要这样。其二，其作为缓冲输入，存储在缓冲区，等待缓冲区满（完全缓冲）或者按下回车键（行缓冲）后再对其进行处理。</p>
+<p>C的文件IO由各操作系统独立实现，称之为低级I/O。为了方便，C有一套高级的全平台I/O标准，称之为标准I/O包。系统之间的差异，比如换行和字符集等，由C来进行处理，对于用户则是一个统一的接口。</p>
+<p><strong>流式I/O</strong></p>
+<p>文件、媒体作为流被C程序处理。C仅仅提供的是流处理API，键盘输入由一个叫做stdin的流表示。屏幕等输出设备则由stdout流表示。所有从键盘的输入，以及输出到屏幕，都需要使用这两个流，然后交给C处理。C不能直接处理文件。</p>
+<p><strong>处理过程和终止过程</strong></p>
+<p>像是getchar(),putchar(),printf(),scanf()，这些函数/宏被用来从流中读取各种东西下来。读取过的部分从流中自动消失。当文件被读取完毕，C输入函数可以自动检测文件尾。文件结尾采用 EOF 定义，这是一个在 stdio.h 中定义的变量，值为-1。scanf()和getchar()等函数在读到文件末尾的时候，自动返回 EOF。当作为键盘输入的时候，使用ctrl+z or ctrl+d 来表示中止输入，作为文件结尾。</p>
+<h2 id="&#37325;&#23450;&#21521;">&#37325;&#23450;&#21521;<a class="anchor-link" href="#&#37325;&#23450;&#21521;">&#182;</a></h2><p>程序如何了解在哪里寻找输入的内容？或者要输出到哪里？一种方式是采用专门打开、关闭、读写文件的函数，第二种方式是采用重定向技术。</p>
+<p><strong>输入输出重定向</strong></p>
+<p>&lt; 用来进行输入重定向。此运算符将 文件 和 stdin流 之间建立联系。现在这个文件就是I/O设备。同样的， &gt; 被用来作为输出重定向。</p>
+<div class="highlight"><pre><span></span><span class="n">echo_file</span><span class="p">.</span><span class="n">c</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">((</span><span class="n">ch</span> <span class="o">=</span> <span class="n">getchar</span><span class="p">())</span> <span class="o">!=</span> <span class="n">EOF</span><span class="p">)</span>
+        <span class="n">putchar</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">print_file</span><span class="p">.</span><span class="n">c</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello World!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="highlight"><pre><span></span>gcc echo_file.c
+gcc print_file.c
+
+print_file.exe &gt; hello.log
+echo_file.exe &lt; hello.log
+</pre></div>
+<p><strong>组合重定向</strong></p>
+<p>可以在一行中进行输入输出重定向，但是，因为我们使用重定向符号的时候，是将文件作为当前I/O设备，因此stdin和stdout只能分别接受一个文件，但是可以同时使用，并且没有方向的问题，也就是说，可以先定义输入，再定义输出，或者先定义输出，再定义输入。</p>
+<p><code>echo_file.exe &lt; hello.log &gt; result.log</code></p>
+<p>此外，需要注意，输入输出设备不能同时为一个文件，这样会造成混乱。<code>echo_file.exe &lt; hello.log &gt; hello.log 错误</code></p>
+<h2 id="&#23383;&#31526;&#20018;&#36755;&#20837;&#30830;&#35748;">&#23383;&#31526;&#20018;&#36755;&#20837;&#30830;&#35748;<a class="anchor-link" href="#&#23383;&#31526;&#20018;&#36755;&#20837;&#30830;&#35748;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">){</span>
+        <span class="c1">// process with n</span>
+        <span class="k">while</span> <span class="p">((</span><span class="n">ch</span> <span class="o">=</span> <span class="n">getchar</span><span class="p">())</span> <span class="o">!=</span> <span class="sc">&#39;\n&#39;</span><span class="p">){</span>
+            <span class="n">putchar</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>上述程序用来接受一个输入并只接受一个收入，并且要求其值大于0.</p>
+<p>可以看到，一般利用scanf()函数的返回值来确认读取的字节数。同样的，使用scanf()来抛弃无效输出。而为了得到符合要求的值，可以将其包裹在 while 语句内重复进行判断。</p>
 
 </div>
 </div>
