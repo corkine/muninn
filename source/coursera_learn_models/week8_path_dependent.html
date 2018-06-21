@@ -11805,7 +11805,6 @@ div#notebook {
 <p>当做出一个选择后，时间维度的收益随着这个选择而产生变化。比如选择建监狱或者学校，当犯罪率较高时，前者收益大，但是当急需提高教育水平时，后者收益大。随着时间的变化，环境决定了这两个选择的不同收益，像滚雪球一样。</p>
 <p>Path Dependence 指的就是收益持续取决于之前做出的某个决策，比如选择了QWERTY键盘或者选择建立学校。</p>
 <p>在心理中，每个人不能被看作一张白纸，而是由之前自己做出的每个决策构成的集合。当下的人格受到这些决策的影响。这也可以称之为一种路径依赖。</p>
-<h2 id="Different-with-Markov">Different with Markov<a class="anchor-link" href="#Different-with-Markov">&#182;</a></h2><p>固定转移概率不等。这意味着历史对现在有所意义，而不是终究会变成完全相似的动态均衡。（或许是时间尺度的问题？在较长时间尺度下，转移概率可以被看作相等，但是在较短时间尺度下则不可以？）</p>
 <h2 id="Urn-Model">Urn Model<a class="anchor-link" href="#Urn-Model">&#182;</a></h2><p><strong>Bernoulli Model</strong></p>
 <p>罐子里有一定数量红球和蓝球，取出一个。</p>
 <p>Bernoulli U = {B blue, R red} 有选择并放回</p>
@@ -11829,7 +11828,35 @@ div#notebook {
 <p><strong>SWAY Process</strong></p>
 <p>U = {1 bLUE, 1rED} 选择一个并放回</p>
 <p>在时刻t，添加一个相同颜色的球，放回去，并且添加 $2^{t-s}-2^{t-s-1}$ 个在每个小于t的s时刻抽到的球。</p>
+<p><img src="sway.png" alt=""></p>
+<p>SWAY 过程是一个完全的路径以来，在某种情况下可以表示历史厚重感。</p>
+<h2 id="Different-with-Markov">Different with Markov<a class="anchor-link" href="#Different-with-Markov">&#182;</a></h2><p>固定转移概率不等。这意味着历史对现在有所意义，而不是终究会变成完全相似的动态均衡。（或许是时间尺度的问题？在较长时间尺度下，转移概率可以被看作相等，但是在较短时间尺度下则不可以？）</p>
+<p>在 Urn 模型中，可以明显的看到，每次放回的概率都是有区别的的，也就是说，不存在像Markov过程那种红球向蓝球转化，蓝球向红球转化，在某一时刻，只存在一种转化。</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Different-with-Chaos">Different with Chaos<a class="anchor-link" href="#Different-with-Chaos">&#182;</a></h2><p>ESTIC ：Extreme Sensitivity to initial conditions</p>
+<p>Chaos 指的是仅对初始变量敏感，但是之后完全混乱的递归，比如：</p>
+<p>X in (0,1)</p>
+<p>F(X) = 2X if X &lt; 0.5
+F(X) = 2 - 2X if X &gt; 0.5</p>
+<p>初始值决定了整个序列，虽然每个时刻都仅仅和上一个时刻相关，但是总的来看却是随机的。</p>
+<p>这个看起来很像 PATH DEPENDENCE，但是却不是。因为Chaos序列固定，而PATH DEPENDENCE的结果则取决于之前的决策。因此不等同于Chaos。</p>
+<p>X = 0.4321 经过11次后变成 0.2368，而 X = 0.4322 经过11次后变成 0.5824。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="-"> <a class="anchor-link" href="#-">&#182;</a></h1>
 </div>
 </div>
 </div>
