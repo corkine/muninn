@@ -11775,7 +11775,60 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#23383;&#31526;&#36755;&#20837;/&#36755;&#20986;&#21644;&#36755;&#20837;&#30830;&#35748;">&#23383;&#31526;&#36755;&#20837;/&#36755;&#20986;&#21644;&#36755;&#20837;&#30830;&#35748;<a class="anchor-link" href="#&#23383;&#31526;&#36755;&#20837;/&#36755;&#20986;&#21644;&#36755;&#20837;&#30830;&#35748;">&#182;</a></h1>
+<h1 id="&#23383;&#31526;&#36755;&#20837;/&#36755;&#20986;&#21644;&#36755;&#20837;&#30830;&#35748;">&#23383;&#31526;&#36755;&#20837;/&#36755;&#20986;&#21644;&#36755;&#20837;&#30830;&#35748;<a class="anchor-link" href="#&#23383;&#31526;&#36755;&#20837;/&#36755;&#20986;&#21644;&#36755;&#20837;&#30830;&#35748;">&#182;</a></h1><h2 id="&#32531;&#20914;&#21306;">&#32531;&#20914;&#21306;<a class="anchor-link" href="#&#32531;&#20914;&#21306;">&#182;</a></h2><p>字符并非在键盘上按下后就立刻被处理。其分为两种情况。其一，直接作为非缓冲输入，显示在Output设备，比如显示器上，对于交互程序，比如Word以及游戏需要这样。其二，其作为缓冲输入，存储在缓冲区，等待缓冲区满（完全缓冲）或者按下回车键（行缓冲）后再对其进行处理。</p>
+<p>C的文件IO由各操作系统独立实现，称之为低级I/O。为了方便，C有一套高级的全平台I/O标准，称之为标准I/O包。系统之间的差异，比如换行和字符集等，由C来进行处理，对于用户则是一个统一的接口。</p>
+<p><strong>流式I/O</strong></p>
+<p>文件、媒体作为流被C程序处理。C仅仅提供的是流处理API，键盘输入由一个叫做stdin的流表示。屏幕等输出设备则由stdout流表示。所有从键盘的输入，以及输出到屏幕，都需要使用这两个流，然后交给C处理。C不能直接处理文件。</p>
+<p><strong>处理过程和终止过程</strong></p>
+<p>像是getchar(),putchar(),printf(),scanf()，这些函数/宏被用来从流中读取各种东西下来。读取过的部分从流中自动消失。当文件被读取完毕，C输入函数可以自动检测文件尾。文件结尾采用 EOF 定义，这是一个在 stdio.h 中定义的变量，值为-1。scanf()和getchar()等函数在读到文件末尾的时候，自动返回 EOF。当作为键盘输入的时候，使用ctrl+z or ctrl+d 来表示中止输入，作为文件结尾。</p>
+<h2 id="&#37325;&#23450;&#21521;">&#37325;&#23450;&#21521;<a class="anchor-link" href="#&#37325;&#23450;&#21521;">&#182;</a></h2><p>程序如何了解在哪里寻找输入的内容？或者要输出到哪里？一种方式是采用专门打开、关闭、读写文件的函数，第二种方式是采用重定向技术。</p>
+<p><strong>输入输出重定向</strong></p>
+<p>&lt; 用来进行输入重定向。此运算符将 文件 和 stdin流 之间建立联系。现在这个文件就是I/O设备。同样的， &gt; 被用来作为输出重定向。</p>
+<div class="highlight"><pre><span></span><span class="n">echo_file</span><span class="p">.</span><span class="n">c</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">((</span><span class="n">ch</span> <span class="o">=</span> <span class="n">getchar</span><span class="p">())</span> <span class="o">!=</span> <span class="n">EOF</span><span class="p">)</span>
+        <span class="n">putchar</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">print_file</span><span class="p">.</span><span class="n">c</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello World!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="highlight"><pre><span></span>gcc echo_file.c
+gcc print_file.c
+
+print_file.exe &gt; hello.log
+echo_file.exe &lt; hello.log
+</pre></div>
+<p><strong>组合重定向</strong></p>
+<p>可以在一行中进行输入输出重定向，但是，因为我们使用重定向符号的时候，是将文件作为当前I/O设备，因此stdin和stdout只能分别接受一个文件，但是可以同时使用，并且没有方向的问题，也就是说，可以先定义输入，再定义输出，或者先定义输出，再定义输入。</p>
+<p><code>echo_file.exe &lt; hello.log &gt; result.log</code></p>
+<p>此外，需要注意，输入输出设备不能同时为一个文件，这样会造成混乱。<code>echo_file.exe &lt; hello.log &gt; hello.log 错误</code></p>
+<h2 id="&#23383;&#31526;&#20018;&#36755;&#20837;&#30830;&#35748;">&#23383;&#31526;&#20018;&#36755;&#20837;&#30830;&#35748;<a class="anchor-link" href="#&#23383;&#31526;&#20018;&#36755;&#20837;&#30830;&#35748;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">){</span>
+        <span class="c1">// process with n</span>
+        <span class="k">while</span> <span class="p">((</span><span class="n">ch</span> <span class="o">=</span> <span class="n">getchar</span><span class="p">())</span> <span class="o">!=</span> <span class="sc">&#39;\n&#39;</span><span class="p">){</span>
+            <span class="n">putchar</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>上述程序用来接受一个输入并只接受一个收入，并且要求其值大于0.</p>
+<p>可以看到，一般利用scanf()函数的返回值来确认读取的字节数。同样的，使用scanf()来抛弃无效输出。而为了得到符合要求的值，可以将其包裹在 while 语句内重复进行判断。</p>
+
 </div>
 </div>
 </div>
