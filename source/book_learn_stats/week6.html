@@ -11785,7 +11785,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#36830;&#32493;&#20998;&#24067;&#30340;&#26399;&#26395;&#20540;">&#36830;&#32493;&#20998;&#24067;&#30340;&#26399;&#26395;&#20540;<a class="anchor-link" href="#&#36830;&#32493;&#20998;&#24067;&#30340;&#26399;&#26395;&#20540;">&#182;</a></h1><h2 id="&#26399;&#26395;&#20540;&#36817;&#20284;&#25512;&#23548;">&#26399;&#26395;&#20540;&#36817;&#20284;&#25512;&#23548;<a class="anchor-link" href="#&#26399;&#26395;&#20540;&#36817;&#20284;&#25512;&#23548;">&#182;</a></h2><p>对于积分， $S = \sum_{-∞}^∞h(x)dx ≈ \sum_{n=-∞}^∞h(n\Delta)·\Delta$</p>
+<h1 id="&#36830;&#32493;&#20998;&#24067;&#30340;&#26399;&#26395;&#20540;&#21450;&#24615;&#36136;">&#36830;&#32493;&#20998;&#24067;&#30340;&#26399;&#26395;&#20540;&#21450;&#24615;&#36136;<a class="anchor-link" href="#&#36830;&#32493;&#20998;&#24067;&#30340;&#26399;&#26395;&#20540;&#21450;&#24615;&#36136;">&#182;</a></h1><h2 id="&#26399;&#26395;&#20540;&#36817;&#20284;&#25512;&#23548;">&#26399;&#26395;&#20540;&#36817;&#20284;&#25512;&#23548;<a class="anchor-link" href="#&#26399;&#26395;&#20540;&#36817;&#20284;&#25512;&#23548;">&#182;</a></h2><p>对于积分， $S = \sum_{-∞}^∞h(x)dx ≈ \sum_{n=-∞}^∞h(n\Delta)·\Delta$</p>
 <p>对于连续随机变量 X，可以用近似的方法：</p>
 <p>$X∈[0,\Delta) -&gt; Y = 0\Delta$</p>
 <p>$X∈[1\Delta,2\Delta) -&gt; Y = 1\Delta$</p>
@@ -11869,7 +11869,44 @@ div#notebook {
 <li>$X -~ Gaussian(\mu,\sigma)\\\mu_X = \mu\\\sigma_X^2 = \sigma^2$</li>
 </ul>
 <p>Exp: Exponsential 期望值推导：</p>
-<p>$$</p>
+<p>根据：$\int Udv = UV - \int VdU\\\int_0^∞ \lambda e^{-\lambda x}dx = 1$</p>
+<p>$$\mu_X = \int_{-∞}^∞xf_X(x)dx = \int_0^∞x·\lambda e^{-\lambda x}dx\\
+= -\int_0^∞-x\lambda e^{-\lambda x}dx = -\int_0^∞x e^{-\lambda x}d(-\lambda x)
+= - \int_0^∞ xde^{-\lambda x} \\= \int_0^∞ e^{-\lambda x}dx = \frac{1}{\lambda}\int_0^∞ \lambda e^{-\lambda x}dx = \frac{1}{\lambda}$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="&#38543;&#26426;&#21464;&#37327;&#30340;&#20989;&#25968;&#30340;&#20998;&#24067;">&#38543;&#26426;&#21464;&#37327;&#30340;&#20989;&#25968;&#30340;&#20998;&#24067;<a class="anchor-link" href="#&#38543;&#26426;&#21464;&#37327;&#30340;&#20989;&#25968;&#30340;&#20998;&#24067;">&#182;</a></h1><p><strong>Derived random variable</strong></p>
+<h2 id="&#31163;&#25955;&#21464;&#37327;&#20998;&#24067;">&#31163;&#25955;&#21464;&#37327;&#20998;&#24067;<a class="anchor-link" href="#&#31163;&#25955;&#21464;&#37327;&#20998;&#24067;">&#182;</a></h2><p>当 X 为随机变量，那么 Y = g(X) 也是随机变量：</p>
+<p>$$p_{g(X)}(y) = \sum_{让g(x)=y的所有x}p_X(x)$$</p>
+<p>例如：</p>
+<p><img src="prob0601.png" alt=""></p>
+<h2 id="&#36830;&#32493;&#21464;&#37327;&#20998;&#24067;">&#36830;&#32493;&#21464;&#37327;&#20998;&#24067;<a class="anchor-link" href="#&#36830;&#32493;&#21464;&#37327;&#20998;&#24067;">&#182;</a></h2><p>如果 X 为连续变量，那么 Y = g(X) 也是连续变量。区别是，不能直接算PDF，而最好先计算 g(X) 的 CDF：$F_{g(X)}(y) = P[g(X)\le y]$</p>
+<p><img src="prob0602.png" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="prob0603.png" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#20030;&#20363;">&#20030;&#20363;<a class="anchor-link" href="#&#20030;&#20363;">&#182;</a></h2><p><img src="prob0604.png" alt=""></p>
+<p><img src="prob0605.png" alt=""></p>
 
 </div>
 </div>

@@ -30,6 +30,7 @@ COURSE_INFO = {
             ("独立概率和古典概率","0.9","book_learn_stats/Week_3.html","w3"),
             ("离散分布模型","0.8","book_learn_stats/Week4_PMF_CDF.html","w4"),
             ("连续分布模型","0","book_learn_stats/week5.html","w5"),
+            ("连续分布期望值","0","book_learn_stats/week6.html","w6"),
         ],
     },
     "mt":
