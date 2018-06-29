@@ -11776,7 +11776,7 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><span type="title">Randomness and Random Walk</span> | <span type="version">1.0</span> | <span type="update">2018-06-29</span></p>
-<p><span type="intro"><p class="card-text">
+<p><span type="intro"><p class="card-text">第一部分探讨随机过程，以及那个经典问题：存在常胜将军吗？此外，我们探讨了如何利用随机漫步模型：根据回归来区分技能和运气，以及利用信息不对称来获取收益。
 </p><p class="card-text"></p>
 <p>&lt;/p&gt;&lt;/span&gt;</p>
 
@@ -11819,8 +11819,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Random-Walk">Random Walk<a class="anchor-link" href="#Random-Walk">&#182;</a></h2><p><strong>Random Walk 的特征</strong></p>
-
+<h2 id="Define-Random-Walk">Define Random Walk<a class="anchor-link" href="#Define-Random-Walk">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -11888,37 +11887,6 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>是否存在典型的 Hot hand？</strong></p>
-<p>不存在，因为即便是前手表现很好，接下来的胜利概率也是类似的，并不会改变（基于统计）。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>卓越的公司如何诞生？</strong></p>
-<p>大多数所谓卓越的公司，在一段时间后表现都趋近于平均值。而促进他们在历史上成功的原因，可能在新的环境条件下就没有那种运气或者施展条件，尽管这些可能很复杂。但是，依然可以用随机游走模型来进行解释。因此，在活着的公司都会寻求和培育更多的创业项目，以支撑自己的发展。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>使用Random Walk Model</strong></p>
-<p>很多时候，在图标上看到的聚类可能不是因为实力，而是因为运气。我们确定它的方法就是放到Random Walk Model中，因为如果是因为运气，那么总会最终趋近于平均值。</p>
-<p>使用这个模型可以确定发生的事件是否是随机的，依赖技能更多还是运气更多？</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Normal-Random-Walk-Model">Normal Random Walk Model<a class="anchor-link" href="#Normal-Random-Walk-Model">&#182;</a></h2>
 </div>
 </div>
@@ -11971,8 +11939,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>除非利用信息不对称，否则很难赚到钱，因为市场总是会回归到正常水平。比如比特币，在2018年中旬，比特币投资赚到的钱，全部都是被忽悠的那群人新投资带来的血汗钱。</p>
-<p>但是，这个模型也有问题，因为像是巴菲特的公司，连续30-40年一直在盈利，所谓的Consistent Winners，难以被这个模型解释。</p>
+<h2 id="&#26159;&#21542;&#23384;&#22312;&#20856;&#22411;&#30340;-Hot-hand&#65311;">&#26159;&#21542;&#23384;&#22312;&#20856;&#22411;&#30340; Hot hand&#65311;<a class="anchor-link" href="#&#26159;&#21542;&#23384;&#22312;&#20856;&#22411;&#30340;-Hot-hand&#65311;">&#182;</a></h2><p>不存在，因为即便是前手表现很好，接下来的胜利概率也是类似的，并不会改变（基于统计）。</p>
 
 </div>
 </div>
@@ -11981,7 +11948,30 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Finite-Memory-Random-Walk">Finite Memory Random Walk<a class="anchor-link" href="#Finite-Memory-Random-Walk">&#182;</a></h2>
+<p><strong>卓越的公司如何诞生？</strong></p>
+<p>大多数所谓卓越的公司，在一段时间后表现都趋近于平均值。而促进他们在历史上成功的原因，可能在新的环境条件下就没有那种运气或者施展条件，尽管这些可能很复杂。但是，依然可以用随机游走模型来进行解释。因此，在活着的公司都会寻求和培育更多的创业项目，以支撑自己的发展。</p>
+<p><strong>未解之谜</strong></p>
+<p>Random Walk 模型有一定的问题，因为像是巴菲特的公司，连续30-40年一直在盈利，所谓的Consistent Winners，难以被这个模型解释。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#21306;&#20998;-Skill-or-Luck">&#21306;&#20998; Skill or Luck<a class="anchor-link" href="#&#21306;&#20998;-Skill-or-Luck">&#182;</a></h2><p>很多时候，在图标上看到的聚类可能不是因为实力，而是因为运气。我们确定它的方法就是放到Random Walk Model中，因为如果是因为运气，那么总会最终趋近于平均值。</p>
+<p>使用这个模型可以确定发生的事件是否是随机的，依赖技能更多还是运气更多？</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#21033;&#29992;&#20449;&#24687;&#19981;&#23545;&#31216;">&#21033;&#29992;&#20449;&#24687;&#19981;&#23545;&#31216;<a class="anchor-link" href="#&#21033;&#29992;&#20449;&#24687;&#19981;&#23545;&#31216;">&#182;</a></h2><p>除非利用信息不对称，否则很难赚到钱，因为市场总是会回归到正常水平。比如比特币，在2018年中旬，比特币投资赚到的钱，全部都是被忽悠的那群人新投资带来的血汗钱。</p>
+
 </div>
 </div>
 </div>
