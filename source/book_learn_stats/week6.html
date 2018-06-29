@@ -11881,7 +11881,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#38543;&#26426;&#21464;&#37327;&#30340;&#20989;&#25968;&#30340;&#20998;&#24067;">&#38543;&#26426;&#21464;&#37327;&#30340;&#20989;&#25968;&#30340;&#20998;&#24067;<a class="anchor-link" href="#&#38543;&#26426;&#21464;&#37327;&#30340;&#20989;&#25968;&#30340;&#20998;&#24067;">&#182;</a></h1><p><strong>Derived random variable</strong></p>
+<h1 id="&#38543;&#26426;&#21464;&#37327;&#20989;&#25968;&#30340;&#20998;&#24067;">&#38543;&#26426;&#21464;&#37327;&#20989;&#25968;&#30340;&#20998;&#24067;<a class="anchor-link" href="#&#38543;&#26426;&#21464;&#37327;&#20989;&#25968;&#30340;&#20998;&#24067;">&#182;</a></h1><p><strong>Derived random variable</strong></p>
 <h2 id="&#31163;&#25955;&#21464;&#37327;&#20998;&#24067;">&#31163;&#25955;&#21464;&#37327;&#20998;&#24067;<a class="anchor-link" href="#&#31163;&#25955;&#21464;&#37327;&#20998;&#24067;">&#182;</a></h2><p>当 X 为随机变量，那么 Y = g(X) 也是随机变量：</p>
 <p>$$p_{g(X)}(y) = \sum_{让g(x)=y的所有x}p_X(x)$$</p>
 <p>例如：</p>
@@ -11915,7 +11915,54 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#26465;&#20214;&#27010;&#29575;&#20998;&#24067;&#21644;&#22833;&#24518;&#24615;">&#26465;&#20214;&#27010;&#29575;&#20998;&#24067;&#21644;&#22833;&#24518;&#24615;<a class="anchor-link" href="#&#26465;&#20214;&#27010;&#29575;&#20998;&#24067;&#21644;&#22833;&#24518;&#24615;">&#182;</a></h1>
+<p><br></p>
+<h1 id="&#26465;&#20214;&#27010;&#29575;&#30340;&#20998;&#24067;&#21644;&#22833;&#24518;&#24615;">&#26465;&#20214;&#27010;&#29575;&#30340;&#20998;&#24067;&#21644;&#22833;&#24518;&#24615;<a class="anchor-link" href="#&#26465;&#20214;&#27010;&#29575;&#30340;&#20998;&#24067;&#21644;&#22833;&#24518;&#24615;">&#182;</a></h1><h2 id="&#31163;&#25955;&#26465;&#20214;&#27010;&#29575;&#20998;&#24067;">&#31163;&#25955;&#26465;&#20214;&#27010;&#29575;&#20998;&#24067;<a class="anchor-link" href="#&#31163;&#25955;&#26465;&#20214;&#27010;&#29575;&#20998;&#24067;">&#182;</a></h2><p><img src="prob0606.png" alt=""></p>
+<p>如果 X 是离散随机变量，那么 PMF 为 $p_X(x)$。 如果已知某事件 B 已经发生，那么在这种条件下，概率分布为：</p>
+<p>$$PMF:~p_{X|B}(x)=x∈B：\frac{p_X(x)}{P(B)},~x~ not ∈ B：0$$</p>
+<p>$$CDF:~F_{X|B}(x)=\sum_{\mu \le x} p_{X|B}(\mu) = \sum_{\mu \le x,\mu ∈ B}\frac{p_X(\mu)}{P(B)}$$</p>
+<h2 id="&#36830;&#32493;&#26465;&#20214;&#27010;&#29575;&#20998;&#24067;">&#36830;&#32493;&#26465;&#20214;&#27010;&#29575;&#20998;&#24067;<a class="anchor-link" href="#&#36830;&#32493;&#26465;&#20214;&#27010;&#29575;&#20998;&#24067;">&#182;</a></h2><p><img src="prob0607.png" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>如果 X 是连续随机变量，其 PDF 为 $f_X(x)$。如果某事件 B 已经发生，那么在这种情况下：</p>
+<p>$$PDF:~f_{X|B}=x∈B：\frac{f_X(x)}{P(B)},~x ~ not ∈ B：0.$$</p>
+<p>$$CDF:~F_{X|B}(x)=\int_{-∞}^xf_{X|B}(\mu)d\mu = \int_{-∞\le \mu \le x,\mu ∈B}\frac{f_X(\mu)}{P(B)}d\mu$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#26465;&#20214;&#27010;&#29575;&#20998;&#24067;&#30340;&#26399;&#26395;&#20540;&#21644;&#26041;&#24046;">&#26465;&#20214;&#27010;&#29575;&#20998;&#24067;&#30340;&#26399;&#26395;&#20540;&#21644;&#26041;&#24046;<a class="anchor-link" href="#&#26465;&#20214;&#27010;&#29575;&#20998;&#24067;&#30340;&#26399;&#26395;&#20540;&#21644;&#26041;&#24046;">&#182;</a></h2><p>$$离散：E[X|B] = \sum_{x=-∞}^{∞}x·p_{X|B}(x)$$</p>
+<p>$$连续：E[X|B] = \int_{-∞}^{∞}x·f_{X|B}(x)dx$$</p>
+<p>$$离散：E[g(X)|B] = \sum_{x=-∞}^{∞}g(x)·p_{X|B}(x)$$</p>
+<p>$$连续：E[g(X)|B] = \int_{-∞}^{∞}g(x)·f_{X|B}(x)dx$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$$Var(X|B) = E[(X|B - \mu_{X|B})^2] = E[(X - \mu_{X|B})^2|B] \\=E[X^2|B] - (\mu_{X|B})^2$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#22833;&#24518;&#24615;">&#22833;&#24518;&#24615;<a class="anchor-link" href="#&#22833;&#24518;&#24615;">&#182;</a></h2><p><img src="prob0608.png" alt=""></p>
+
 </div>
 </div>
 </div>
