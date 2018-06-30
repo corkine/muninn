@@ -48,6 +48,7 @@ COURSE_INFO = {
             ("Lyapunov Functions","0.8","coursera_learn_models/week7_lyapunov_functions.html","lf"),
             ("path dependent","","coursera_learn_models/week8_path_dependent.html","pq"),
             ("random","","coursera_learn_models/week9_random_walk.html","w9"),
+            ("dilemma","","coursera_learn_models/week10_prisoner_dilemma.html","w10"),
             
         ],
     },
