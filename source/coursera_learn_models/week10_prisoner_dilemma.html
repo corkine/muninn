@@ -11863,7 +11863,10 @@ Network Reciprocity is also less likely, because it suggests that the more dense
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Kin">Kin<a class="anchor-link" href="#Kin">&#182;</a></h2><h2 id="Laws">Laws<a class="anchor-link" href="#Laws">&#182;</a></h2><h2 id="Incentives">Incentives<a class="anchor-link" href="#Incentives">&#182;</a></h2><ul>
+<h2 id="Kin">Kin<a class="anchor-link" href="#Kin">&#182;</a></h2><p>etc</p>
+<h2 id="Laws">Laws<a class="anchor-link" href="#Laws">&#182;</a></h2><p>etc</p>
+<h2 id="Incentives">Incentives<a class="anchor-link" href="#Incentives">&#182;</a></h2><p>etc</p>
+<ul>
 <li>铲除门前的雪，代价很高，收益不大</li>
 </ul>
 
@@ -11949,6 +11952,51 @@ or like Shoveling snow off sidewalks</code></pre>
 <p>L: M &lt; KC</p>
 <p>K = M/C</p>
 <p>如果M对于高能力者是划算的，而对于低能力者是不划算的，那么可以以此区分开低能者和高能力者。信息就不是隐藏的了。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Auctions">Auctions<a class="anchor-link" href="#Auctions">&#182;</a></h2><ul>
+<li>Ascending Price 公开拍卖，出价最高者获胜，最高价格支付</li>
+<li>Second Price 每人写一个条子，私密排下，出价最高者获胜，但是以第二高价格支付</li>
+<li>Sealed Bird 密封价格拍卖 每人提交标价，出价最高的人得到物品，但以自己提交的价格支付</li>
+</ul>
+<p>对于 Ascending Price 递增价格拍卖的话，基于理性，需要支付的钱大约在第二高的价格上，因为如果一个人打算100美元拍下，而另一个是70，超过70后，第二个人就退出，那么第二个人只需要以稍高于70美元的价格拍下即可。</p>
+<p>对于 Second Price 而言，因为是私下拍卖，因此，如果两个人竞争，一个人出价100，另一个70，那么出价100的人以70美元得到，每个人在知道所有人报价情况下会以高于期望价入手，但，如果都这样，那么会得不偿失，因此理性的做法是按照真实价格报价。</p>
+<p>对于 Sealed Bird也是类似，我们会出预期价格的1/2，最终由最高出价的人获得标的，支付第二高的价格。</p>
+<p>根据 Revenue Equivalence Theorem，这三种，基于理性的人，期望收益不会有任何差异，不论选择何种拍卖方式（Roger Myerson “Optimal Auction Design”）</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Public-Project">Public Project<a class="anchor-link" href="#Public-Project">&#182;</a></h2><p>公共购买需要面对隐藏信息，设计一个机制，让所有人都掏钱然后支付。</p>
+
+<pre><code>Three lawyers are deciding whether or not to buy a new couch for the lounge. The couch would cost $700. Lawyer 1 values a new couch at $100; Lawyer 2 values a new couch at $500; and Lawyer 3 values a new couch at $250.
+
+Do they buy the couch? If so, how much does each person pay?
+
+
+------------------------------------------
+
+Remember, each person does not necessarily pay her value. What we're concerned with, instead, is each person's "claimed value" given the values of the other two people.
+
+Lawyer 1 sees that the two others (2 &amp; 3) are willing to pay a sum of $750. Since the couch costs $700, Lawyer 1 claims a value of $0.
+
+Lawyer 2 sees that the two others (1 &amp; 3) are willing to pay a sum of $350. So Lawyer 2 claims a value of $350.
+
+Lawyer 3 see that the two others (1 &amp; 2) are willing to pay a sum of $600. So Lawyer 3 claims a value of $100.
+
+Because each person only wants to pay as much as is necessary to ensure the couch is paid for, they each pay less than their true value.
+
+They raise a total of $0+$350+$100=$450, and don't have enough to buy the $700 couch.</code></pre>
 
 </div>
 </div>
