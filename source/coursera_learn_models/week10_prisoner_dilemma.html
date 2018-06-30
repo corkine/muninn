@@ -11845,14 +11845,6 @@ div#notebook {
 <p>GroupB：合作概率50%</p>
 <p>如果发生两组对抗，那么A获胜概率更大，因此如果以组为单位，那么就会要求更高的合作概率。</p>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
 <pre><code>which 2 are the most likely to explain why people in small, isolated towns are so nice?
 
 - Reputation (Indirect Reciprocity)
@@ -11888,6 +11880,11 @@ Network Reciprocity is also less likely, because it suggests that the more dense
 
 or like Shoveling snow off sidewalks</code></pre>
 <p>$x_j: the ~action ~of ~person ~j\\Payoff~to~j:~-x_j + β\sum_{i=1}^Nx_i~~,β~in~(0,1)$</p>
+<p>假设贡献转化为0.6，我的贡献为0，一共10个人，那么我的收益是 0 + 0.6 * 9 = 5.4</p>
+<p>而如果我的贡献为1，那么我的收益是 -1 + 0.6 * 10 = 5 &lt; 5.4</p>
+<p>因此就存在搭便车的问题，这个问题在进化过程中长期存在，人们甚至进化出对其独特的识别系统，并且极其憎恶。</p>
+<p><strong>Free Rider Problem：</strong>别人贡献收益，而自己搭便车。</p>
+<h1 id="Common-pool-resource-problem">Common pool resource problem<a class="anchor-link" href="#Common-pool-resource-problem">&#182;</a></h1><p>资源过度消耗，造成不可持续发展。such as Lobster fishing、Turkey hunting。对于这个问题，唯一的解法是：No PANACEA</p>
 
 </div>
 </div>
@@ -11896,11 +11893,62 @@ or like Shoveling snow off sidewalks</code></pre>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>假设贡献转化为0.6，我的贡献为0，一共10个人，那么我的收益是 0 + 0.6 * 9 = 5.4</p>
-<p>而如果我的贡献为1，那么我的收益是 -1 + 0.6 * 10 = 5 &lt; 5.4</p>
-<p>因此就存在搭便车的问题，这个问题在进化过程中长期存在，人们甚至进化出对其独特的识别系统，并且极其憎恶。</p>
-<p><strong>Free Rider Problem：</strong>别人贡献收益，而自己搭便车。</p>
-<h1 id="Common-pool-resource-problem">Common pool resource problem<a class="anchor-link" href="#Common-pool-resource-problem">&#182;</a></h1><p>资源过度消耗，造成不可持续发展。such as Lobster fishing、Turkey hunting。对于这个问题，唯一的解法是：No PANACEA</p>
+<h1 id="Mechanism-Design">Mechanism Design<a class="anchor-link" href="#Mechanism-Design">&#182;</a></h1><p>three things do we define when designing a mechanism</p>
+<ul>
+<li><p>The rules of the game (not The logic behind the rules)</p>
+</li>
+<li><p>The actions people can take</p>
+</li>
+<li><p>Payoffs associated with the actions</p>
+</li>
+</ul>
+<p>two things need we fixed</p>
+<ul>
+<li><p>隐藏的信息（关于Player的特征信息）</p>
+</li>
+<li><p>潜在的活动（我们只能看到结果，而看不到其实现）</p>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Hidden-Action">Hidden Action<a class="anchor-link" href="#Hidden-Action">&#182;</a></h2><p>假如你是一个老板，雇佣工人生产产品，因为无法实施监视，所以就无法得知员工在努力工作还是在磨洋工。因此，撰写一份合同，避免这种情况，那么，应该如何写这份合同呢？</p>
+<p>++++++++++++++++++++++++++++++</p>
+<p>Action: effort = 0,1</p>
+<p>outcome = {Good, Bad}</p>
+<p>Prob(Good|effort=1) = 1 认真工作并且没有影响最终进度</p>
+<p>Prob(Good|effort=0) = p 划水但是没影响最终进度</p>
+<p>cost effect = c 认真工作的精力/时间消耗</p>
+<p>++++++++++++++++++++++++++++++</p>
+<p>contract: M if good, 0 if bad.</p>
+<p>这样的话，员工得到M元的情况有两种：</p>
+<p>effort 1: M - c 得到的减去努力工作支出的</p>
+<p>effort 0: pM  划水并且完美飘过的</p>
+<p>因此：</p>
+<p>M - c &gt; pm ==&gt; M &gt; c/(1-p) 这是促使努力工作的条件</p>
+<p>很好玩的，如果 c 增加，那么 M 也会增加。如果 p 增加，那么 M 也会增加（虽然这两种增加的方式不同）</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Hidden-Infomation">Hidden Infomation<a class="anchor-link" href="#Hidden-Infomation">&#182;</a></h2><p>雇佣能力高的人还是雇佣能力低的人（时薪）？</p>
+<p>Ability: High(H), Low(L)</p>
+<p>H cost per hour of effort c</p>
+<p>L cost per hour of effort C &gt; c</p>
+<p>Contract: pay M but first you must work K hours</p>
+<p>H: M &gt; Kc</p>
+<p>L: M &lt; KC</p>
+<p>K = M/C</p>
+<p>如果M对于高能力者是划算的，而对于低能力者是不划算的，那么可以以此区分开低能者和高能力者。信息就不是隐藏的了。</p>
 
 </div>
 </div>
