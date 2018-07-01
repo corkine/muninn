@@ -49,7 +49,7 @@ COURSE_INFO = {
             ("path dependent","","coursera_learn_models/week8_path_dependent.html","pq"),
             ("random","","coursera_learn_models/week9_random_walk.html","w9"),
             ("dilemma","","coursera_learn_models/week10_prisoner_dilemma.html","w10"),
-            
+            ("replicator","","coursera_learn_models/week11_replicator_dynamics.html","w11"),
         ],
     },
     "c1":
