@@ -11775,7 +11775,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><span type="title">Prisoners'Dilemma & Mechanism Design</span> | <span type="version">1.0</span> | <span type="update">2018-06-30</span></p>
+<p><span type="title">Learning Model & Diversity Prediction</span> | <span type="version">1.0</span> | <span type="update">2018-07-01</span></p>
 <p><span type="intro"><p class="card-text">第一部分主要是关于多人竞争和合作的建模，在这里主要定义了囚徒困境模型、群体行动模型，资源有限模型，并且提出7种促进合作的方式。
 </p><p class="card-text">
 在第二部分，主要讲解了模式设计。模式设计被用来针对隐含信息和隐藏行为进行模型设计，来迫使人们改变行为，有效的进行合作达到目标，比如公共购买，竞拍以及上班摸鱼。
@@ -11858,10 +11858,58 @@ Var 32
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Variation-or-Six-Sigma">Variation or Six Sigma<a class="anchor-link" href="#Variation-or-Six-Sigma">&#182;</a></h1><p>What is right？ 活到老，学到老？ 还是 老狗学不会新把戏？</p>
+<h2 id="Variation-or-Six-Sigma">Variation or Six Sigma<a class="anchor-link" href="#Variation-or-Six-Sigma">&#182;</a></h2><p>What is right？ 活到老，学到老？ 还是 老狗学不会新把戏？</p>
 <p>模型而非谚语更加有用的原因是，其提供了非常清晰的假设以及非常简洁的数学公式。我们对逻辑了如指掌，但是对谚语却无能为力。</p>
 <p>这个问题很好解释。如果将问题看作是一个固定的模式，那么减少变化会更好，比如一道数学题，有固定的解法，一个算法，有最优的处理思路。一件任务，有最合适、最有效率的方式。对于机器，Six Sigma 或者努力减少差异是有巨大回报的。</p>
 <p>但，实际上，非常多的情况下，环境是变化的。人的能力也是变化的。因此，差异越大，适应越快，人的能力是不断变化的，对于人来说，扩大视野，提高差异，努力适应，这才会有更大的回报，相反，对某一件事的刻板化偏见，只会变得狭隘和固执。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Crowed-Prediction">Crowed Prediction<a class="anchor-link" href="#Crowed-Prediction">&#182;</a></h1><p>多样性预测定理</p>
+
+<pre><code>
+Amy predicts 10， error is （10-18）^2 = 64, diversity is (10-17)^2 = 49
+
+Belle predicts 16, error is 4, diversity is 1
+
+Carlos predicts 25, error is 49, diversity is 64
+
+crowed average value is 17, crowed error (17-18)^2 = 1
+
+Actual value is 18, average error is (64+4+49)/3 = 39
+
+sum diversity = (64+1+49)/3 = 38
+
+so, crowed error = average error - diversity</code></pre>
+<p>Example:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code>Anisha, Matt and Wendy are on a game show. They are trying to guess the price of a new car. Anisha's prediction is $50,000. Matt's prediction is $30,000. Wendy's prediction is $43,000. The actual price is $41,050. They win the car if their crowd squared error is less than 5,000. Do they win the car? What is the crowd diversity?
+
+crowed error = (41050-41000)^2 = 2500 &lt; 5000
+crowed diversity = ((50000-41000)^2+...)/3 = 68,666,666.67</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>群体智慧在于其多样性，因为 average error 很大，但是 diversity 同样很大，因此 crowed error 很小。不同的个体使用不同的模型得到聚合的结果，如果每个模型都有一些道理，那么总体也不会差太多。多样性预测定理是一种整合方式。</p>
+<p>群体的愚蠢在于完全一样的预测，如果丧失了多样性，那么就不存在群体的智慧了。</p>
 
 </div>
 </div>
