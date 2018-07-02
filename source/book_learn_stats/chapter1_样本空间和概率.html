@@ -11785,14 +11785,98 @@ div#notebook {
 <p>$S^c = [~x∈Ω~|~x~not~ ∈~S]$</p>
 <p><strong>集合的代数</strong></p>
 <p>$S \cup T = T \cup S\\S \cup (T \cup U) = (S \cup T) \cup U\\S \cup (T \cap U) = (S \cup T) \cap (S \cup U)\\S \cap (T \cup U) = (S \cap T) \cup (S \cap U)\\(S^c)^c = S$</p>
-<p>德摩根定理：</p>
+<p>德摩根定理【用于补集和交并之间的转换】：</p>
 <p>$(\cup_nS_n)^c = \cap_n S_n^c$</p>
 <p>$(\cap_nS_n)^c = \cup_n S_n^c$</p>
-<p>很容易证明：</p>
+<p>根据VNN图得到的一个很常用的公式【用于拆分和合并补集】：</p>
+<p>$S = (S \cap T)\cup(S \cap T^c)$</p>
+<p>++++++++++++++++</p>
+<p>因此，对于以下等式，很容易证明：</p>
 <p>$(A \cap B)^c = (A^c \cap B) \cup (A^c \cap B^c) \cup (A \cap B^c)$</p>
 <p>证明如下：对于 $(A^c \cap B) \cup (A^c \cap B^c)$, 因为 $S = (S \cap T)\cup(S \cap T^c)$，所以等于 $A^c$</p>
 <p>根据德摩根定理，$(A \cap B)^c = A^c \cup B^c$</p>
 <p>而公式后半部分根据集合代数可以求出，因此易证。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="1.2-&#27010;&#29575;&#27169;&#22411;">1.2 &#27010;&#29575;&#27169;&#22411;<a class="anchor-link" href="#1.2-&#27010;&#29575;&#27169;&#22411;">&#182;</a></h2><p><strong>关键术语</strong></p>
+<p>试验：概率模型包括一个试验，其中抛硬币1次或者30次，都可以看作一个试验。</p>
+<p>结果：相同时空下的模型的试验包含且只包含一个结果。不同时空下的模型的试验组成了多个结果。</p>
+<p>样本空间：这些结果组成了样本空间。每个结果发生在不同的时空，因此必须是互斥的。在确定模型时，必须穷尽所有的结果，构成样本空间。样本空间可以包含可数个结果，或者不可数个结果。</p>
+<p>质量：结果可以看做样本空间中的元素，其质量均相等，样本空间质量为1。</p>
+<p>事件：一些结果组成的组称之为事件。事件是样本空间的子集。每个事件对应一个概率律</p>
+<p>比如：抛一枚硬币，S = {H,L}（穷举了所有结果的样本空间）, E1 = {H,L}（随意的分组组成事件）, E2 = {L}
+S 可能的事件有 {H,L} {H} {L} {空}</p>
+<p><strong>序贯模型</strong></p>
+<p>可以用树状图（序贯树形图）表示整个实验的可能空间组成的元素，每个线路代表一种时空可能性。</p>
+<p>对于两次抛硬币，也可以使用棋盘序贯图来表示。</p>
+<p><strong>概率律</strong></p>
+<p>定义好实验和样本空间后，为了建立概率模型，需要引入概率律。定义每个事件A的一个值P（A）为其概率。其表示了任何结果或者结果的集合的似然程度。概率律必须满足三条公理（定义P(A)必须满足此三条公理）：</p>
+<p>非负性 P(A) &gt;= 0</p>
+<p>归一化 P(S) = 1</p>
+<p>可加性:对于任何不相交集合 $P(A\cup B) = P(A) + P(B);~so: ~~~P(A_1\cup A_2\cup ...) = P(A_1) + P(A_2) + ...$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="1.2.1-&#31163;&#25955;&#27169;&#22411;">1.2.1 &#31163;&#25955;&#27169;&#22411;<a class="anchor-link" href="#1.2.1-&#31163;&#25955;&#27169;&#22411;">&#182;</a></h3><p>抛一枚硬币，正面朝上H，反面为T，样本空间为{H,T}，所有可能事件为{H},{T},{H,T},{空}</p>
+<p>由 P({H,T}) = P({H}) + P({T}), P({H}) = P({T}) 得：</p>
+<p>P({H}) = P({T}) = 0.5,这就是离散概率律：</p>
+<p><strong>离散概率律</strong></p>
+<p>样本空间由有限可能结果组成，事件${s_1,s_2,s_3...}$是各自事件概率之和。</p>
+<p>$P({s_1,s_2,s_3...}) = P(s_1) + P(s_2) + ...$</p>
+<p><strong>离散均匀概率律</strong></p>
+<p>样本空间由n个等可能的实验结果组成。</p>
+<p>P（A） = 含有事件A的实验结果数/n</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="1.2.2-&#36830;&#32493;&#27169;&#22411;">1.2.2 &#36830;&#32493;&#27169;&#22411;<a class="anchor-link" href="#1.2.2-&#36830;&#32493;&#27169;&#22411;">&#182;</a></h3><p>连续模型包含无穷个事件，其不能区分事件，否则，事件之和概率大于1，不符合概率律。假设事件空间是一个长度为1的绳子，一个集合的概率可以定义为这个集合的长度。</p>
+<p>通常可以通过画图。使用积分的方法来得到概率。比如A和B见面，约定等对方15分钟，他们都可能在1小时之内的任意时间到，问碰面的概率。使用一个正方形，轴代表其各自的绳子，那么计算矩形减去上下三角的面积，就是可以会面的概率。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>概率律的性质</strong></p>
+<p>概率律是对于事件而言的。对于事件 A,B,C 有：</p>
+<p>$A ∈ B，则 P(A) \le P(B)\\P(A\cup B) = P(A) + P(B) - P(A\cap B)\\P(A\cup B) \le P(A) + P(B)$</p>
+<p>概率律的不相容性：</p>
+<p>对于一组互不相容的事件组 S，有 $A = \cup_{i=1}^n(A\cap S_i)$</p>
+<p>++++++++++++++++++++++</p>
+<p>因此容易证明以下公式：</p>
+<p>$P(A) = \sum_{i=1}^nP(A\cap S_i)$</p>
+<p>以及：</p>
+<p>$P((A\cap B^c)\cup(A_c\cap B)) = P(A) + P(B) -2P(A\cap B)$</p>
+<p>因为，前者可以拆分成两个独立概率，对于$P(A\cap B_c) = P(A\cap B_c) + P(A\cap B) - P(A\cap B) = P(A) - P(A\cap B)$,同理可证。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>使用概率模型</strong></p>
+<p>第一步：问题的数学表示：概率模型的建立首先需要定义一个试验，之后穷举样本空间，此样本空间必须大小适当。在合适的样本空间内给出概率律，从而建立概率模型。概率律只需要满足概率三公理即可。很多概率模型都是错误的，但只要简单并且易于处理，并且有用就可以。</p>
+<p>第二步：逻辑推理：在建立概率模型之后，在完全严格的模型中使用数学推导性质或者计算某些事件的概率。</p>
 
 </div>
 </div>
