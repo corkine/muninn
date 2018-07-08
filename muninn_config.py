@@ -71,9 +71,8 @@ COURSE_INFO = {
         "address":"/learning_c",
         "id":"c2",
         "chapter_list":[
-            ("数据和C","1","learn_c/chapter_3_data_and_c.html","da"),
-            ("字符串、格式化输入输出","1","learn_c/chapter_4_string_and_scanf.html","ss"),
-            ("操作符、表达式、语句、文件IO","1","learn_c/chapter_5_operator.html","op"),
+            ("数据、字符串、格式化输入输出","1","learn_c/chapter_4_string_and_scanf.html","w3"),
+            ("操作符、表达式、语句、字符串I/O机制","1","learn_c/chapter_5_operator.html","w4"),
         ],
     },
     "cpp":

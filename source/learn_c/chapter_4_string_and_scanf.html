@@ -11775,7 +11775,127 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#31532;&#22235;&#31456;-&#23383;&#31526;&#20018;&#21644;&#26684;&#24335;&#21270;I/O">&#31532;&#22235;&#31456; &#23383;&#31526;&#20018;&#21644;&#26684;&#24335;&#21270;I/O<a class="anchor-link" href="#&#31532;&#22235;&#31456;-&#23383;&#31526;&#20018;&#21644;&#26684;&#24335;&#21270;I/O">&#182;</a></h1><h2 id="4.1-&#24120;&#37327;">4.1 &#24120;&#37327;<a class="anchor-link" href="#4.1-&#24120;&#37327;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<p><span type="title">数据类型、字符串和格式化基础</span> | <span type="update">2018-06-21</span> | <span type="version">0.8</span></p>
+<p><span type="intro"><p class="card-text">在第一部分主要讲解了C的数据类型，其中包括int、float、char、bool等。</p><p class="card-text">在第二部分，则主要介绍了字符串和在C中进行格式化的两个重要函数：scanf、printf。这部分内容和数据类型有密切关系，因此放在此处进行讲解。在掌握这部分内容之后就可以利用C的基本运算符和数据进行基本的运算和输出了。在下一章节中将会主要介绍众多运算符及其顺序、表达式、三种基本语句以及字符串I/O的机制问题。这两个章节构成了一门语言的基本结构。</p></span></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="3.-C&#30340;&#25968;&#25454;&#31867;&#22411;">3. C&#30340;&#25968;&#25454;&#31867;&#22411;<a class="anchor-link" href="#3.-C&#30340;&#25968;&#25454;&#31867;&#22411;">&#182;</a></h1><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Date:2018-05-19 Author：Corkine Ma&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>C的两大特征是快速和简洁，因此自带了很多数据类型，丰富的数据类型为不同硬件下C的运行提供了很好的发挥空间，常见的数据类型有<code>int, sort, long , unsigned, char, float, double, -Bool</code>. 使用 <code>sizeof()</code>可以获取当前的数据类型所占的byte数，比如在Qt-Win下，unsigned 8 byte，long long int 和 float 8 byte，int 4 byte。</p>
+<p><strong>获取输入</strong>：使用 <code>scanf("%d",&amp;varname)</code> 获取用户输入，相当于input()在Python中的作用，不过可以自动转换为相应类型，并且varname还需要提前定义。</p>
+<p><strong>数据类型</strong>：整数在计算机中的存储基本都是按照bit的位数来定义的，2 bit可以定义4个数字，8bit可以定义2**8个数字。符号单独在前面占一位进行定义，正数和负数的定义方式不同。小数的话，采用的是浮点数定义，也就是 aEb，其中a为E次方的乘数，b为E次方的指数。这三个元素分别存储在对应的比特中，符号另存。浮点数有精度的问题，其往往是真实数值的近似，计算速度慢。</p>
+<h2 id="3.1-C&#25968;&#25454;&#31867;&#22411;&#31616;&#20171;">3.1 C&#25968;&#25454;&#31867;&#22411;&#31616;&#20171;<a class="anchor-link" href="#3.1-C&#25968;&#25454;&#31867;&#22411;&#31616;&#20171;">&#182;</a></h2><h3 id="3.1.1-int-&#31867;&#22411;">3.1.1 int &#31867;&#22411;<a class="anchor-link" href="#3.1.1-int-&#31867;&#22411;">&#182;</a></h3><p>int类型一般使用16bit定义，范围在-32768~32768之间。可以通过以下方法声明：</p>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">var_1</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">var_2</span><span class="p">,</span> <span class="n">var_3</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">var_1</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="n">var_1</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">var_2</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span> <span class="c1">//错误</span>
+<span class="kt">int</span> <span class="n">var_1</span><span class="p">,</span> <span class="n">var_2</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span> <span class="c1">//不推荐</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;var_1 is %d, var_2 is %d&quot;</span><span class="p">,</span><span class="n">var_1</span><span class="p">,</span><span class="n">var_2</span><span class="p">);</span><span class="c1">//如果少写，那么系统会随机从内存中取值，而不会报错。</span>
+<span class="c1">//如果类型不匹配, IDE会提醒，尽量不要不匹配，如果为了显示float，使用%.f来像整数一样显示即可。</span>
+</pre></div>
+<p>初始化变量后，系统会自动将内存中某片区域给此变量，并且赋值。</p>
+<p><strong>不同进制</strong></p>
+<p>10进制int使用“%d”打印。</p>
+<p>8进制数字的写法为 octal，%o, %#o</p>
+<p>16进制的写法为 hex, %x, %#x</p>
+<p>其中带有#的表示显示前缀。</p>
+<p><strong>不同整型</strong></p>
+<p>其余整型有（方括号可不写）：</p>
+<ul>
+<li><p>sort [int] 和int占有相同的bit，不过表示数字更小。打印使用%hd/ho/hx/hu</p>
+</li>
+<li><p>long [int] 表示数字更多，一般为32位。会减慢计算。打印使用%ld/lx/lo/lu</p>
+</li>
+<li><p>long long [int] 表示数字更多，一般为64位。64位推荐使用。打印使用%lld/llo/llx/llu</p>
+</li>
+<li><p>unsigned [int] 非负整数，相比较int可表示更大数值。一般用于计数。打印使用%u，如果是u long long int,使用%llu</p>
+</li>
+</ul>
+<p><strong>整数溢出</strong></p>
+<p>不要错误的使用打印符号，请手动进行类型转换。</p>
+<p>注意，对于无符号变量使用%d会导致负值，这是因为非负数和整数表示方式不同。同样，short int 使用 %d ，不会出现什么问题，但是 long int使用 %d 会导致截断。</p>
+<p>超出600000多的int类型会溢出，溢出后会归零。负数会随机赋值。浮点数溢出精度后只会截断，不影响数据。</p>
+<h3 id="3.1.2-char-&#31867;&#22411;">3.1.2 char &#31867;&#22411;<a class="anchor-link" href="#3.1.2-char-&#31867;&#22411;">&#182;</a></h3><p>char是ASCII码字符类型，使用单引号表示，而双引号则表示字符串。char的长度为1（char），即1个byte占有几个bit意味着1个char占有几个bit。</p>
+<div class="highlight"><pre><span></span><span class="kt">char</span> <span class="n">grade</span> <span class="o">=</span> <span class="sc">&#39;A&#39;</span><span class="p">;</span><span class="c1">//正确</span>
+<span class="kt">char</span> <span class="n">grade</span> <span class="o">=</span> <span class="mi">65</span><span class="p">;</span><span class="c1">//ASCII码，不推荐</span>
+
+<span class="kt">char</span> <span class="n">beep</span> <span class="o">=</span> <span class="sc">&#39;\007&#39;</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">beep</span> <span class="o">=</span> <span class="sc">&#39;\a&#39;</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">beep</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span><span class="c1">//10进制</span>
+<span class="c1">//转义序列，不论是字幕还是各种进制的转义，都必须加引号</span>
+
+<span class="kt">char</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">13</span><span class="p">;</span><span class="c1">//10进制</span>
+<span class="kt">char</span> <span class="n">ret</span> <span class="o">=</span> <span class="mo">015</span><span class="p">;</span><span class="c1">//8进制</span>
+<span class="kt">char</span> <span class="n">ret</span> <span class="o">=</span> <span class="mh">0xd</span><span class="p">;</span><span class="c1">//16进制</span>
+<span class="c1">//这三种不同进制表示均可以，且不用加引号</span>
+
+<span class="kt">char</span> <span class="n">var_a</span> <span class="o">=</span> <span class="s">&quot;B&quot;</span><span class="p">;</span> <span class="kt">char</span> <span class="n">var_b</span> <span class="o">=</span> <span class="n">C</span><span class="p">;</span><span class="c1">//统统错误</span>
+</pre></div>
+<p>常见的有：</p>
+<ul>
+<li><p>\0oo 8进制</p>
+</li>
+<li><p>\xhh 16进制</p>
+</li>
+<li><p>\" 双引号</p>
+</li>
+<li><p>\' 单引号</p>
+</li>
+<li><p>\ 反斜杠</p>
+</li>
+</ul>
+<p>使用 <code>%e</code> 来打印char类型。</p>
+<p>使用 &lt;inttypes.h&gt; 来包含可移植的类型，比如uint32_t表示unsigned 32bit int，int16_t表示 16bit的有符号类型整数。</p>
+<h3 id="3.1.3-float-double-&#31867;&#22411;">3.1.3 float double &#31867;&#22411;<a class="anchor-link" href="#3.1.3-float-double-&#31867;&#22411;">&#182;</a></h3><p>float为单精度数，标准规定其至少表示6位数，比如33.333 333，包含点和整数部分的6位数。通常系统使用32bit表示1个float，其中8位表示指数和符号，24位表示非指数和符号。</p>
+<p>double为双精度数。其至少表示10位数字。一般为64bit。此处的e好像不是数学中的$e$，而是10.</p>
+<div class="highlight"><pre><span></span><span class="kt">double</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">27e-5</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;a in double is %f, in e is %e&quot;</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">a</span><span class="p">);</span>
+<span class="c1">//a in double is 0.000270, in e is 2.700000e-004</span>
+
+<span class="kt">double</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">27e1000</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;a in double is %.10, in e is %e&quot;</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">a</span><span class="p">);</span>
+<span class="c1">//a in double is , in e is 1.#INF00e+000</span>
+</pre></div>
+<p>double和float类型都使用%f进行打印，使用%e表示E形式。</p>
+<p>进行比如 2.0 × 3.0 的计算，会默认使用double，但这有可能减慢速度，因此使用 2.0f × 3.0f 强制使用float类型计算。还有 2.0L和3.0L代表long double。</p>
+<p>小数溢出最大为INF，表示无穷大，最小为NaN，代表不是Number的Number类型的数。</p>
+<h2 id="3.2-&#20351;&#29992;&#25968;&#25454;&#31867;&#22411;">3.2 &#20351;&#29992;&#25968;&#25454;&#31867;&#22411;<a class="anchor-link" href="#3.2-&#20351;&#29992;&#25968;&#25454;&#31867;&#22411;">&#182;</a></h2><p>C需要声明数据，其会自动在声明的时候进行转换，比如</p>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">apple</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">orange</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">;</span> <span class="c1">// 不好</span>
+<span class="kt">int</span> <span class="n">banana</span> <span class="o">=</span> <span class="mf">3.1</span><span class="p">;</span> <span class="c1">// 不好</span>
+<span class="kt">float</span> <span class="n">pi</span> <span class="o">=</span> <span class="mf">3.141592654</span> <span class="c1">//不好</span>
+</pre></div>
+<p>除此之外，在打印的时候也容易出错，这里更应该小心，因为C不会自动转换数据。</p>
+<p><strong>转义序列的使用</strong></p>
+<div class="highlight"><pre><span></span><span class="kt">float</span> <span class="n">money</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;小明科技公司涨薪计算</span><span class="se">\n</span><span class="s">请输入你的薪水：￥_____</span><span class="se">\b\b\b\b</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%f&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">money</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n\t</span><span class="s">%.2f 涨薪水后的工资为：%.2f&quot;</span><span class="p">,</span><span class="n">money</span><span class="p">,</span><span class="n">money</span><span class="o">*</span><span class="mf">1.3</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\r</span><span class="s">Gee!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</pre></div>
+<p>如上所示，\r表示回到行首，\n表示换行。\b表示光标回退，但不删除回退过程中的东西。</p>
+<p><strong>刷新输出</strong></p>
+<p>有三种情况下会遇到刷新输出的问题，其一是缓冲区满的时候，其二为遇到换行符的时候，其三为需要输入的时候。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="4.-&#23383;&#31526;&#20018;&#21644;&#26684;&#24335;&#21270;I/O&#22522;&#30784;">4. &#23383;&#31526;&#20018;&#21644;&#26684;&#24335;&#21270;I/O&#22522;&#30784;<a class="anchor-link" href="#4.-&#23383;&#31526;&#20018;&#21644;&#26684;&#24335;&#21270;I/O&#22522;&#30784;">&#182;</a></h1><h2 id="4.1-&#24120;&#37327;">4.1 &#24120;&#37327;<a class="anchor-link" href="#4.1-&#24120;&#37327;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 <span class="cp">#define PI 3.1415926 </span><span class="c1">//define不需要等号</span>
 
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
@@ -11788,14 +11908,6 @@ div#notebook {
 <span class="p">}</span>
 </pre></div>
 <p>常量一般大写表示，在C预处理器中使用原型定义或者使用const定义。有一些头文件定义了很多常量，比如 limits.h 和 float.h。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="4.2-&#23383;&#31526;&#20018;">4.2 &#23383;&#31526;&#20018;<a class="anchor-link" href="#4.2-&#23383;&#31526;&#20018;">&#182;</a></h2><p>char数组使用 <code>char string_name[length]</code>定义，其表示由 length 长度组成的排列好的 char 扩展类型。其中字符串的每个单元是一个字符，其长度为定义的 length，是确定的。在最后一个位置为ASCII字符 “\0” （被程序自动添加）。</p>
 <p>字符串使用双引号表示，其中双引号只是指示类型，并没有实际作用。</p>
 <p><strong>使用方法</strong></p>
@@ -11817,14 +11929,6 @@ div#notebook {
 <p><strong>常见问题</strong></p>
 <p>此外，需要注意“x”和‘x’的区别，前者包含两个字符，而后者只包含一个字符。</p>
 <p>strlen()可以获取字符串长度，它会在遇到“\0”的字符处停止（字符串固定长度，但是\0后的内存并没有使用）。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="4.3-PRINTF&#20989;&#25968;">4.3 PRINTF&#20989;&#25968;<a class="anchor-link" href="#4.3-PRINTF&#20989;&#25968;">&#182;</a></h2><h3 id="4.3.1-&#20462;&#39280;&#31526;&#21644;&#26684;&#24335;&#21270;">4.3.1 &#20462;&#39280;&#31526;&#21644;&#26684;&#24335;&#21270;<a class="anchor-link" href="#4.3.1-&#20462;&#39280;&#31526;&#21644;&#26684;&#24335;&#21270;">&#182;</a></h3><p>printf()函数接受第一个参数为字符串，代表格式化模板（控制描述），其余参数为传入此模板的一些变量、常量或者表达式，最后输出的是字符串。</p>
 <p>格式化常见的有：<code>%a %c %d %g %e %f %o %x %% %u %s %p</code></p>
 <p>格式化的同时可以添加修饰符，比如 a.bf 可以定义长度为a，精度为b的 float/double 类型格式。使用h、l、ll、L可以定义长短整数等。</p>
@@ -11845,14 +11949,6 @@ div#notebook {
 <span class="n">b</span> <span class="n">is</span> <span class="mf">3.000000e-002</span><span class="p">,</span> <span class="mf">0.030000</span><span class="p">,</span>      <span class="mf">0.030</span>
 <span class="n">c</span> <span class="n">is</span> <span class="mi">240</span>       <span class="p">,</span> <span class="mi">240</span><span class="p">,</span>        <span class="mi">240</span><span class="p">,</span> <span class="mo">0000000240</span>
 </pre></div>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="4.3.2-&#36890;&#36807;float.h&#26597;&#30475;&#31995;&#32479;&#25552;&#20379;&#30340;&#26684;&#24335;&#31934;&#24230;">4.3.2 &#36890;&#36807;float.h&#26597;&#30475;&#31995;&#32479;&#25552;&#20379;&#30340;&#26684;&#24335;&#31934;&#24230;<a class="anchor-link" href="#4.3.2-&#36890;&#36807;float.h&#26597;&#30475;&#31995;&#32479;&#25552;&#20379;&#30340;&#26684;&#24335;&#31934;&#24230;">&#182;</a></h3><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;float.h&gt;</span><span class="cp"></span>
@@ -11870,33 +11966,9 @@ div#notebook {
 <span class="o">&gt;&gt;</span> <span class="n">b1</span> <span class="n">is</span> <span class="mf">0.3333</span><span class="p">,</span> <span class="n">b2</span> <span class="n">is</span> <span class="mf">0.333333343267</span><span class="p">,</span> <span class="n">b3</span> <span class="n">is</span> <span class="mf">0.3333333432674408</span>
 <span class="o">&gt;&gt;</span> <span class="n">the</span> <span class="kt">float</span><span class="p">.</span><span class="n">h</span> <span class="n">say</span> <span class="n">FLT_DIG</span> <span class="n">is</span> <span class="mi">6</span><span class="p">,</span> <span class="n">DBL_DIG</span> <span class="n">is</span> <span class="mi">15</span>
 </pre></div>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="4.3.3-&#19981;&#21305;&#37197;&#30340;&#36716;&#25442;&#21644;PRINTF&#20316;&#29992;&#36807;&#31243;">4.3.3 &#19981;&#21305;&#37197;&#30340;&#36716;&#25442;&#21644;PRINTF&#20316;&#29992;&#36807;&#31243;<a class="anchor-link" href="#4.3.3-&#19981;&#21305;&#37197;&#30340;&#36716;&#25442;&#21644;PRINTF&#20316;&#29992;&#36807;&#31243;">&#182;</a></h3><p>使用printf()的时候，当转换不匹配时，问题很严重。比如，由float转换成为sort int。但是，有时候，即便格式正确，也不能进行转换。这是因为，对于一句printf()来说，其将所有需要转换的值放到一个称作是stack的内存中，其工作机制是，按照格式要求的位数按照顺序读取变量，比如%f要求一个32位的double，而第一个变量提供的是16位的int，那么程序会继续用下一个变量的前16位数来补全这个%f的格式。然后继续读取剩下的，可以看到，即便后来的完全对应，读取已经完全错了。</p>
 <p>可以使用多个printf来避免这种问题，或者仔细检查格式。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p>printf有返回值，很少被用到。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="4.4-SCANF&#20989;&#25968;">4.4 SCANF&#20989;&#25968;<a class="anchor-link" href="#4.4-SCANF&#20989;&#25968;">&#182;</a></h2><h3 id="4.4.1-&#20462;&#39280;&#31526;&#21644;&#26684;&#24335;&#21270;">4.4.1 &#20462;&#39280;&#31526;&#21644;&#26684;&#24335;&#21270;<a class="anchor-link" href="#4.4.1-&#20462;&#39280;&#31526;&#21644;&#26684;&#24335;&#21270;">&#182;</a></h3><p>scanf函数做的事情是，将输入的字符串转换成为各种模板规定的类型。即便输入的是0-10这种数字，其本质上也是按照char来读取的，scanf就是进行的这种转换。</p>
 <p>对于读作字符串而言，第二个参数不需要使用指针，只用变量名即可。而对于其余类型，比如整数、浮点和字符，必须使用&amp;表示的指针来将内容按照模板进行转换并读取到相应类型的变量中去。</p>
 <p>scanf支持的修饰符大体和printf类似，<code>%c %d %e/f/g/a %o %s %u %x</code>, 但是 <code>%f %e %g</code> 这种可以用于double和float的，一般只作为float类型输入，区别于正常状态下作为double的printf，如果要指定double，则需要用到%l修饰符，即 %lf、%le、%lg。</p>
@@ -11944,23 +12016,7 @@ div#notebook {
 <span class="o">&gt;&gt;</span> <span class="mi">10</span><span class="p">,</span><span class="mi">30</span>
 <span class="o">&gt;&gt;</span> <span class="n">The</span> <span class="n">number</span> <span class="nl">is</span><span class="p">:</span> <span class="mf">0.000000380000000000000010000000</span>
 </pre></div>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p>使用*可以将格式化的工作留给程序自己完成。上面是一个例子。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p>下面又是一例：</p>
 <div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
@@ -11979,14 +12035,6 @@ div#notebook {
 <span class="o">&gt;&gt;</span> <span class="n">marvin</span> <span class="n">lii</span>
 <span class="o">&gt;&gt;</span>      <span class="mi">6</span>   <span class="mi">3</span>
 </pre></div>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <hr>
 <p>更新日志：</p>
 <p>2018年5月20日 SP1.0-180520</p>
