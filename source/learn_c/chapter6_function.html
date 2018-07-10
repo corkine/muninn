@@ -11858,6 +11858,63 @@ a[1][1]  some value
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="&#25968;&#32452;&#25351;&#38024;&#30340;&#32423;&#21035;&#21644;&#36816;&#31639;">&#25968;&#32452;&#25351;&#38024;&#30340;&#32423;&#21035;&#21644;&#36816;&#31639;<a class="anchor-link" href="#&#25968;&#32452;&#25351;&#38024;&#30340;&#32423;&#21035;&#21644;&#36816;&#31639;">&#182;</a></h1><h2 id="&#36816;&#31639;&#35268;&#21017;">&#36816;&#31639;&#35268;&#21017;<a class="anchor-link" href="#&#36816;&#31639;&#35268;&#21017;">&#182;</a></h2><p>对于数组指针的运算，比如 a[] = {1,2,3}, a+1 会得到 a[1] 的地址。以下是三要素：</p>
+<ul>
+<li><p>对于数组名而言，其值永远是指向第一个元素的指针</p>
+<ul>
+<li><p>对于一维数组，a 的值就是 <code>a[0]</code> 的指针/地址</p>
+</li>
+<li><p>对于二维数组<code>a[][]</code>, a 的值就是 <code>a[0]</code> 的指针/地址， <code>a[]</code> 的值就是 <code>a[][0]</code> 的指针/地址。需要注意，二维数组并非是拉长的一维数组，二维数组的定义是基于其所包含一维数组来的。</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>对于 * 操作而言，总是向下降一级</p>
+<ul>
+<li><p>对于一维数组， <code>*a</code> 的结果是 a[0] 的地址变成了 a[0] 的值，从地址变成值是一种降级。</p>
+</li>
+<li><p>对于二维数组， <code>*a[2]</code> 的结果是由 第三个数组的指针/地址 变成了 第三个数组中第一个元素的地址（也就是 <code>&amp;a[2][0]</code>，解释：a是第一个数组的指针，所以<code>a[2]</code>是第三个数组的指针，第三个数组的值根据定义，等于<code>&amp;a[2][0]</code>,也就是第一个元素的地址，因此，第三个数组的指针取<code>*</code>得到的是第三个数组第一个元素的值，即 <code>*a[2] = *&amp;a[2][0] = a[2][0]</code>。</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>对于 &amp; 操作而言，总是向上升一级</li>
+</ul>
+<h2 id="&#25968;&#32452;&#32423;&#21035;">&#25968;&#32452;&#32423;&#21035;<a class="anchor-link" href="#&#25968;&#32452;&#32423;&#21035;">&#182;</a></h2><p>【注意&amp;a】作为特例，对于一维数组a，&amp;a表示升一级，但是其值还等于a，都是代表第一个元素的地址。但是区别在于 a+1 和 &amp;a+1，前者跨越了一个数组元素，后者则跨越了整个数组，这可以看作升级带来的不同。</p>
+<p>根据以上内容，对于二维数组，显然有：</p>
+<div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">*</span><span class="n">a</span>
+<span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">*</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">**</span><span class="n">a</span>
+
+<span class="c1">//对于二维数组，其级别为：</span>
+
+<span class="o">&amp;</span><span class="n">a</span> <span class="c1">// +1可以跨越整个二维数组</span>
+  <span class="n">a</span> <span class="c1">// +1可以跨越一个一维数组</span>
+    <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1">// +1可以跨越一维数组的一个元素</span>
+      <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="c1">// +1没有含义，这里已经是值，而不是地址了</span>
+</pre></div>
+<h2 id="&#23454;&#38469;&#20351;&#29992;">&#23454;&#38469;&#20351;&#29992;<a class="anchor-link" href="#&#23454;&#38469;&#20351;&#29992;">&#182;</a></h2><p>上述都是建立在定义上的。实际中，对于二维数组，不存在单独的 &amp;a，a[0], a[1] 的数值，内存中仅有 a[0][0] - a[n][n] 的元素，被排成一列。因此，a的实际值为 &amp;a[0] = &amp;&amp;a[0][0], 它总会返回一个最后不能再跳转的地址（最接近内存中的值的最后地址）。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="&#23383;&#31526;&#20018;&#21644;&#25351;&#38024;">&#23383;&#31526;&#20018;&#21644;&#25351;&#38024;<a class="anchor-link" href="#&#23383;&#31526;&#20018;&#21644;&#25351;&#38024;">&#182;</a></h1><p>字符串就是一个类型为char的数组，结尾以'\0'结尾。一个神奇的事情在于可以将字符串赋值给一个指针，比如 ptr = "hello"，这个指针指向不可修改的字符串数组的地址，使用 %p 可以查看首字母地址，使用 %s 可以直接生成所有字符串（某种宏？），使用<code>*p</code>可以返回h这个字母，和数组指针类似。</p>
+<p>需要注意，在cpp环境下的cout输出ptr会直接被转换成 %s 而输出字符串，而不是输出一个地址。在c下不存在这种问题。</p>
+
+</div>
+</div>
+</div>
     </div>
   </div>
 </body>
