@@ -11785,7 +11785,132 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#32467;&#26500;&#20307;">&#32467;&#26500;&#20307;<a class="anchor-link" href="#&#32467;&#26500;&#20307;">&#182;</a></h1><p>结构体是一种复合数据结构，就其结构而言，其非常类似于数组，但和数组又有一定的区别。你可以认为结构体是yi'zh</p>
+<h1 id="&#32467;&#26500;&#20307;">&#32467;&#26500;&#20307;<a class="anchor-link" href="#&#32467;&#26500;&#20307;">&#182;</a></h1><p>结构体是一种复合数据结构，就其结构而言，其非常类似于数组，但和数组又有一定的区别。你可以认为结构体是一种抽象的数组模板。</p>
+<h2 id="&#32467;&#26500;&#20307;&#30340;&#23450;&#20041;&#12289;&#36171;&#20540;&#21644;&#20351;&#29992;">&#32467;&#26500;&#20307;&#30340;&#23450;&#20041;&#12289;&#36171;&#20540;&#21644;&#20351;&#29992;<a class="anchor-link" href="#&#32467;&#26500;&#20307;&#30340;&#23450;&#20041;&#12289;&#36171;&#20540;&#21644;&#20351;&#29992;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">student</span>
+    <span class="p">{</span>
+        <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">30</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">id</span><span class="p">;</span>
+        <span class="kt">char</span> <span class="n">addr</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="p">}</span> <span class="n">cm</span><span class="p">,</span><span class="n">lj</span><span class="p">;</span>
+
+    <span class="n">student</span> <span class="n">marvin</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;Corkine&quot;</span><span class="p">,</span><span class="mi">2017110658</span><span class="p">,</span><span class="s">&quot;CCNU&quot;</span><span class="p">};</span>
+    <span class="n">marvin</span><span class="p">.</span><span class="n">id</span><span class="o">++</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s, %d&quot;</span><span class="p">,</span><span class="n">marvin</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="n">marvin</span><span class="p">.</span><span class="n">id</span>
+           <span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>如上声明了一个结构体，采用 <code>struct student</code> 包裹一个大括号加上分号即可声明这一种抽象结构。对于这种结构，student并非是变量，而是一种数据类型，类似于float、bool以及typedef定义的你的数据类型。此数据类型的特殊之处在于其复合了多个数据类型，student包含了name、id、addr这三个变量，采用类似于声明的方式声明其结构体内部变量的类型，可以有默认值。在分号之前，可以顺手创建几个变量，采用逗号隔开，这些变量的类型是 student。这就是结构体的定义。</p>
+<p>结构体在内存中非常类似于数组的表示方法， <code>student marvin = {,,}</code> 这句话可以看出，在内存中这三个变量是相连的。逗号分隔的是结构体中对应顺序的变量的值。这就是结构体赋值的方法。</p>
+<p>结构体的变量可以用.运算符取出，取出后的东西就相当于其内部定义变量的类型，可以进行任何属于此变量类型的操作，比如 marvin.id++ 就对这个 int 类型的数据加了1。</p>
+<p><strong>此外，需要注意，虽然结构体变量类似于数组，但是结构体变量可以直接赋值，相当于COPY一份数据给另一个结构体变量。</strong>比如：<code>cm = marvin;</code></p>
+<h2 id="&#32467;&#26500;&#20307;&#21644;&#20989;&#25968;">&#32467;&#26500;&#20307;&#21644;&#20989;&#25968;<a class="anchor-link" href="#&#32467;&#26500;&#20307;&#21644;&#20989;&#25968;">&#182;</a></h2><p>结构体可以作为函数的参数和返回值。</p>
+<p>但结构体作为参数时，并非像数组传递的是一个地址，而是单独COPY了一份数据给函数，传递的是值。</p>
+<p>比如：</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">student</span>
+    <span class="p">{</span>
+        <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">30</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">id</span><span class="p">;</span>
+        <span class="kt">char</span> <span class="n">addr</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="p">}</span> <span class="n">cm</span><span class="p">,</span><span class="n">lj</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">renew</span><span class="p">(</span><span class="n">student</span> <span class="n">one</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">one</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">12345</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">one</span><span class="p">.</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;, &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">one</span><span class="p">.</span><span class="n">id</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">student</span> <span class="nf">reone</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">student</span> <span class="n">one</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;NOBODY&quot;</span><span class="p">,</span><span class="mi">20000000</span><span class="p">,</span><span class="s">&quot;NOWHERE&quot;</span><span class="p">};</span>
+    <span class="k">return</span> <span class="n">one</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+
+    <span class="n">student</span> <span class="n">marvin</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;Corkine&quot;</span><span class="p">,</span><span class="mi">2017110658</span><span class="p">,</span><span class="s">&quot;CCNU&quot;</span><span class="p">};</span>
+    <span class="n">marvin</span><span class="p">.</span><span class="n">id</span><span class="o">++</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s, %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">marvin</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="n">marvin</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
+
+    <span class="n">renew</span><span class="p">(</span><span class="n">marvin</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;After renew: %s, %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">marvin</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="n">marvin</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
+
+    <span class="n">marvin</span> <span class="o">=</span> <span class="n">reone</span><span class="p">();</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;After reone: %s, %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">marvin</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="n">marvin</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<pre><code>Corkine, 2017110659
+Corkine, 12345
+After renew: Corkine, 2017110659
+After reone: NOBODY, 20000000</code></pre>
+<p>相反，结构体作为返回值的时候，则是COPY了一份数据给原始的变量，这样就得到了更改。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#32467;&#26500;&#20307;&#21644;&#25351;&#38024;">&#32467;&#26500;&#20307;&#21644;&#25351;&#38024;<a class="anchor-link" href="#&#32467;&#26500;&#20307;&#21644;&#25351;&#38024;">&#182;</a></h2><p><strong>结构体各结构的地址</strong></p>
+<p>虽然结构体非常类似于数组，但是结构体变量可以直接赋值，这和数组不同，那么打印结构体会怎样呢？cout &lt;&lt; marvin 出错。使用C的“%p”运算符的话可以运行，但是和 &amp;marvin 得到的地址不同：</p>
+<div class="highlight"><pre><span></span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%p,%p,%p,%p</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">marvin</span><span class="p">,</span><span class="o">&amp;</span><span class="n">marvin</span><span class="p">,</span><span class="o">&amp;</span><span class="p">(</span><span class="n">marvin</span><span class="p">.</span><span class="n">name</span><span class="p">),</span><span class="o">&amp;</span><span class="p">(</span><span class="n">marvin</span><span class="p">.</span><span class="n">id</span><span class="p">));</span>
+<span class="c1">//6B726F43,00656E69,00000000,00000000 marvin和&amp;marvin打印结果不同</span>
+</pre></div>
+<p><strong>结构体指针取内部元素操作</strong></p>
+<p>结构体可以定义指针，并且可以使用指针操作，和数组一样，但是，我们现在定义了一个叫做“指向运算符”的符号，可以不用写星号和点号，直接用 <code>ptr-&gt;name</code> 来获取结构体内部的 name 属性。</p>
+<div class="highlight"><pre><span></span><span class="n">student</span> <span class="n">marvin</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;Corkine&quot;</span><span class="p">,</span><span class="mi">2017110658</span><span class="p">,</span><span class="s">&quot;CCNU&quot;</span><span class="p">};</span>
+<span class="n">student</span> <span class="o">*</span><span class="n">ptr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">marvin</span><span class="p">;</span> <span class="c1">//注意这里marvin取其地址，也就是不把结构体名看作一个指针。</span>
+<span class="n">marvin</span><span class="p">.</span><span class="n">id</span><span class="o">++</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s, %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">marvin</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="n">marvin</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
+<span class="c1">//printf(&quot;With Ptr: %s, %d\n&quot;,*ptr.name,*ptr.id); 在纯C环境下可能不起作用？</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;With Magic: %s, %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">);</span> <span class="c1">//和前者相同</span>
+</pre></div>
+<p><strong>结构体指针作为函数参数</strong></p>
+<p>在之前的例子中，我们传入函数的时候结构体自动进行了赋值，就像除了数组的其余数据结构一样。但是，我们其实可以像数组一样传递过去一个地址，就像这样：</p>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">renew_2</span><span class="p">(</span><span class="n">student</span> <span class="o">*</span><span class="n">one</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">one</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="mi">20000001</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">renew_2</span><span class="p">(</span><span class="o">&amp;</span><span class="n">marvin</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;After pointer renew: %s, %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">marvin</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="n">marvin</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
+<span class="c1">//After pointer renew: NOBODY, 20000001</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#32467;&#26500;&#20307;&#25968;&#32452;">&#32467;&#26500;&#20307;&#25968;&#32452;<a class="anchor-link" href="#&#32467;&#26500;&#20307;&#25968;&#32452;">&#182;</a></h2><p>结构体可以组成结构体数组，如下：</p>
+<div class="highlight"><pre><span></span><span class="n">student</span> <span class="n">cms</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{{</span><span class="s">&quot;Corkine&quot;</span><span class="p">,</span><span class="mi">2001</span><span class="p">,</span><span class="s">&quot;CCNU&quot;</span><span class="p">},{</span><span class="s">&quot;Liuji&quot;</span><span class="p">,</span><span class="mi">2002</span><span class="p">,</span><span class="s">&quot;CCNU&quot;</span><span class="p">},{</span><span class="s">&quot;Marvin&quot;</span><span class="p">,</span><span class="mi">2003</span><span class="p">,</span><span class="s">&quot;CCNU&quot;</span><span class="p">}};</span>
+<span class="n">student</span> <span class="o">*</span><span class="n">ptr2</span> <span class="o">=</span> <span class="n">cms</span><span class="p">;</span> <span class="c1">//指向结构体数组的指针</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ptr2</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;, &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">ptr2</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">//显然像数组一样，会打印第一个元素，也就是Corkine和2001.</span>
+<span class="n">ptr2</span><span class="o">++</span><span class="p">;</span>
+<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ptr2</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;, &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">ptr2</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="c1">//跨越了一个元素，打印Liuji和2002.</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#21306;&#20998;&#32467;&#26500;&#20307;&#21644;&#25968;&#32452;">&#21306;&#20998;&#32467;&#26500;&#20307;&#21644;&#25968;&#32452;<a class="anchor-link" href="#&#21306;&#20998;&#32467;&#26500;&#20307;&#21644;&#25968;&#32452;">&#182;</a></h2><p>之前在前面说，结构体可以看做一个包含多种数据类型的数组，其在内存上的储存也是类似。但是，其实它们除了这点几乎没有相同。结构体使用前需要像函数一样定义抽象结构，在调用前需要定义结构体变量，采用的定义方式和数组定义类似。但是，结构体可以完全和部分赋值，而数组不可以，结构体作为函数参数是传递数据（也可以传递数据），而数组是传递地址。结构体的指针操作使用特殊操作符，而不是星号和点号。结构体可以和数组混杂构成结构体数组，结构体数组包含了数组的特色：数组名就是指针，指针运算跳转一个结构体，其也包含了结构体的特色：内部变量和指向运算符。</p>
+<p>我个人认为造成所有的这些不同的原因是：结构体名作为数值，而数组名作为地址 而造成的。</p>
 
 </div>
 </div>
