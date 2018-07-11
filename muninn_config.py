@@ -74,6 +74,7 @@ COURSE_INFO = {
             ("数据、字符串、格式化输入输出","1","learn_c/chapter_4_string_and_scanf.html","w3"),
             ("操作符、表达式、语句、字符串I/O机制","1","learn_c/chapter_5_operator.html","w4"),
             ("函数、指针和数组","1","learn_c/chapter6_function.html","w5"),
+            ("结构体和链表","1","learn_c/chapter7_struct.html","w6"),
         ],
     },
     "cpp":

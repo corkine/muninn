@@ -11776,7 +11776,7 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><span type="title">结构体和链表</span> | <span type="update">2018-07-11</span> | <span type="version">0.9</span></p>
-<p><span type="intro"><p class="card-text">本章讲解结构体和链表</p></span></p>
+<p><span type="intro"><p class="card-text">本章讲解结构体和链表，这些高级数据结构都是基于指针操作实现的应用，能够实现更加复杂的功能。</p></span></p>
 
 </div>
 </div>
@@ -11911,6 +11911,54 @@ After reone: NOBODY, 20000000</code></pre>
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="&#21306;&#20998;&#32467;&#26500;&#20307;&#21644;&#25968;&#32452;">&#21306;&#20998;&#32467;&#26500;&#20307;&#21644;&#25968;&#32452;<a class="anchor-link" href="#&#21306;&#20998;&#32467;&#26500;&#20307;&#21644;&#25968;&#32452;">&#182;</a></h2><p>之前在前面说，结构体可以看做一个包含多种数据类型的数组，其在内存上的储存也是类似。但是，其实它们除了这点几乎没有相同。结构体使用前需要像函数一样定义抽象结构，在调用前需要定义结构体变量，采用的定义方式和数组定义类似。但是，结构体可以完全和部分赋值，而数组不可以，结构体作为函数参数是传递数据（也可以传递数据），而数组是传递地址。结构体的指针操作使用特殊操作符，而不是星号和点号。结构体可以和数组混杂构成结构体数组，结构体数组包含了数组的特色：数组名就是指针，指针运算跳转一个结构体，其也包含了结构体的特色：内部变量和指向运算符。</p>
 <p>我个人认为造成所有的这些不同的原因是：结构体名作为数值，而数组名作为地址 而造成的。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="&#38142;&#34920;">&#38142;&#34920;<a class="anchor-link" href="#&#38142;&#34920;">&#182;</a></h1><h2 id="&#23450;&#20041;">&#23450;&#20041;<a class="anchor-link" href="#&#23450;&#20041;">&#182;</a></h2><p>链表是为了解决以下问题而设计的：</p>
+<p>对于结构体，其不能够在两个结构体变量间插入一个新变量，起码不能在内存中这样做，否则插入点之后的数据都要向后移动，对于这种情况，可以使用链表解决。</p>
+<p>链表包含了很多结构体，不过这些结构体变量并非按照数组那样在内存中顺序排列，每个结构体提供下一个结构体的地址信息，首尾相连，构成了链表。</p>
+<p>链表包含链表头（HEAD），其就是一个结构体，指向第一个由内容的结构体，接着是多个链表节点，其中每个链表节点由保存数据的内部变量以及一个存储指向下一个节点地址的变量组成。NULL表示结尾。</p>
+<h2 id="&#21160;&#24577;&#30003;&#35831;&#20869;&#23384;&#31354;&#38388;">&#21160;&#24577;&#30003;&#35831;&#20869;&#23384;&#31354;&#38388;<a class="anchor-link" href="#&#21160;&#24577;&#30003;&#35831;&#20869;&#23384;&#31354;&#38388;">&#182;</a></h2><p>区别于结构体、数组等，链表是动态生成的，因此需要向解释器动态申请内存来使用。使用以下语句：</p>
+<div class="highlight"><pre><span></span><span class="kt">int</span> <span class="o">*</span><span class="n">ptr1</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">1024</span><span class="p">);</span>
+<span class="kt">int</span> <span class="o">*</span><span class="n">ptr2</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">int</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+
+<span class="n">delete</span> <span class="n">ptr1</span><span class="p">;</span>
+<span class="n">delete</span> <span class="p">[]</span><span class="n">ptr2</span><span class="p">;</span>
+</pre></div>
+<p>申请内存空间需要声明需要的长度（类型），放在运算符 new 之后。接着是可选的括号，放置默认值，对于数组而言，要声明数组长度，方便分配内存。调用返回一个地址，对于数组而言，其地址的基类是地址元素的类。类需要写在指针前，就像普通的指针定义。这句话好像把指针定义和赋值写在一起了。</p>
+<p>删除使用 delete 运算符即可。对于数组需要使用 []ptr 这种形式。删除后，其内存空间被自动回收。</p>
+<h2 id="&#23454;&#29616;&#38142;&#34920;">&#23454;&#29616;&#38142;&#34920;<a class="anchor-link" href="#&#23454;&#29616;&#38142;&#34920;">&#182;</a></h2><p>下面的代码实现了链表的结构：</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">student</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">id</span><span class="p">;</span>
+    <span class="n">student</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">student</span> <span class="o">*</span><span class="nf">create</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">student</span> <span class="o">*</span><span class="n">head</span><span class="p">,</span> <span class="o">*</span><span class="n">temp</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">,</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="n">new</span> <span class="n">student</span><span class="p">;</span><span class="c1">//分配地址到head指针</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span><span class="c1">//初始化时从head获取指针地址</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">num</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">num</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span>
+        <span class="n">n</span><span class="o">++</span><span class="p">;</span><span class="c1">//链表包含struct的个数</span>
+        <span class="n">temp</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="n">num</span><span class="p">;</span>
+        <span class="n">temp</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">new</span> <span class="n">student</span><span class="p">;</span><span class="c1">//获取下一个struct内存，并且链接到next变量上</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span><span class="c1">//temp变量后移，方便继续创建</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">num</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="n">head</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span> <span class="k">else</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span><span class="c1">//设置最终结束标记</span>
+    <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 
 </div>
 </div>
