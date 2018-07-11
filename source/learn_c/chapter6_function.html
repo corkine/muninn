@@ -11886,8 +11886,7 @@ a[1][1]  some value
 <ul>
 <li>对于 &amp; 操作而言，总是向上升一级</li>
 </ul>
-<h2 id="&#25968;&#32452;&#32423;&#21035;">&#25968;&#32452;&#32423;&#21035;<a class="anchor-link" href="#&#25968;&#32452;&#32423;&#21035;">&#182;</a></h2><p>【注意&amp;a】作为特例，对于一维数组a，&amp;a表示升一级，但是其值还等于a，都是代表第一个元素的地址。但是区别在于 a+1 和 &amp;a+1，前者跨越了一个数组元素，后者则跨越了整个数组，这可以看作升级带来的不同。</p>
-<p>根据以上内容，对于二维数组，显然有：</p>
+<h2 id="&#25968;&#32452;&#32423;&#21035;">&#25968;&#32452;&#32423;&#21035;<a class="anchor-link" href="#&#25968;&#32452;&#32423;&#21035;">&#182;</a></h2><p>根据以上内容，对于二维数组，显然有：</p>
 <div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">*</span><span class="n">a</span>
@@ -11900,7 +11899,8 @@ a[1][1]  some value
     <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1">// +1可以跨越一维数组的一个元素</span>
       <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="c1">// +1没有含义，这里已经是值，而不是地址了</span>
 </pre></div>
-<h2 id="&#23454;&#38469;&#20351;&#29992;">&#23454;&#38469;&#20351;&#29992;<a class="anchor-link" href="#&#23454;&#38469;&#20351;&#29992;">&#182;</a></h2><p>上述都是建立在定义上的。实际中，对于二维数组，不存在单独的 &amp;a，a[0], a[1] 的数值，内存中仅有 a[0][0] - a[n][n] 的元素，被排成一列。因此，a的实际值为 &amp;a[0] = &amp;&amp;a[0][0], 它总会返回一个最后不能再跳转的地址（最接近内存中的值的最后地址）。</p>
+<h2 id="&amp;a-=-a[0]">&amp;a = a[0]<a class="anchor-link" href="#&amp;a-=-a[0]">&#182;</a></h2><p>【注意&amp;a】作为特例，对于一维数组a，&amp;a表示升一级，但是其值还等于a，都是代表第一个元素的地址。但是区别在于 a+1 和 &amp;a+1，前者跨越了一个数组元素，后者则跨越了整个数组，这可以看作升级带来的不同。</p>
+<p>对于二维数组而言，&amp;a[0] = a[0]显然也是这个例子的说明，因为 a = &amp;a[0], a[0] = &amp;a[0][0], 为了正常运算， 对于数组名而言， &amp;a[0] 总是等于 a[0]，这样 a = &amp;a[0] = a[0] = &amp;a[0][0]。这是需要注意的点，其中中间的等式是由这个规定而来。</p>
 
 </div>
 </div>
