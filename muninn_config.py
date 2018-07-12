@@ -11,6 +11,7 @@ JUPYTER_NOTEBOOK_ALLOWED_FOLDER = [
     "book_learn_stats",
     "learn_c",
     "learn_machine_learning",
+    "coursera_learn_computer",
 ]
 
 HTML_DST_FOLDER = "./source"
