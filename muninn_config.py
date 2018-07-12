@@ -15,7 +15,7 @@ JUPYTER_NOTEBOOK_ALLOWED_FOLDER = [
 
 HTML_DST_FOLDER = "./source"
 
-COURSE_HEAD = ["pr1","mt","c1","c2","cpp","visual1","ml1","mluw"]
+COURSE_HEAD = ["pr1","mt","c1","c2","c3","cpp","visual1","ml1","mluw"]
 
 COURSE_INFO = {
     "pr1":
@@ -75,6 +75,18 @@ COURSE_INFO = {
             ("操作符、表达式、语句、字符串I/O机制","1","learn_c/chapter_5_operator.html","w4"),
             ("函数、指针和数组","1","learn_c/chapter6_function.html","w5"),
             ("结构体和链表","1","learn_c/chapter7_struct.html","w6"),
+        ],
+    },
+    "c3":
+    {
+        "show_menu_name_1st":"Computer Science",
+        "show_menu_name_2st":"Computer Structure",
+        "2st_addr":"学习笔记",
+        "address":"/coursera_learn_computer",
+        "id":"c3",
+        "chapter_list":[
+            ("intro","0","coursera_learn_computer/chapter1_intro.html","w1"),
+            ("x86_mips","0","coursera_learn_computer/chapter2_x86_mips.html","w2"),
         ],
     },
     "cpp":
