@@ -4,7 +4,7 @@
 __version__ = "0.1.0"
 __log__ = """2018-06-10 0.0.1 重构项目，添加Course类
 2018-06-11 0.0.3 添加Note和Chapter类，添加了从源文件中获取数据的方法，添加了单元测试
-2018-07-13 0.1.0 
+2018-07-13 0.1.0 修复了在POSIX和NT下的SEP间隔符问题。
 """
 import random
 from bs4 import BeautifulSoup
@@ -56,7 +56,7 @@ class Course:
         #这是程序用来定位文件的URI的地址(用于菜单导航)，每个课程，不论是一级还是二级，均在大类文件夹内。
         #多个属于同一大类的课程也在同一文件夹内
         if full_path: 
-            res =  self.fname.replace(" ","_")+"/"+self.name.replace(" ","_")
+            res =  self.fname.replace(" ","_")+SEP+self.name.replace(" ","_")
             return res + suffix
         #返回章节html的地址，格式已经被定义好，不可使用suffix进行重新定义
         if is_chapter and chapter:
