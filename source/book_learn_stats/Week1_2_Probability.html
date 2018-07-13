@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>WEEK2_model_thinking</title>
+<title>Week1_2_Probability</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -179,13 +179,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><span type="title">Modeling Aggregation & Decision</span> | <span type="version">0.9</span> | <span type="update">2018-06-14</span>
-<span type="intro">
-    <p class="card-text">本章主要介绍聚合和决策。如果把 Model Thinking 看作是输入输出流，那么本周的内容主要关注输出 Output。对于个人而言，我们的行为最后都变成了决策，而对于群体和社会而言，则是聚合。</p>
-    <p class="card-text">举个简单的例子，离散分布，这是多个个体决策事件的聚合。我们可以根据当前的观察水平，来对总体的聚合进行估计，这就是概率论在实际中的应用，比如六个方差。当然，聚合不仅仅是包含独立样本，对于那些基于相互依赖的决策的聚合，比如自动细胞机，则从另一个方面说明了聚合的复杂和可变性。</p>
-    <p class="card-text">决策也比较复杂，这仅仅考虑了理性的情况。一般而言，我们可以将决策分为复杂问题决策和时空决策，前者对不同维度进行分解来解决问题，后者则考虑将不同的事件放在时间层面下，使用决策树来寻找最优选择。</p>
-</span></p>
-<hr>
+<h2 id="1.-&#22522;&#26412;&#23450;&#20041;">1. &#22522;&#26412;&#23450;&#20041;<a class="anchor-link" href="#1.-&#22522;&#26412;&#23450;&#20041;">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -194,19 +188,10 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="2.-Aggregation">2. Aggregation<a class="anchor-link" href="#2.-Aggregation">&#182;</a></h1>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>什么是聚合？</strong></p>
-<p>聚合指的是当各种事件的集合，量变引起质变，当个体的选择组成集体的选择，聚合就发生了。当我们谈论聚合的时候，就是在谈论从个体选择到集体选择的这样一个过程。</p>
-<p>聚合分为两大类，其一：每个人做出的决策独立，这意味着一些不同的概率分布形式，比如离散分布或者连续分布。其二：每个人做出的决策相关并且互相影响。</p>
-<p>为什么有两种不同的类型（独立/相互影响）呢？其实这是两种看待世界的方式，相互独立的聚合来自于基于数据的数学模型，相互依靠的聚合来自社会科学的研究。在这两个不同的研究领域，独立的重要性是不同的，对于数学而言，独立才能建模并且预测，对于社会科学而言，依存是研究的基础。</p>
+<h3 id="&#27010;&#29575;&#30340;&#23450;&#20041;">&#27010;&#29575;&#30340;&#23450;&#20041;<a class="anchor-link" href="#&#27010;&#29575;&#30340;&#23450;&#20041;">&#182;</a></h3><p>可以将概率看作是一个周长为1的圆盘。概率为0.2意味着一根长为0.2的绳子缠绕在圆环周围，旋转转盘，刻度停留在有绳子处的可能性。</p>
+<h3 id="&#38598;&#21512;&#30340;&#23450;&#20041;">&#38598;&#21512;&#30340;&#23450;&#20041;<a class="anchor-link" href="#&#38598;&#21512;&#30340;&#23450;&#20041;">&#182;</a></h3><p>集合是由元素构成的合集。全集（宇集）用 $S$ 表示。空集用 $Φ$ 表示。</p>
+<p>集合之间的关系有交/或（A∪B）、并/和（A∩B）、补集 ($ C = A^c$)、差集（$ X-Y $）</p>
+<p>Disjoint 不相交指的是两个集合的关系 $ X ∩ Y = Φ $ 。Mutually Exclusive 互斥指的是多个集合均不相交。</p>
 
 </div>
 </div>
@@ -216,26 +201,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>比如，物理学家 Anderson wrote a paper called "More is Different". 湿润是一群水分子的特性，而不是单个水分子的。我们需要感知到氢氧键。</p>
-<p>心理学上的整体大于部分。生物学的突触变成了认知能力。</p>
-<h2 id="2.1-Rules-Dependence">2.1 Rules Dependence<a class="anchor-link" href="#2.1-Rules-Dependence">&#182;</a></h2><h3 id="2.1.1-Central-Limit-Theorem">2.1.1 Central Limit Theorem<a class="anchor-link" href="#2.1.1-Central-Limit-Theorem">&#182;</a></h3><p>独立事件相加，会形成一条类似于正态分布曲线的线段。</p>
-<h3 id="2.1.2-Different-Distribution">2.1.2 Different Distribution<a class="anchor-link" href="#2.1.2-Different-Distribution">&#182;</a></h3><p>二项分布：Binomial Distribution， X～B（N,P）;$Mean = np；std = \sqrt{npq}$。</p>
-<p>2std 95% 1std 68%</p>
-<p>Ex.对于380座位的飞机，一共卖了400张票，根据统计上座率为0.9，如果假如每个人上座独立，那么，mean = 360，std = $\sqrt{0.09*400}$ = 0.3*20 = 6, 3 std + mean = 378 &lt; 380, and now we have 99% probability to say traverler will be happy and nobody will charge us.</p>
-<p>这一切的基础在于<strong>每个实验相互独立而不是互相依赖</strong></p>
-<p>对于计算而言，一般使用pdf、cdf、ppf函数来计算不同置信度水平下的置信区间。</p>
-<h3 id="2.1.3-Six-sigma-by-Motorola">2.1.3 Six sigma by Motorola<a class="anchor-link" href="#2.1.3-Six-sigma-by-Motorola">&#182;</a></h3><p>将误差控制在6sigma之内，就能几乎应付所有可能的情况。</p>
-<h2 id="2.2-Rules-Independence">2.2 Rules Independence<a class="anchor-link" href="#2.2-Rules-Independence">&#182;</a></h2><h3 id="2.2.1-Self-Organization">2.2.1 Self Organization<a class="anchor-link" href="#2.2.1-Self-Organization">&#182;</a></h3><p>Game of Life中，仅仅遵循简单的方式，就产生了很多不同的组织和状态。</p>
-<p>生命游戏要求对于一个方格的8个邻居，必须有2-3个，少于2个则无聊死亡，大于3个则资源不够而死亡。死亡发生在下一帧。常见的有f、8模型。</p>
-<h3 id="2.2.2-It-from-Bit">2.2.2 It from Bit<a class="anchor-link" href="#2.2.2-It-from-Bit">&#182;</a></h3><p>惠勒 万物源于比特。任何复杂的问题，都可以用是或者不是来进行解决。细胞自动机可以从非常简单的规则延伸出任何东西。</p>
-<p>区别于独立，简单规则，合起来的话，可以产生任何结果。这和数学上的独立分布最后可以被预测成中心极限定理非常的不同。运行生命游戏或者细胞机（<strong>代表了简单的相互依存</strong>），可以产生独立、变化以及各种不同的模式。人们认为这些模式可以解释一切现实的复杂性——尽管其起源是非常简单的规则和自组织。</p>
-<p>甚至规则的聚合还会产生完全随机的数列。</p>
-<h2 id="2.3-Preferences-Aggregation">2.3 Preferences Aggregation<a class="anchor-link" href="#2.3-Preferences-Aggregation">&#182;</a></h2><p>A：喜好苹果大于香蕉大于芒果</p>
-<p>B：喜好香蕉大于芒果大于苹果</p>
-<p>C：喜好芒果大于苹果大于香蕉</p>
-<p>聚合后：喜好芒果大于喜好苹果大于香蕉大于芒果（悖论）</p>
-<p>每个单独的结果是理性的，但是在宏观上聚合后，最后的结果不一定是理性的。</p>
-<p>Condersay paradox 投票悖论 : Each Person Rational but Collection NOT</p>
+<h3 id="De-Morgan&#8216;s-Law-&#31532;&#25705;&#26681;&#23450;&#24459;">De Morgan&#8216;s Law &#31532;&#25705;&#26681;&#23450;&#24459;<a class="anchor-link" href="#De-Morgan&#8216;s-Law-&#31532;&#25705;&#26681;&#23450;&#24459;">&#182;</a></h3><p>$ (A ∪ B)^c = A^c ∩ B^c $</p>
 
 </div>
 </div>
@@ -245,18 +211,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="3.-Decision-&#20915;&#31574;">3. Decision &#20915;&#31574;<a class="anchor-link" href="#3.-Decision-&#20915;&#31574;">&#182;</a></h1>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>什么是决策？</strong></p>
-<p>决策是一个独立的过程，不论选择什么方式——基于理性/行为的模型还是基于规则的模型，我们都要进行决策。决策是聚合的基础，换句话说，因为有了每个个体的决策，才有了决策的聚合。</p>
-<p>对于独立和依存的不同的理念，决策和聚合的重要性是不同的。比如，对于独立而言，决策很重要，我们可以在事情发展维度（决策树）和复杂性维度（多维度决策模型）进行分析和做出最佳选择，相反，聚合仅仅是几种不同的分布以及其可能性的计算。但是对于依存和基于规则的模型而言，决策就是单纯的规则，而聚合更加复杂和重要。</p>
+<h3 id="&#23454;&#39564;&#65288;Experiment&#65289;&#30340;&#35201;&#32032;">&#23454;&#39564;&#65288;Experiment&#65289;&#30340;&#35201;&#32032;<a class="anchor-link" href="#&#23454;&#39564;&#65288;Experiment&#65289;&#30340;&#35201;&#32032;">&#182;</a></h3><p>Procedures、Model、Observations（Outcome）</p>
 
 </div>
 </div>
@@ -266,15 +221,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>WHY MODEL?
-Normative 规范性
-Positive 预测性</p>
-<p>多选择+决策树，更清楚的了解某项选择的价值</p>
-<h2 id="3.1-Multi-criterion-decision-&#22810;&#32500;&#24230;&#20915;&#31574;&#27169;&#22411;">3.1 Multi-criterion decision &#22810;&#32500;&#24230;&#20915;&#31574;&#27169;&#22411;<a class="anchor-link" href="#3.1-Multi-criterion-decision-&#22810;&#32500;&#24230;&#20915;&#31574;&#27169;&#22411;">&#182;</a></h2><p>1、Qualitative WAY:
-将需要研究的问题/面临的选择，按照类似多元线性回归的方法列举不同的维度，然后计算每个问题/选择占优的维度有多少。</p>
-<p><strong>有时候我们会更感性的偏向某个选择，或许我们对于某些东西有着浪漫的幻想</strong>，则应该被仔细审查和排除在外。</p>
-<p>2、Quantitative WAY:
-稍微复杂一点，需要定量的考虑每个维度的权重，比如1or2。最后计算加权后的维度数。</p>
+<p><img src="exp1.png" alt=""></p>
 
 </div>
 </div>
@@ -284,9 +231,20 @@ Positive 预测性</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="3.1.1-Spatial-Choice-Model-&#31354;&#38388;&#36873;&#25321;&#27169;&#22411;">3.1.1 Spatial Choice Model &#31354;&#38388;&#36873;&#25321;&#27169;&#22411;<a class="anchor-link" href="#3.1.1-Spatial-Choice-Model-&#31354;&#38388;&#36873;&#25321;&#27169;&#22411;">&#182;</a></h3><p>空间选择模型指的是，对于两个维度，比如偏激或者保守，选民所在的位置。如果选民意识到这一点的话，它们就会知道自己更偏向哪个维度，以及，将会投票给谁。这是一个一维的模型，对于两个变量的话，使用X-Y二维坐标系。</p>
-<p>Spatial Choice Model 差异度量是多维度决策模型中一个特别的维度的模型。比如，Sina想要选择电脑，其关注价格、CPU速度、内存、电池和屏幕，其中屏幕就是一个可以使用Spatial Chioce Model的地方，因为，这个总是主观的和难以认识到的，通过对不同尺寸进行比较，可以确定一个我们理想中的尺寸。而对于CPU、内存和电池、价格，则不存在这种主观选择的偏好。</p>
-<p><strong>注意，Choice必须是主观而没有可观标准的。</strong></p>
+<h2 id="2.-&#33258;&#21464;&#37327;&#65306;&#20803;&#32032;&#12289;&#26679;&#26412;&#21644;&#20107;&#20214;">2. &#33258;&#21464;&#37327;&#65306;&#20803;&#32032;&#12289;&#26679;&#26412;&#21644;&#20107;&#20214;<a class="anchor-link" href="#2.-&#33258;&#21464;&#37327;&#65306;&#20803;&#32032;&#12289;&#26679;&#26412;&#21644;&#20107;&#20214;">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Sample-Space-&#26679;&#26412;&#31354;&#38388;">Sample Space &#26679;&#26412;&#31354;&#38388;<a class="anchor-link" href="#Sample-Space-&#26679;&#26412;&#31354;&#38388;">&#182;</a></h3><p>用 $S$ 表示，代表几率实验所有的可能的结果的集合。</p>
+<p>比如转转盘1次，$ S= [0,1) $ ，可以用一条线表示。转2次， $ S = [0,1) × [0,1) $ 可以用一个正方形表示。转3次，可以用立方体表示。</p>
+<h3 id="Event-&#20107;&#20214;-&#21644;-Event-Space-&#20107;&#20214;&#31354;&#38388;">Event &#20107;&#20214; &#21644; Event Space &#20107;&#20214;&#31354;&#38388;<a class="anchor-link" href="#Event-&#20107;&#20214;-&#21644;-Event-Space-&#20107;&#20214;&#31354;&#38388;">&#182;</a></h3><p>Event 是 Outcome 的集合，是 Sample Space 的子集。</p>
+<p>Event Space 事件空间指的是所有事件组成的空间。如果样本空间有n个结果，那么事件空间则有$2^n$个结果（包括空集合，其实就是Sample Space各元素的组合而不是排列，也就是不考虑顺序）。</p>
+<p><img src="sos.png" alt=""></p>
 
 </div>
 </div>
@@ -296,7 +254,9 @@ Positive 预测性</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="3.1.2-&#27169;&#22411;&#24230;&#37327;">3.1.2 &#27169;&#22411;&#24230;&#37327;<a class="anchor-link" href="#3.1.2-&#27169;&#22411;&#24230;&#37327;">&#182;</a></h3><p>一般而言，对于一个复杂系统问题，将其按照维度进行分离。之后的操作主要有三，其一，按照维度的重要性进行加权，求得加权后的问题分度量值和总度量值。其二，得到分度量值之后，可以计算|diff|，求得两个不同模型的比较度量。其三，对于两个不同的系统问题，可以对于其不同维度进行比较，查看差异最大的维度，这些就是造成问题差异的根本原因。</p>
+<p>可以将样本空间看作：
+$$SampleSpace = EventSpace.flat().strip().unique()$$</p>
+<p>类似于numpy的表示方法：大概含义为去除空集合，从各集合中取出元素排成一排，取唯一值</p>
 
 </div>
 </div>
@@ -306,12 +266,7 @@ Positive 预测性</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>聚焦总体的度量：哪个更好？</p>
-<p>快速比较两个选择的方法是比较其总的加权过的总度量值大小。这种方法很不精确，因此，最好对于两个选择求差，其差的总体就是总体的差异，每个维度的差就代表了每个维度的不同，如果在某些维度差异特别大，那么在这些维度就是造成总体差异的重要原因。</p>
-<p>聚焦总体差异：差异有多大？</p>
-<p>但是，相比较我们想要的每个维度的理想值，我们可以对一个待比较的项目的每个维度进行观察，并且求得和理想值得|diff|，这样得到的数据意味着选择和理想的差异，类似于std度量差异连续数据的差异。</p>
-<p>聚焦部分差异：差异在哪里？</p>
-<p>能度量差异的一个优点在于：如果我们有一个朋友总是进行一个选择，我们可以对这个选择进行维度的分解，然后排除那些和我们相似的维度，那么这些不同的维度就是导致选择差异的根本原因。</p>
+<h3 id="Probability-&#27010;&#29575;&#30340;&#36755;&#20837;">Probability &#27010;&#29575;&#30340;&#36755;&#20837;<a class="anchor-link" href="#Probability-&#27010;&#29575;&#30340;&#36755;&#20837;">&#182;</a></h3><p>概率是一个函数 P(x) 相当于 事件（自变量）和概率（0，1）之间的映射。所以，事件空间代表了所有可能的元素的范围（样本空间）内的组合，也就代表着自变量——事件的范围。</p>
 
 </div>
 </div>
@@ -321,8 +276,11 @@ Positive 预测性</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>总的来说，我比较建议将不同问题通过不同维度表示出来，进行加权并得到每个维度的数值。这样方便在多个问题间进行快速选择（通过总体度量值）。</strong></p>
-<p><strong>对于理想的和待比较的问题，我们一般采用|diff|来比较总体差异和部分差异，这样更能从数量方便上理解问题的差异程度（通过总体差异）和其最重要的原因（通过部分差异，即在哪个维度差异最大）。</strong></p>
+<h2 id="3.-&#27010;&#29575;&#20844;&#29702;&#21644;&#25512;&#23548;">3. &#27010;&#29575;&#20844;&#29702;&#21644;&#25512;&#23548;<a class="anchor-link" href="#3.-&#27010;&#29575;&#20844;&#29702;&#21644;&#25512;&#23548;">&#182;</a></h2><p>Axioms 公理指的是那些不可证明的、较少的、所有本领域内容都衍生自的一些基本理论，类似于Class类，所有的实例都派生自类。</p>
+<p>线性代数的公理一共有8个，概率的公理一共有三个，其分别是：</p>
+<p>1、对于任何事件A，$P(A) \ge 0$</p>
+<p>2、$P(S) = 1$</p>
+<p>3、$事件A_1 、A_2、 A_3 互斥，则 P(A_1∪A_2∪A_3...)=P(A_1)+P(A_2)+P(A_3)+...$</p>
 
 </div>
 </div>
@@ -332,19 +290,7 @@ Positive 预测性</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="3.2-&#20915;&#31574;&#26641;-Decision-Tree">3.2 &#20915;&#31574;&#26641; Decision Tree<a class="anchor-link" href="#3.2-&#20915;&#31574;&#26641;-Decision-Tree">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="3.2.1-&#27010;&#29575;&#38519;&#38449;">3.2.1 &#27010;&#29575;&#38519;&#38449;<a class="anchor-link" href="#3.2.1-&#27010;&#29575;&#38519;&#38449;">&#182;</a></h3><p>概率是很好的，如果我们有相关的数据，比如想要预测天气，那么我们有历史15年的本地区天气数据。概率为统计提供了很多可能的模型，比如二项分布、t分布、正态分布等等，但是，将概率应用到生活中去<strong>最危险的地方在于：主观估计的概率很可能不符合客观事实，并且常常得到错误的结论。</strong></p>
-<p>比如：EventA：一个漂亮女生是乘务员的概率被人为估计为5%
-EventB：其不仅仅是乘务员，并且在读MBA的概率被独立的估计为10%
-这显然是违反概率公理（Axioms）的。因此，这种危险需要被注意。</p>
+<p>其中公理三搭起了集合运算和概率运算的桥梁，非常重要。</p>
 
 </div>
 </div>
@@ -354,7 +300,12 @@ EventB：其不仅仅是乘务员，并且在读MBA的概率被独立的估计�
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="3.2.2-Decision-Tree">3.2.2 Decision Tree<a class="anchor-link" href="#3.2.2-Decision-Tree">&#182;</a></h3><p><strong>决策树和概率论中的树状概率非常类似。其表示在做出一系列不等概率的选择的时候的各种事件组成的决策空间。</strong>每一个分支，每一个选择都有相应的概率，我们可以计算出所作选的的概率和对应概率下的收益或者支出。这有助于指导我们进行选择。</p>
+<p>以下是一些由公理衍生的性质：</p>
+<p>$E={O_1,O_2,O_3...} \quad then \quad P(E) = P({O_1})+P({O_2})+P({O_3})$</p>
+<p>$P(Φ)=0$</p>
+<p>$P(A) = 1- P(A^c)$   证明：由定义知 $A^c∩A = Φ \quad A^c∪A = S$ 有第三公理证明</p>
+<p>$P(A)=P(A-B)+P(A∩B)$</p>
+<p>$P(A\cup B)=P(A)+P(B)-P(A\cap B)$ 利用第三公理证明，此定理反映了$\cup \cap$的关系，如果需要转换，使用很方便。</p>
 
 </div>
 </div>
@@ -364,8 +315,7 @@ EventB：其不仅仅是乘务员，并且在读MBA的概率被独立的估计�
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>决策树不仅仅可以用于自己的决策，还可以用于估计别人决策时所期望的概率</strong>。比如别人想要我们投资时，我们可以估计其有多大的期望能够赚钱。</p>
-<p>总而言之，决策树提供了一个在不确定事件发生的情况下评估所有事件空间并得到最优解并作出决定的一种方法。<strong>我们甚至还可以根据此确定信息的价值</strong>，只需要评估有此信息的情况下的收益和没有此信息的情况下的收益即可。（当有信息后，不确定性改变了，决策树有些部分就不会发生，因此受益变化。）</p>
+<p><img src="pb1.png" alt=""></p>
 
 </div>
 </div>
@@ -375,9 +325,7 @@ EventB：其不仅仅是乘务员，并且在读MBA的概率被独立的估计�
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>————————————————————————————————————————————</p>
-<p>决策树是概率树的一种。在概率论中，概率树是由独立事件作为假设的，所有的概率问题，都是对于概率树的拆分和计算，比如古典概率中的排列、组合问题，就是对概率树的分析，然后进行求解的过程。</p>
-<p>概率树是时间维度的所有可能性的集合。</p>
+<p>上面这个定理本质上是全概率公式的简化版，多用于多个$\cap \cap \cap  \cap $的证明使用。</p>
 
 </div>
 </div>
@@ -387,12 +335,77 @@ EventB：其不仅仅是乘务员，并且在读MBA的概率被独立的估计�
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>更新历史：</strong></p>
-<p>2018年5月19日 S1.31版本 添加了对于概率树和聚合、决策的简要介绍和一些来自于其他课程的观点。</p>
-<p><strong>相关笔记：</strong></p>
-<p><span type="related_note" mold="question" update="2018-06-14">在实际生活中，很难客观的估计概率，那么如何应用决策树呢？</span></p>
-<p><span type="related_note" mold="blog" update="2018-06-14" description="本文主要介绍了如何使用统计方法来解决问题" url="http://www.baidu.com">
-简明统计精要 - Corkine's Blog</span></p>
+<p>$If \quad A \in B \quad then \quad P(A) \le P(B)$</p>
+<p>证明：将B分成A和A的补集。</p>
+<p>$P(\bigcup^{n}_{i=1}A_i) \le ∑^{n}_{i=1}P(A_{i}) \quad $ Boole's不等式，根据第三定理证明。</p>
+<p>$P(\bigcap^{n}_{i=1}A_i) \ge 1-∑^{n}_{i=1}P(A^{c}_{i})$ Bonferroin's不等式，使用$P(A\cup B)=P(A)+P(B)-P(A\cap B)$和补集定义、第三公理证明。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>以上定理基本都是从第三公理推出来的。基本设计了∩和∪的关系、多个∩集、子集和母集关系以及一些特殊情况下的第三公理（非互斥）。其含义在于，我们将集合运算，转变成了概率运算。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="4.-&#26465;&#20214;&#27010;&#29575;">4. &#26465;&#20214;&#27010;&#29575;<a class="anchor-link" href="#4.-&#26465;&#20214;&#27010;&#29575;">&#182;</a></h2><p>条件概率指的是在发生某些事情（条件、已经发生并观察到的）的情况下，发生其他事情的概率。</p>
+<p>$S = {o_1,o_2,o_3,o_4,o_5,o_6}$</p>
+<p>$Y = {o_1,o_2,o_3,o_4}$</p>
+<p>$P(o_1|Y) = \frac{P(o_1)}{P(o_1)+P(o_2)+P(o_3)+P(o_4)}$</p>
+<p>$P(X|Y) = \frac{P(X\cap Y)}{P(Y)}$ 不属于Y的，一旦Y发生并被观察到了，就不会发生了</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>和概率三公理一样，条件概率满足：</p>
+<p>$P(X|Y) \ge 0$</p>
+<p>$P(Y|Y) = 1$</p>
+<p>$P((A\cup B) | Y)=P(A|Y)+P(B|Y)$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="&#20840;&#27010;&#29575;&#20844;&#24335;">&#20840;&#27010;&#29575;&#20844;&#24335;<a class="anchor-link" href="#&#20840;&#27010;&#29575;&#20844;&#24335;">&#182;</a></h3><p>对于$C_1,C_2,C_3,C_4$互斥，并且$C_1\cup C_2 \cup C_3 \cup C_n =S$</p>
+<p>对于任意事件A，有：</p>
+<p>$P(A)=P(A|C_1)P(C_1)+P(A|C_2)P(C_2)+P(A|C_n)P(C_n)$</p>
+<h3 id="&#36125;&#21494;&#26031;&#20844;&#24335;">&#36125;&#21494;&#26031;&#20844;&#24335;<a class="anchor-link" href="#&#36125;&#21494;&#26031;&#20844;&#24335;">&#182;</a></h3><p>$P(C_1|A) = \frac{P(A|C_1)P(C_1)}{P(A|C_1)P(C_1)+P(A|C_2)P(C_2)+P(A|C_n)P(C_n)}$</p>
+<p>证明如下：</p>
+<p>根据定义 $P(C_1|A)=\frac{P(C_1\cup A)}{P(A)} = \frac{P(A|C_1)P(C_1)}{P(A)}$</p>
+<p>$P(A)=P(A|C_1)P(C_1)+P(A|C_2)P(C_2)+P(A|C_n)P(C_n)$</p>
+<p>所以即可证明。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>条件概率拓宽了概率的应用范围，可用来计算非随机情况下，当已知部分信息条件下的概率。而贝叶斯公式提供了一个将条件概率的条件和结果互相转换的方法，这对于已知先验概率求当前概率很有帮助。</p>
+<p>比如解决以下问题：</p>
+<p>A，B，C 三个门，其中一个有现金，而另外两个没有。当你做出选择后（A），主持人打开另外两个门中的一个（B），并告诉你没现金，问你是否要更改选择（A或者C）？</p>
+<p>选择A的概率为1/2，选择A的条件概率为1/3.使用贝叶斯公式可以推导出来，其中条件指的是“主持人打开了一个绝对没有奖金且不是玩家选择的门”，这里容易出错，P(条件|C) = 1，P（条件|A） = 0.5。</p>
 
 </div>
 </div>

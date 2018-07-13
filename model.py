@@ -1,14 +1,16 @@
 #/usr/bin/env python
 # -*- coding:utf8 -*-
 #本模块用来抽象课程结构，用来处理Python和Bootstrap进行笔记文件和网站静态展示的转换工作。
-__version__ = "0.0.3"
+__version__ = "0.1.0"
 __log__ = """2018-06-10 0.0.1 重构项目，添加Course类
 2018-06-11 0.0.3 添加Note和Chapter类，添加了从源文件中获取数据的方法，添加了单元测试
+2018-07-13 0.1.0 
 """
 import random
 from bs4 import BeautifulSoup
 import lxml
-import re
+import re, os
+SEP = os.path.sep
 
 class Course:
     """课程类，课程包含章节类实例。
@@ -101,20 +103,20 @@ class Course:
             self.id = c["id"]
         self.sourceuri = c["address"]
         for i in c["chapter_list"]:  
-            ch = Chapter(course=self,name=i[0],mark=i[1],sourceuri=i[2],id=i[3])
+            ch = Chapter(course=self,name=i[0],mark=i[1],sourceuri=self.sourceuri+SEP+i[2],id=i[3])
             self.chapters.append(ch)
         return self
 
     def set_chapter(self,chapter_address="",get_header=False,get_description=False,get_notes=False,reload_info=False):
         """调用Chapter的fetch_from_HTML方法，并且返回此课程实例
         一般在这里进行章节信息的重载"""
-        print("%s\n正在进行章节的信息获取，此过程可能需要较长的时间..."%("="*10))
+        print("\n正在进行章节的信息获取，此过程可能需要较长的时间...")
         for ch in self.chapters:
             try:
                 ch.fetch_from_HTML(chapter_address=chapter_address,get_header=get_header,
                             get_description=get_description,get_notes=get_notes,reload_info=reload_info)
 
-            except: print("没有找到HTML文件")
+            except Exception as e:print("在试图解析文件时出现以下问题：",e)
         return self
 
 class Chapter:
@@ -174,10 +176,11 @@ class Chapter:
 
     def fetch_from_HTML(self,chapter_address="",get_header=False,get_description=False,get_notes=False,reload_info=False):
         """获取课程描述信息以及构建相关笔记信息"""
-        self.realurl = chapter_address + self.sourceuri
+        self.realurl = chapter_address + SEP + self.sourceuri
+        print("::::Finding Info from",self.realurl,"::::")
         #获取标题信息，并返回到chapter_head中。
         if get_header:
-            f = open(chapter_address + self.sourceuri,"r",encoding="utf8")
+            f = open(self.realurl,"r",encoding="utf8")
             print(self,"正在解析HTML文档")
             print("\t\t获取标题信息中，请稍后...")
             h1_rules = re.compile("<h1[^>]*>(.*?)<")
@@ -200,7 +203,7 @@ class Chapter:
             f.close()
         #获取描述信息，并填充到description中。
         if get_description:
-            f = open(chapter_address + self.sourceuri,"r",encoding="utf8")
+            f = open(self.realurl,"r",encoding="utf8")
             print("\t\t获取描述性信息中，请稍后...")
             soup = BeautifulSoup(f,"lxml")
             res = soup.find_all("span",type="intro")
@@ -210,7 +213,7 @@ class Chapter:
             f.close()
         #获取相关笔记描述，并且构建Note OO对象。
         if get_notes:
-            f = open(chapter_address + self.sourceuri,"r",encoding="utf8")
+            f = open(self.realurl,"r",encoding="utf8")
             print("\t\t获取相关笔记信息中，请稍后...")
             soup = BeautifulSoup(f,'lxml')
             res = soup.find_all("span",type="related_note")
@@ -283,17 +286,17 @@ if __name__ == "__main__":
         "show_menu_name_1st":"Probability",
         "show_menu_name_2st":None,
         "2st_addr":None,
-        "address":"/probabielity",
+        "address":"probabielity",
         "id":"pr1",
         "chapter_list":[
-            ("概率导论","0.9","probability/Week1&2_Probability.html","w12"),
-            ("独立概率和古典概率","0.9","probability/Week_3.html","w3"),
-            ("离散分布模型","0.8","probability/Week4_PMF_CDF.html","w4"),
+            ("概率导论","0.9","Week1&2_Probability.html","w12"),
+            ("独立概率和古典概率","0.9","Week_3.html","w3"),
+            ("离散分布模型","0.8","Week4_PMF_CDF.html","w4"),
         ],
     }
-    c = Course().set_config(temp_dict).set_chapter("source/",True,True,True,True)
+    c = Course().set_config(temp_dict).set_chapter("source",True,True,True,True)
     print(c)
     for ch in c.chapters:
-        print(ch,ch.get_description(),ch.get_version(),ch.get_header(),ch.get_related_notes())
+        print(ch,ch.get_description(),ch.get_version(),ch.get_header(),ch.get_related_notes(),ch.sourceuri)
 
 

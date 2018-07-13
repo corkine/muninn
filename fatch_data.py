@@ -1,6 +1,6 @@
 #/usr/bin/env python3
 # -*- coding: utf8 -*-
-server_version  = "0.1.1"
+server_version  = "0.2.0"
 server_log = """
 0.0.3 2018-06-11 使用model提供的类方法而不是对象属性重构了项目，使用API解耦合。
                 添加了Pickle存储对象，方便进行调试。
@@ -9,24 +9,52 @@ server_log = """
 0.0.4 2018-06-11 完善related_notes笔记接口，提供三种标准（问题、名言、博客类型），整个程序大体完成。
 0.1.0 Alpha 上线测试
 0.1.1 2018年6月18日 添加了 ‘explain’ 类型的笔记。给每个笔记添加了链接。解决了目录显示顺序随机的问题。
+0.2.0 2018年7月14日 修正了一些错误，优化了转换ipynb文件的逻辑，提高了健壮性，现在复制文件会根据时间来计算，避免了全局复制，减小更新负担。
+                    转化文件按照文件夹顺序，加快了程序运行。降低了配置文件复杂程度，现在不需要声明允许的文件夹信息。
 """
 from muninn_config import *
 import random,os,re,pickle
 from model import *
+import convert,traceback
 
+STOP = False
 
 def constructWorld(courses,head=None,notes=None):
     """构建OO对象，仅初始化课程及其包含的章节，不包括章节具体标题、描述和相关笔记。"""
     clist = []
-    for key in head:
-        #从config.py中配置Course信息，包括Course信息，其包含的Chapter信息（构建Chapter对象）
-        # 以及对应地址包含的Chapter标题、描述和相关Note对象信息
-        try:
-            c = Course().set_config(courses[key]).set_chapter(chapter_address="source/",
-                get_header=True,get_description=True,get_notes=True,reload_info=True)
-            #顺手读取了关联章节名称、id、地址和版本号
+    #head包含了章节顺序信息，其也是courses字典的key值
+
+    #从config.py中配置Course信息，包括Course信息，其包含的Chapter信息（构建Chapter对象）
+    # 以及对应地址包含的Chapter标题、描述和相关Note对象信息
+
+    try:
+        for key in head:
+            c = Course().set_config(courses[key])
             clist.append(c)
-        except: print("\n"+"X"*20,"\n课程添加出错，可能是索引不正确..\n","X"*20+"\n")
+    except: 
+        print("\n"+"X"*20,"\n课程添加出错，可能是索引不正确..\n","X"*20+"\n")
+        print(traceback.format_exc())
+
+    try:
+        convert.transData(clist,from_source=JUPYTER_NOTEBOOK_ROOT_FOLDER,
+                            to_source=HTML_DST_FOLDER+SEP)
+        needfiles = convert.findIpynb(clist,from_source=JUPYTER_NOTEBOOK_ROOT_FOLDER,
+                            to_source=HTML_DST_FOLDER+SEP)
+        if len(needfiles) == 0: 
+            STOP = True
+            return []
+        convert.convertNotes(clist,"source",needfiles=needfiles)
+    except:
+        print("\n"+"X"*20,"在转换文件时出错","X"*20+"\n")
+        print(traceback.format_exc())
+
+    try:
+        for course in clist:
+            course.set_chapter(chapter_address="source",get_header=True,get_description=True,get_notes=True,reload_info=True)
+    except:
+        print("\n"+"X"*20,"在写入章节信息时出错","X"*20+"\n")
+        print(traceback.format_exc())
+
     return clist
 
 def main(update_data=False,file_path=""):
@@ -40,6 +68,10 @@ def main(update_data=False,file_path=""):
     else:
         print("从备份中读取项目")
         clist = pickle.load(open(file_path,"rb"))
+    if STOP or len(clist) == 0:
+        print("没有更新内容，本次更新已跳过.")
+        return 0
+
     #首先根据所有项目生成一个HTML页面的菜单，点击链接到下面创建的html文件中
     menu_html = makeHead(clist)
     # 对于index页面进行生成
@@ -104,7 +136,7 @@ def makeHead(clist):
                 """%out_html
     return menu_html
 
-def makeHTMLPage(course_info,menu_html,is_chapter=False,chapter_id="",chapter_address="source/"):
+def makeHTMLPage(course_info,menu_html,is_chapter=False,chapter_id="",chapter_address="source"):
     """对于课程总览，在此返回HTML页面。对于每个章节，也在此返回HTML页面。"""
     c = course_info
     chapter_html = ""
@@ -292,28 +324,27 @@ def makeHTMLPage(course_info,menu_html,is_chapter=False,chapter_id="",chapter_ad
 
     #此处闭合contaioner和row
     intro_html = """<!--右侧-->
-        <div class="col-md-8 pl-3">
-            <!--本章概览-->
-            <div class="card">
-                <div class="card-header">本章概览</div>
-                <div class="card-body">
-                        {intro_content}
-                    <p class="card-text">
-                        <small class="text-muted">最后更新于 {chapter_update} <a href="{chapter_url}" target="_black" class="card-link">查看笔记</a></small>
-                    </p>
+                    <div class="col-md-8 pl-3">
+                        <!--本章概览-->
+                        <div class="card">
+                            <div class="card-header">本章概览</div>
+                            <div class="card-body">
+                                    {intro_content}
+                                <p class="card-text">
+                                    <small class="text-muted">最后更新于 {chapter_update} <a href="{chapter_url}" target="_black" class="card-link">查看笔记</a></small>
+                                </p>
+                            </div>
+                        </div>
+                        <!--笔记详情-->
+                        <div class="card-columns mt-5">
+                            {notes_html}
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <!--笔记详情-->
-            <div class="card-columns mt-5">
-                {notes_html}
-            </div>
-        </div>
-    </div>
-</div>""".format_map(map_c)
+            </div>""".format_map(map_c)
     
     output_html = header + menu_html + head_nav + left_nav + intro_html  + footer
     return output_html
-
 
 def make_Index(html_head):
     index_map = {
