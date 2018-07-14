@@ -91,6 +91,8 @@ COURSE_INFO = {
         "chapter_list":[
             ("intro","0","chapter1_intro.html","w1"),
             ("x86_mips","0","chapter2_x86_mips.html","w2"),
+            ("ALU","0","chapter3_alu.html","w3"),
+            ("multi","0","chapter4_mult.html","w4"),
         ],
     },
     "cpp":
