@@ -13,7 +13,7 @@ SEP = os.path.sep
 def transData(clist,from_source=JUPYTER_NOTEBOOK_ROOT_FOLDER,to_source="source"+SEP):
     """用来转移文件的胶水层，耦合fatch_data
     使用clist提供的期望的地址来寻找"""
-    print("="*10,"正在迁移文件和媒体","="*10)
+    print("="*10,"正在迁移指定文件夹下的ipynb文件以及其附带的媒体文件","="*10)
     def getAllowedFolders(clist):
         af = []
         res = ""
@@ -79,7 +79,7 @@ def transData(clist,from_source=JUPYTER_NOTEBOOK_ROOT_FOLDER,to_source="source"+
 def findIpynb(clist,from_source=JUPYTER_NOTEBOOK_ROOT_FOLDER,to_source="source"+SEP):
     needfiles = []
     try:
-        print("正在根据配置文件寻找需要更新的ipynb文件")
+        print("正在根据配置文件寻找需要进行转换的ipynb文件(ipynb文件日期新于html文件)")
         count = 0
         for course in clist:
             for chapter in course.chapters:
@@ -95,7 +95,7 @@ def findIpynb(clist,from_source=JUPYTER_NOTEBOOK_ROOT_FOLDER,to_source="source"+
                 # 如果不存在html文件或者ipynb文件有更新，则进行下一步
                 if not os.path.isfile(to_filename_html) or os.stat(from_filename).st_mtime > os.stat(to_filename).st_mtime:
                     count += 1
-                    print("%s, 找到需要更新的文件"%count,from_filename)
+                    print("%s. 以下文件应该被找到并且更新"%count,to_filename)
                     needfiles.append(filename)
     except:
         print(traceback.format_exc())
@@ -142,7 +142,7 @@ def convertNotes(clist,chapter_dir,needfiles=[]):
                 filename = filename.replace(".html",".ipynb")
             #如果此文件不能找到，则跳过转换 xxx/xxx.ipynb
             if not os.path.isfile(filename):
-                print(filename,"无法找到，已跳过转换")
+                print(filename,"此文件无法被找到，但是存在于配置文件中，请手动检查，目前已跳过转换")
                 continue
             if not filename in needfiles:
                 count += 1
