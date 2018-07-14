@@ -1,8 +1,8 @@
 #/usr/bin/env python3
 # -*- coding: utf8 -*-
 
-# JUPYTER_NOTEBOOK_ROOT_FOLDER = "/root/.jupyter"
-JUPYTER_NOTEBOOK_ROOT_FOLDER = """C:\\Users\\Administrator\\Desktop\\jupyter"""
+JUPYTER_NOTEBOOK_ROOT_FOLDER = "/root/.jupyter"
+#JUPYTER_NOTEBOOK_ROOT_FOLDER = """C:\\Users\\Administrator\\Desktop\\jupyter"""
 
 # JUPYTER_NOTEBOOK_ALLOWED_FOLDER = [
 #     "coursera_learn_ml",
