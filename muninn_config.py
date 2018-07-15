@@ -59,7 +59,7 @@ COURSE_INFO = {
     "introc":
     {
         "show_menu_name_1st":"Computer Science",
-        "show_menu_name_2st":"可计算思想和计算机概论",
+        "show_menu_name_2st":"Introduction to Computer",
         "2st_addr":None,
         "address":"learn_c",
         "id":"c1",
