@@ -93,6 +93,7 @@ COURSE_INFO = {
             ("x86_mips","0","chapter2_x86_mips.html","w2"),
             ("ALU","0","chapter3_alu.html","w3"),
             ("multi","0","chapter4_mult.html","w4"),
+            ("design_a_cpu","0","chapter5_design_a_cpu.html","w5"),
         ],
     },
     "java":

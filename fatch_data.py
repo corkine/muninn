@@ -1,6 +1,6 @@
 #/usr/bin/env python3
 # -*- coding: utf8 -*-
-server_version  = "0.2.2"
+server_version  = "0.2.3"
 server_log = """
 0.0.3 2018-06-11 使用model提供的类方法而不是对象属性重构了项目，使用API解耦合。
                 添加了Pickle存储对象，方便进行调试。
@@ -12,7 +12,9 @@ server_log = """
 0.2.0 2018年7月14日 修正了一些错误，优化了转换ipynb文件的逻辑，提高了健壮性，现在复制文件会根据时间来计算，避免了全局复制，减小更新负担。
                     转化文件按照文件夹顺序，加快了程序运行。降低了配置文件复杂程度，现在不需要声明允许的文件夹信息。
 0.2.2 2018年7月14日 服务器上线，修正了一些日志的逻辑问题，添加了注释，不再保存数据到last_data中。
+0.2.3 2018年7月15日 修复convert模块中一个导致日期判断出错的bug。
 """
+
 from muninn_config import *
 import random,os,re,pickle
 from model import *
