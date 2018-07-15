@@ -93,7 +93,7 @@ def findIpynb(clist,from_source=JUPYTER_NOTEBOOK_ROOT_FOLDER,to_source="source"+
                 to_filename = os.path.join(to_source,filename)
                 to_filename_html = to_filename.replace(".ipynb",".html")
                 # 如果不存在html文件或者ipynb文件有更新，则进行下一步
-                if not os.path.isfile(to_filename_html) or os.stat(from_filename).st_mtime > os.stat(to_filename).st_mtime:
+                if not os.path.isfile(to_filename_html) or os.stat(from_filename).st_mtime > os.stat(to_filename_html).st_mtime:
                     count += 1
                     print("%s. 以下文件应该被找到并且更新"%count,to_filename)
                     needfiles.append(filename)
