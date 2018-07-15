@@ -65,7 +65,7 @@ def main(update_data=False,file_path=""):
         print("正在构建项目")
         clist = constructWorld(COURSE_INFO,COURSE_HEAD)
         #p = pickle.dump(clist,open(file_path,"wb"))
-        print("项目构建完毕，并且存放在:%s"%file_path)
+        #print("项目构建完毕，并且存放在:%s"%file_path)
     else:
         print("从备份中读取项目")
         clist = pickle.load(open(file_path,"rb"))
