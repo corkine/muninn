@@ -17,7 +17,7 @@ JUPYTER_NOTEBOOK_ROOT_FOLDER = "/root/.jupyter"
 
 HTML_DST_FOLDER = "source"
 
-COURSE_HEAD = ["pr1","mt","c1","c2","c3","cpp","visual1","ml1"]
+COURSE_HEAD = ["pr1","mt","introc","cst","langc","cpp","java","visual1","ml1"]
 #for debug
 # COURSE_HEAD = ["mt","c3"]
 
@@ -56,7 +56,7 @@ COURSE_INFO = {
             ("replicator","","week11_replicator_dynamics.html","w11"),
         ],
     },
-    "c1":
+    "introc":
     {
         "show_menu_name_1st":"Computer Science",
         "show_menu_name_2st":"可计算思想和计算机概论",
@@ -67,7 +67,7 @@ COURSE_INFO = {
             ("可计算思想和计算机概论","1.3","learn_c_1.html","lc"),
         ],
     },
-    "c2":
+    "langc":
     {
         "show_menu_name_1st":"Computer Science",
         "show_menu_name_2st":"C Primer Plus",
@@ -81,7 +81,7 @@ COURSE_INFO = {
             ("结构体和链表","1","chapter7_struct.html","w6"),
         ],
     },
-    "c3":
+    "cst":
     {
         "show_menu_name_1st":"Computer Science",
         "show_menu_name_2st":"Computer Structure",
@@ -93,6 +93,17 @@ COURSE_INFO = {
             ("x86_mips","0","chapter2_x86_mips.html","w2"),
             ("ALU","0","chapter3_alu.html","w3"),
             ("multi","0","chapter4_mult.html","w4"),
+        ],
+    },
+    "java":
+    {
+        "show_menu_name_1st":"Computer Science",
+        "show_menu_name_2st":"Think in Java",
+        "2st_addr":"读书笔记",
+        "address":"learn_java",
+        "id":"c3",
+        "chapter_list":[
+            ("对象、操作符和流程控制","0","chapter_1_play_java.html","w1"),
         ],
     },
     "cpp":
