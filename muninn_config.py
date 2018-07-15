@@ -98,7 +98,7 @@ COURSE_INFO = {
     "java":
     {
         "show_menu_name_1st":"Computer Science",
-        "show_menu_name_2st":"Think in Java",
+        "show_menu_name_2st":"Thinking in Java",
         "2st_addr":"读书笔记",
         "address":"learn_java",
         "id":"c3",
