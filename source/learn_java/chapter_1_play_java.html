@@ -11796,6 +11796,7 @@ div#notebook {
 <p><code>char c = 'c'; Character c = new Character('c'); Character ch = 'x'; char c = ch</code> 前者创建值，后者创建引用，引用指向值，倒数第二个，转换成包装器类，最后一个，转换成基本类型。</p>
 <p>BigInteger、BigDecimal 仅支持引用，支持任意精度整数和小数，当然，速度很慢。</p>
 <p>int[] a; Java中的数组创建后，默认指向null（被初始化为null）。在任何引用前，如果尚未指定对象，那么运行会报错。</p>
+<p><code>int a[] = new int[]; int a[] = {0};</code> 类似，后者是 C 的写法。注意，这里存储在堆栈而非堆，生成的是值？</p>
 <h2 id="1.2-&#38144;&#27585;&#23545;&#35937;">1.2 &#38144;&#27585;&#23545;&#35937;<a class="anchor-link" href="#1.2-&#38144;&#27585;&#23545;&#35937;">&#182;</a></h2><h3 id="1.2.1-&#20316;&#29992;&#22495;">1.2.1 &#20316;&#29992;&#22495;<a class="anchor-link" href="#1.2.1-&#20316;&#29992;&#22495;">&#182;</a></h3><p><strong>基本类型</strong></p>
 <p>如下所示，对于C、Java而言，作用域由花括号决定，显然在外部无法找到q这个变量，因此会出错。好玩的是，对于不同作用域下重复定义变量，Java不允许。</p>
 <div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">hello</span><span class="o">{</span>
@@ -12018,6 +12019,7 @@ c is 111111111111111
 <p><code>int b = (int)2.7;</code> 对，但是发生截尾</p>
 <p><code>int b = 2.7;</code> 错，Java不会自动转换</p>
 <p><code>int a = 30; float b = 2.7f;print(a*b)</code> 一个 float * 一个 int，结果为 float，这叫做提升。</p>
+<p><strong>注意</strong>：对于 <code>Integer a = 27; char c = (char)a;</code> 是不可行的，但是 <code>int a = 27; char c = (char)a;</code> 正确。</p>
 <h2 id="2.6-+=-&#22312;-println-&#20013;&#30340;&#34920;&#29616;">2.6 += &#22312; println &#20013;&#30340;&#34920;&#29616;<a class="anchor-link" href="#2.6-+=-&#22312;-println-&#20013;&#30340;&#34920;&#29616;">&#182;</a></h2><p>在println中，+= 和 + 被用来连接字符串，对于两个int类型的数，那么+会被执行算术运算后再打印，这个时候只需要：</p>
 <div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="o">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
 <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">);</span> <span class="c1">//2</span>
@@ -12068,6 +12070,59 @@ c is 111111111111111
     <span class="k">print</span><span class="p">(</span><span class="s2">&quot;You get back </span><span class="si">%d</span><span class="s2"> and font </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">f</span><span class="p">))</span>
 </pre></div>
 <p>可以看到，作为编译型语言的Java，在代码行数上不逊色于Python。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="3.-&#25511;&#21046;&#35821;&#21477;">3. &#25511;&#21046;&#35821;&#21477;<a class="anchor-link" href="#3.-&#25511;&#21046;&#35821;&#21477;">&#182;</a></h1><p>Java 完全继承了 C 的控制语句，包括：</p>
+<p><code>if-else while for for-while switch</code> 此外，还有类似于 Python 的 <code>foreach</code></p>
+<p>举例如下：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ctr</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">arg</span><span class="o">){</span>
+        <span class="n">Random</span> <span class="n">rand</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
+        <span class="kt">float</span> <span class="n">f</span><span class="o">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">float</span><span class="o">[</span><span class="mi">10</span><span class="o">];</span>
+        <span class="c1">//or use c style: float f[] = {0};</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span> <span class="c1">//for循环</span>
+            <span class="n">f</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextFloat</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">float</span> <span class="n">x</span> <span class="o">:</span> <span class="n">f</span><span class="o">){</span><span class="c1">// for each 循环，遍历数组中每一个数</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">Random</span> <span class="n">rand</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">200</span><span class="o">);</span>
+    <span class="n">Integer</span> <span class="n">p</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">200</span><span class="o">);</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">p</span><span class="o">);</span>
+    <span class="c1">//char q = (char)n; //value but not a quote</span>
+    <span class="n">Character</span> <span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Character</span><span class="o">((</span><span class="kt">char</span><span class="o">)</span><span class="mi">0</span><span class="o">);</span>
+    <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">){</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">Character</span><span class="o">.</span><span class="na">isAlphabetic</span><span class="o">(</span><span class="n">q</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">Character</span><span class="o">.</span><span class="na">isLowerCase</span><span class="o">(</span><span class="n">q</span><span class="o">)){</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;You got :&quot;</span> <span class="o">+</span> <span class="n">n</span> <span class="o">+</span> <span class="s">&quot; (IN char) &quot;</span> <span class="o">+</span> <span class="o">(</span><span class="kt">char</span><span class="o">)</span><span class="n">n</span><span class="o">);</span>
+            <span class="k">switch</span> <span class="o">(</span><span class="n">q</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">case</span> <span class="sc">&#39;a&#39;</span><span class="o">:</span>
+                <span class="k">case</span> <span class="sc">&#39;b&#39;</span><span class="o">:</span>
+                <span class="k">case</span> <span class="sc">&#39;c&#39;</span><span class="o">:</span>
+                    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;You are easy girl, &quot;</span><span class="o">+</span><span class="n">q</span><span class="o">);</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="k">case</span> <span class="sc">&#39;d&#39;</span><span class="o">:</span>
+                <span class="k">case</span> <span class="sc">&#39;e&#39;</span><span class="o">:</span>
+                    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Not bad, but &quot;</span><span class="o">+</span><span class="n">q</span><span class="o">);</span>
+                <span class="k">default</span><span class="o">:</span>
+                    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Error, &quot;</span><span class="o">+</span><span class="n">q</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">break</span><span class="o">;</span>  
+        <span class="o">}</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">200</span><span class="o">);</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="o">(</span><span class="kt">char</span><span class="o">)</span><span class="n">n</span><span class="o">;</span>
+    <span class="o">}</span>
+</pre></div>
 
 </div>
 </div>
