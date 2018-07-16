@@ -94,6 +94,8 @@ COURSE_INFO = {
             ("ALU","0","chapter3_alu.html","w3"),
             ("multi","0","chapter4_mult.html","w4"),
             ("design_a_cpu","0","chapter5_design_a_cpu.html","w5"),
+            ("pipe_cpu","0","chapter6_pipe.html","w6"),
+            
         ],
     },
     "java":
