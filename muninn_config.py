@@ -108,6 +108,7 @@ COURSE_INFO = {
         "id":"c3",
         "chapter_list":[
             ("对象、操作符和流程控制","0","chapter_1_play_java.html","w1"),
+            ("初始化和清理","0","chapter2_init_finalize.html","w2"),
         ],
     },
     "cpp":
