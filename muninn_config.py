@@ -98,7 +98,6 @@ COURSE_INFO = {
             ("cache","0","chapter7_cache.html","w7"),
             ("interrupt","0","chapter8_interrupt.html","w8"),
             
-            
         ],
     },
     "java":
