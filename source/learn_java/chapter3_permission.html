@@ -11785,7 +11785,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#26435;&#38480;&#25511;&#21046;&#38382;&#39064;">&#26435;&#38480;&#25511;&#21046;&#38382;&#39064;<a class="anchor-link" href="#&#26435;&#38480;&#25511;&#21046;&#38382;&#39064;">&#182;</a></h1><p>在面向对象语言中，一个较大的问题是类方法的权限问题，如果对一个对象而言，其所有的域和方法都面向使用者开放，这势必造成混乱，更为麻烦的事，对于类的维护者而言，其几乎无法重构一个已经发布的类，因为类的任何域或者方法都有可能被其余程序调用。Python选择了一种“大家都是成年人”的方式，完全放弃了权限控制，这很糟糕。而在高级的Python编程专著中，往往会有一部分章节用来介绍如何将权限控制加回去的。</p>
+<h1 id="&#23545;&#35937;&#30340;&#26435;&#38480;&#25511;&#21046;&#38382;&#39064;">&#23545;&#35937;&#30340;&#26435;&#38480;&#25511;&#21046;&#38382;&#39064;<a class="anchor-link" href="#&#23545;&#35937;&#30340;&#26435;&#38480;&#25511;&#21046;&#38382;&#39064;">&#182;</a></h1><p>在面向对象语言中，一个较大的问题是类方法的权限问题，如果对一个对象而言，其所有的域和方法都面向使用者开放，这势必造成混乱，更为麻烦的事，对于类的维护者而言，其几乎无法重构一个已经发布的类，因为类的任何域或者方法都有可能被其余程序调用。Python选择了一种“大家都是成年人”的方式，完全放弃了权限控制，这很糟糕。而在高级的Python编程专著中，往往会有一部分章节用来介绍如何将权限控制加回去的。</p>
 <p>Java面临的第一个问题是变与不变的问题，对于用户的接口，也就是API，不变，使用 <code>public</code> 关键字声明方法或者类，对于内部的接口，使用 <code>private protected</code> 来进行其余的分配。这样就可以在不影响接口的情况下大刀阔斧的修改类，进行重构了。</p>
 <p>Java面临的第二个问题是，如何区分Array这个类，如果系统实现了它，而用户又实现了一遍？对于Python而言，其默认用户声明的具有较高的优先级（本地目录），然后查找系统自带的库。对于C而言，使用 <code>include &lt;stdio.h&gt; 或者 include "stdio.h"</code> 来进行类似的优先级判定。对于Java而言，则是使用 <code>package 和 import</code> 进行管理。</p>
 <h1 id="&#25991;&#20214;&#12289;&#26500;&#20214;&#12289;&#32676;&#32452;&#21644;&#21253;">&#25991;&#20214;&#12289;&#26500;&#20214;&#12289;&#32676;&#32452;&#21644;&#21253;<a class="anchor-link" href="#&#25991;&#20214;&#12289;&#26500;&#20214;&#12289;&#32676;&#32452;&#21644;&#21253;">&#182;</a></h1><p><code>.java</code> 文件包含Java源代码，称之为一个编译单元。</p>
@@ -11803,14 +11803,6 @@ div#notebook {
 <p>使用 <code>import com.mazhangjing.util.Print</code> 可以导入 <code>Print</code> 类，被导入的类的 <code>com</code> 文件夹必须在 <code>CLASSPATH</code> 能够找到的位置。而使用的这个文件，则可以位于任何地方。</p>
 <p>使用 <code>import com.mazhangjing.util.*</code> 可以导入 <code>util</code> 目录下的所有类，在使用的过程中，需要指明类。</p>
 <p>使用 <code>import static com.mazhangjing.util.Print.*</code> 可以导入 <code>Print.class</code> 类中的所有静态方法，注意，不能用这种写法导入其余方法，一般而言，不能对一个类加<code>.*</code>。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <div class="highlight"><pre><span></span><span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">mazhangjing</span><span class="o">/</span><span class="n">Print</span><span class="o">.</span><span class="na">java</span>
 
 <span class="kn">package</span> <span class="nn">com.mazhangjing</span><span class="o">;</span>
@@ -11863,7 +11855,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Java-&#35775;&#38382;&#26435;&#38480;">Java &#35775;&#38382;&#26435;&#38480;<a class="anchor-link" href="#Java-&#35775;&#38382;&#26435;&#38480;">&#182;</a></h1><p>如下代码所示：</p>
+<h1 id="&#26435;&#38480;&#20851;&#38190;&#23383;">&#26435;&#38480;&#20851;&#38190;&#23383;<a class="anchor-link" href="#&#26435;&#38480;&#20851;&#38190;&#23383;">&#182;</a></h1><p>如下代码所示：</p>
 <div class="highlight"><pre><span></span><span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">mazhangjing</span><span class="o">/</span><span class="n">Power</span><span class="o">.</span><span class="na">java</span>
 <span class="kn">package</span> <span class="nn">com.mazhangjing</span><span class="o">;</span>
 <span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
@@ -11892,7 +11884,7 @@ div#notebook {
 <span class="n">b</span><span class="o">.</span><span class="na">proB</span><span class="o">();</span>
 <span class="c1">//b.proA(); //错误</span>
 </pre></div>
-<h2 id="&#26041;&#27861;&#30340;&#26435;&#38480;">&#26041;&#27861;&#30340;&#26435;&#38480;<a class="anchor-link" href="#&#26041;&#27861;&#30340;&#26435;&#38480;">&#182;</a></h2><p>权限一共有四种，从小到大依次是：</p>
+<h2 id="&#26041;&#27861;&#26435;&#38480;&#20851;&#38190;&#23383;">&#26041;&#27861;&#26435;&#38480;&#20851;&#38190;&#23383;<a class="anchor-link" href="#&#26041;&#27861;&#26435;&#38480;&#20851;&#38190;&#23383;">&#182;</a></h2><p>权限一共有四种，从小到大依次是：</p>
 <ul>
 <li>private 权限私有，仅本文件可以访问</li>
 <li>包访问权限 权限仅限本包内的成员访问</li>
@@ -11904,14 +11896,6 @@ div#notebook {
 <p>对于 <code>private</code> 而言，其在除了这个类文件的任何地方都不可调用，甚至是包里的其他类也不可以调用。也就是说，其权限锁定在其文件内。</p>
 <p>如果不写任何关键字，那么默认这个方法的权限在整个包内，也就是说，属于 <code>com.mazhangjing</code> 这个包的所有类文件都可以调用这个方法（再啰嗦一遍，需要import，并且在包内也必须写清楚包名，不能写<code>import Print</code>而应该是<code>import com.mazhangjing.Print</code>）。</p>
 <p>对于<code>protected</code>而言，需要说明的是，这是一种专门用来解决跨包，但是又继承了父类的情况，如<code>LittlePower</code>而言，被保护的方法可以在其类内部使用，它可以将其包装起来作为自己的公共方法，但是不能使用<code>proA</code>,因为这样就变成了继承和重载，不能对于保护方法进行重载，不过换个名字还可以用，所以说，保护方法的权限比公共方法小，比包方法大。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>默认包问题</strong></p>
 <p>如果不声明 <code>package xxx.xxx.xxx</code> 的话，Java将你运行的类看作是默认包，这个包可能存在的问题是，你可以对于任意使用 <code>void methodName(){}</code> 的方法，也就是具有包权限的方法进行访问，这可能不是你希望的。</p>
 <div class="highlight"><pre><span></span><span class="o">/</span><span class="n">xxx</span><span class="o">/</span><span class="n">Cake</span><span class="o">.</span><span class="na">java</span>
@@ -11926,15 +11910,7 @@ div#notebook {
     <span class="kt">void</span> <span class="nf">f</span><span class="o">()</span> <span class="o">{</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;In Pie.f()&quot;</span><span class="o">);}</span>
 <span class="o">}</span>
 </pre></div>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="&#31867;&#30340;&#35775;&#38382;&#26435;&#38480;">&#31867;&#30340;&#35775;&#38382;&#26435;&#38480;<a class="anchor-link" href="#&#31867;&#30340;&#35775;&#38382;&#26435;&#38480;">&#182;</a></h2><p>类只有两种访问权限，<code>public</code> 和 包访问权限。如果不希望包的用户访问此类，可以使用 包访问权限，反之，使用公共权限。</p>
+<h2 id="&#31867;&#30340;&#26435;&#38480;&#20851;&#38190;&#23383;">&#31867;&#30340;&#26435;&#38480;&#20851;&#38190;&#23383;<a class="anchor-link" href="#&#31867;&#30340;&#26435;&#38480;&#20851;&#38190;&#23383;">&#182;</a></h2><p>类只有两种访问权限，<code>public</code> 和 包访问权限。如果不希望包的用户访问此类，可以使用 包访问权限，反之，使用公共权限。</p>
 <div class="highlight"><pre><span></span><span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">mazhangjing</span><span class="o">/</span><span class="n">Copyright</span><span class="o">.</span><span class="na">java</span>
 <span class="kn">package</span> <span class="nn">com.mazhangjing</span><span class="o">;</span>
 <span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
@@ -11964,7 +11940,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#31867;&#37325;&#29992;">&#31867;&#37325;&#29992;<a class="anchor-link" href="#&#31867;&#37325;&#29992;">&#182;</a></h1><h2 id="&#32452;&#21512;">&#32452;&#21512;<a class="anchor-link" href="#&#32452;&#21512;">&#182;</a></h2><p>组合指的是将多个类组合在一起使用，新的类一般包含着其余类的实例，这样就可以在这个类中调用那些类的方法了，这种方法其使用了类的功能，复用了代码而非形式。</p>
+<h1 id="Java&#31867;&#30340;&#37325;&#29992;">Java&#31867;&#30340;&#37325;&#29992;<a class="anchor-link" href="#Java&#31867;&#30340;&#37325;&#29992;">&#182;</a></h1><h2 id="&#31867;&#30340;&#32452;&#21512;">&#31867;&#30340;&#32452;&#21512;<a class="anchor-link" href="#&#31867;&#30340;&#32452;&#21512;">&#182;</a></h2><p>组合指的是将多个类组合在一起使用，新的类一般包含着其余类的实例，这样就可以在这个类中调用那些类的方法了，这种方法其使用了类的功能，复用了代码而非形式。</p>
 <div class="highlight"><pre><span></span><span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Bird</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
@@ -12145,7 +12121,7 @@ The bird's foot is red.</code></pre>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="&#20195;&#29702;">&#20195;&#29702;<a class="anchor-link" href="#&#20195;&#29702;">&#182;</a></h2><p>代理是一种将继承和组合的中庸选择，注意，其和<code>组合和继承的结合</code>不同，其本身是一种妥协。对于很多情况，我们不能直接使用抽象，比如控制器和电脑，电脑明显包含控制器，但是也有别的东西。这种方式可以将多个类和继承类创建实例放置在一个父组合框架中，就像<code>组合和继承的结合</code>那样，不过有时候，通过代理解决更加简单。</p>
+<h2 id="&#20351;&#29992;&#20195;&#29702;">&#20351;&#29992;&#20195;&#29702;<a class="anchor-link" href="#&#20351;&#29992;&#20195;&#29702;">&#182;</a></h2><p>代理是一种将继承和组合的中庸选择，注意，其和<code>组合和继承的结合</code>不同，其本身是一种妥协。对于很多情况，我们不能直接使用抽象，比如控制器和电脑，电脑明显包含控制器，但是也有别的东西。这种方式可以将多个类和继承类创建实例放置在一个父组合框架中，就像<code>组合和继承的结合</code>那样，不过有时候，通过代理解决更加简单。</p>
 <div class="highlight"><pre><span></span><span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Spaceship</span> <span class="kd">extends</span> <span class="n">Control</span> <span class="o">{</span>
     <span class="n">Control</span> <span class="n">ctr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Control</span><span class="o">();</span>
