@@ -77,36 +77,40 @@
                                 指令系统体系和结构<span class="badge badge-primary badge-pill">2</span></a>
                                 <a href="Computer_Structure_ch_w3.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                                 从电路到加法运算<span class="badge badge-primary badge-pill">0</span></a>
-                                <a href="Computer_Structure_ch_w4.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active">
-                                从加减运算到乘除运算<span class="badge badge-primary badge-pill">2</span></a><a href="Computer_Structure_ch_w5.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <a href="Computer_Structure_ch_w4.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                从加减运算到乘除运算<span class="badge badge-primary badge-pill">2</span></a>
+                                <a href="Computer_Structure_ch_w5.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                                 数据通路、信号和指令<span class="badge badge-primary badge-pill">2</span></a>
                                 <a href="Computer_Structure_ch_w6.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                                 超标量流水线技术<span class="badge badge-primary badge-pill">1</span></a>
                                 <a href="Computer_Structure_ch_w7.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                                 存储层次结构<span class="badge badge-primary badge-pill">1</span></a>
-                                <a href="Computer_Structure_ch_w8.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <a href="Computer_Structure_ch_w8.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active">
                                 异常和中断<span class="badge badge-primary badge-pill">2</span></a>
-                                
                         </div>
                         <!--章节详细信息-->
                         <div class="card mt-4">
                               <ul class="list-group">
                             <li class="list-group-item list-group-item-light">章节目录</li>
                         <li class="list-group-item">
-                                &#20108;&#36827;&#21046;&#20056;&#27861;&#36816;&#31639;
+                                &#20013;&#26029;&#21644;&#24322;&#24120;&#30340;&#26469;&#28304;
                                 <ul class="list-group list-group-flush"></ul>
                             </li>
                         <li class="list-group-item">
-                                &#20056;&#27861;&#22120;&#30340;&#23454;&#29616;
-                                <ul class="list-group list-group-flush"></ul>
+                                &#20013;&#26029;&#21521;&#37327;&#34920;&#30340;&#32467;&#26500;
+                                <ul class="list-group list-group-flush"><li class="list-group-item">Intel 8086</li><li class="list-group-item">IA-32</li></ul>
                             </li>
                         <li class="list-group-item">
-                                &#38500;&#27861;&#30340;&#36816;&#31639;&#36807;&#31243;
-                                <ul class="list-group list-group-flush"></ul>
+                                &#20013;&#26029;&#22788;&#29702;&#36807;&#31243;
+                                <ul class="list-group list-group-flush"><li class="list-group-item">IF&#26631;&#24535;&#31526;</li><li class="list-group-item">&#20174;&#20013;&#26029;&#20013;&#36820;&#22238;</li></ul>
                             </li>
                         <li class="list-group-item">
-                                &#38500;&#27861;&#22120;&#30340;&#23454;&#29616;
-                                <ul class="list-group list-group-flush"></ul></li>
+                                &#20869;&#37096;&#20013;&#26029;&#20998;&#31867;
+                                <ul class="list-group list-group-flush"><li class="list-group-item">&#38500;&#27861;&#38169;&#20013;&#26029;</li><li class="list-group-item">&#28322;&#20986;&#20013;&#26029;</li><li class="list-group-item">&#21333;&#27493;&#20013;&#26029;</li><li class="list-group-item">&#26029;&#28857;&#20013;&#26029;</li><li class="list-group-item">&#27880;&#24847;&#20107;&#39033;</li></ul>
+                            </li>
+                        <li class="list-group-item">
+                                &#22522;&#20110;&#20013;&#26029;&#30340;&#21151;&#33021;&#35843;&#29992;
+                                <ul class="list-group list-group-flush"><li class="list-group-item">BIOS&#20013;&#26029;</li><li class="list-group-item">DOS&#20013;&#26029;</li></ul></li>
                         </div>
                     </div>
             <!--右侧-->
@@ -115,9 +119,9 @@
                         <div class="card">
                             <div class="card-header">本章概览</div>
                             <div class="card-body">
-                                    <p type="card-text">本章主要讲解乘法器和除法器。每种部件都从其二进制表示（如何实现二进制的乘法和除法操作）讲起，接着详述了实际利用寄存器和加法、减法器在CPU上实际实现乘法和除法器的过程。最后，讲解了我们为了减少计算机开销对乘法和除法器所做出的优化，包括减小计算机硬件开支（寄存器个数和长度）以及优化时间消耗（比如乘法器的并行运算）。</p>
+                                    <p type="card-text">本章主要讲解异常和中断。第一部分主要讲解了中断程序的寻找过程：从CPU给出指令号，到计算此异常指令向量表地址，取相应地址，跳转内存对应地址执行这一过程。因为不同时代的CPU实现此过程的模式不同，对于实模式，其采用寄存器保存中断向量表，CS和IP的结构为4字节，对于保护模式，其采用储存器保存中断向量表，对于一个中断标志号，需要根据IDTR找到偏移值，根据CS和GDTR找到基地址，然后算出真实物理地址，进行指令执行。</p><p type="card-text">在第二部分，主要讲解了CPU执行中断的整体流程，包括其对于当前指令和数据的处理、对指令和数据的恢复，重点讲解了Flag寄存器的作用，中断返回的过程。之后，讲解了不同的中断指令，包括内部和外部中断，以及其优先级和指令、使用到的FLAGS等。最后，讲解了BIOS和DOS利用中断进行丰富功能的实现的操作。</p>
                                 <p class="card-text">
-                                    <small class="text-muted">最后更新于 2018-07-14 <a href="/source/coursera_learn_computer/chapter4_mult.html" target="_black" class="card-link">查看笔记</a></small>
+                                    <small class="text-muted">最后更新于 2018-07-18 <a href="/source/coursera_learn_computer/chapter8_interrupt.html" target="_black" class="card-link">查看笔记</a></small>
                                 </p>
                             </div>
                         </div>

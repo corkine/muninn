@@ -96,6 +96,8 @@ COURSE_INFO = {
             ("design_a_cpu","0","chapter5_design_a_cpu.html","w5"),
             ("pipe_cpu","0","chapter6_pipe.html","w6"),
             ("cache","0","chapter7_cache.html","w7"),
+            ("interrupt","0","chapter8_interrupt.html","w8"),
+            
             
         ],
     },
