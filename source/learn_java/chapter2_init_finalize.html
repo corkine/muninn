@@ -11775,8 +11775,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><span type="title">初始化和清理</span> | <span type="update">2018-07-17</span> - Version <span type="version">1.0</span></p>
-<p><span type="intro"><p class="card-text">本章主要介绍Java的对象初始化和清理相关内容。在初始化部分，介绍了使用构造器、方法重载、this关键字进行初始化的方法，讲解了初始化变量、方法、构造器的顺序问题，同时讲解了数组、可变参数列表、enum枚举类型等知识点。在清理部分，讲解了finalize方法和Java内存清理的逻辑问题。</p></span></p>
+<p><span type="title">初始化和清理</span> | <span type="update">2018-07-17</span> - Version <span type="version">1.5</span></p>
+<p><span type="intro"><p class="card-text">本章主要介绍Java的对象初始化和清理相关内容。在初始化部分，介绍了使用构造器进行方法重载和对象初始化、使用this关键字进行协同构造和作为方法返回值的技巧，讲解了变量初始化和数组初始化以及其初始化顺序问题，同时讲解了可变参数列表、enum枚举类型等知识点。在清理部分，讲解了finalize方法和Java内存清理的逻辑问题，比如 stop-copy 和 mark-sweep 策略。</p></span></p>
 
 </div>
 </div>
@@ -11810,6 +11810,14 @@ div#notebook {
 <span class="n">Rock</span> <span class="n">r4</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Rock</span><span class="o">(</span><span class="s">&quot;Corkine&quot;</span><span class="o">,</span><span class="mi">233</span><span class="o">);</span>
 </pre></div>
 <p>构造器没有返回值，可以有参数，参数在调用new进行对象构造的时候进行设置。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="&#26041;&#27861;&#37325;&#36733;">&#26041;&#27861;&#37325;&#36733;<a class="anchor-link" href="#&#26041;&#27861;&#37325;&#36733;">&#182;</a></h2><p>构造器可以进行方法重载，区分不同构造器的方法是：看传入参数的不同，比如你可以传入一个int，String，传入参数类型、个数、顺序都用来区别不同的构造器。需要注意的是，方法重载可以重载任意的方法，比如：</p>
 <div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">Dog</span> <span class="o">{</span>
     <span class="kt">void</span> <span class="nf">bark</span><span class="o">(){</span>
@@ -11836,7 +11844,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="this-&#25351;&#20195;">this &#25351;&#20195;<a class="anchor-link" href="#this-&#25351;&#20195;">&#182;</a></h2><p>对象在其内部有一个用来指代自身的关键字 <code>this</code>。一般而言，其用来<strong>作为方法的返回值</strong>，这样就可以多次使用点运算符调用方法。</p>
+<h2 id="this-&#25351;&#20195;">this &#25351;&#20195;<a class="anchor-link" href="#this-&#25351;&#20195;">&#182;</a></h2><p>对象在其内部有一个用来指代自身的关键字 <code>this</code>。一般而言，其用来<strong>作为方法的返回值</strong>，这样就可以多次使用点运算符调用方法。如下<code>Leaf</code>的<code>increment()</code>方法所示。</p>
 <div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">Leaf</span> <span class="o">{</span>
     <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
     <span class="n">Leaf</span> <span class="nf">increment</span><span class="o">(){</span>
@@ -11850,6 +11858,8 @@ div#notebook {
 <span class="n">Leaf</span> <span class="n">e1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Leaf</span><span class="o">();</span>
 <span class="n">e1</span><span class="o">.</span><span class="na">increment</span><span class="o">().</span><span class="na">increment</span><span class="o">().</span><span class="na">increment</span><span class="o">().</span><span class="na">result</span><span class="o">();</span><span class="c1">//The Leaf now is 3</span>
 </pre></div>
+<p>此外，this还可以用作在其内部调用变量和方法的前缀，虽然毫无用处（直接调用变量或者方法即可，不用加this.）。</p>
+<p>注意下面这个例子，this的第二个用途在于<strong>重载构造器</strong>，可以在一个构造器内部重载第二个构造器，但是需要注意，构造器重载在外部构造器里只能进行一次，并且只能放在首行。</p>
 <div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">Flower</span><span class="o">{</span>
     <span class="n">String</span> <span class="n">info</span> <span class="o">=</span> <span class="s">&quot;NaN&quot;</span><span class="o">;</span>
     <span class="n">Flower</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">){</span>
@@ -11869,8 +11879,7 @@ div#notebook {
 <span class="n">Flower</span> <span class="n">f2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Flower</span><span class="o">(</span><span class="s">&quot;rose&quot;</span><span class="o">,</span><span class="mi">28</span><span class="o">);</span>
 <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="na">info</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="n">f2</span><span class="o">.</span><span class="na">info</span><span class="o">);</span>
 </pre></div>
-<p>此外，this还可以用作在其内部调用变量和方法的前缀，虽然毫无用处（直接调用变量或者方法即可，不用加this.）。</p>
-<p>注意上面这个例子，this的第二个用途在于<strong>重载构造器</strong>，可以在一个构造器内部重载第二个构造器，但是需要注意，构造器重载在外部构造器里只能进行一次，并且只能放在首行。</p>
+<p><strong>this 和 static</strong></p>
 <p>this的使用可以让我们清楚的看到static意味着什么，static意味着没有this的方法或者变量，static是非面向对象的写法，所有由同一个类创建的static享有同一片内存地址，越少创建static越好。</p>
 
 </div>
@@ -11880,7 +11889,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="&#21021;&#22987;&#21270;&#39034;&#24207;">&#21021;&#22987;&#21270;&#39034;&#24207;<a class="anchor-link" href="#&#21021;&#22987;&#21270;&#39034;&#24207;">&#182;</a></h2><p>Java会保证类的成员在初始化的时候被赋值，但是不保证方法的成员初始化。</p>
+<h2 id="&#21464;&#37327;&#21021;&#22987;&#21270;">&#21464;&#37327;&#21021;&#22987;&#21270;<a class="anchor-link" href="#&#21464;&#37327;&#21021;&#22987;&#21270;">&#182;</a></h2><p>Java会保证类的成员在初始化的时候被赋值，但是不保证方法的成员初始化。</p>
 <div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">A</span> <span class="o">{</span>
     <span class="kt">int</span> <span class="n">a</span><span class="o">;</span>
     <span class="kt">float</span> <span class="n">b</span><span class="o">;</span>
@@ -11921,7 +11930,7 @@ div#notebook {
 <p>如上代码，采用 <code>static {}</code> 的方式，可以声明一个 静态变量上下文，在此进行静态变量的初始化。当然，你也可以直接 <code>static int q = 0</code> 这样对每个变量初始化。需要注意，不能在 静态变量上下文 中定义变量，只能用来赋值。</p>
 <p><strong>动态变量初始化</strong></p>
 <p>对于动态变量而言，其也可以单独今昔能够，比如 <code>int z = 0;</code> 也可以使用花括号括起来，需要注意，在花括号内部只能赋值，而不能定义变量。</p>
-<p><strong>顺序问题</strong></p>
+<p><strong>初始化顺序问题</strong></p>
 <p>很显然的，静态变量最优先被初始化，接着是动态变量，不论其在代码的任何位置。之后是构造器，构造器之后才是方法。因此，在上述的代码中，结果i为27。</p>
 
 </div>
