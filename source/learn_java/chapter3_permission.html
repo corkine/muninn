@@ -11775,8 +11775,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><span type="title">访问控制权限、类重用</span> | <span type="update">2018-07-18</span> - Version <span type="version">1.4</span></p>
-<p><span type="intro"><p class="card-text">本章第一部分讲解Java的权限控制问题，首先讲解了文件、构件、群组和包的结构，接着从方法和类的角度讲解了几种不同权限控制关键字，以及其作用域和使用方法。其中提到了默认包的问题、变量配置的问题等细节。在第二部分讲解了类重用的方法，其中包含组合、继承、结合、代理等不同方法，这些方法适用于不同的模式。对于继承，重点探讨了构造器初始化的传参问题。</p></span></p>
+<p><span type="title">访问控制权限、类的重用</span> | <span type="update">2018-07-18</span> - Version <span type="version">2.4</span></p>
+<p><span type="intro"><p class="card-text">本章第一部分讲解Java的权限控制问题，首先讲解了文件、构件、群组和包的结构，接着从方法和类的角度讲解了几种不同权限控制关键字，以及其作用域和使用方法。其中提到了默认包的问题、变量配置的问题等细节。</p><p class="card-text">在第二部分讲解了类重用的方法，其中包含组合、继承、结合、代理等不同方法，这些方法适用于不同的模式。对于组合，介绍了变量初始化时机和权限字的使用问题。对于继承，介绍了有无参数的初始化构造、protected关键字在继承中的作用、继承重载方法和@Override名称屏蔽。之后，介绍了组合使用继承和结合的技术，在什么情况下使用继承或者结合，提到了向上转型，最后，介绍了final关键字在数据、方法参数、方法、类上的不同效果和作用。在最后，梳理了有继承的情况下，一个类被调用时的代码执行顺序问题。</p><p class="card-text">在这一部分，可以看到很多技术和继承都有关系，比如向上转型、final方法和类、protected关键字，虽然继承在真实情况下用的并不太多（更多的是组合）。</p></span></p>
 
 </div>
 </div>
@@ -12465,7 +12465,7 @@ The bird's foot is red.</code></pre>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>main方法用作调试的细节</strong></p>
-<p>main方法是用作类进行调试的，因为其是一个 static 方法，所以不能使用类中的任何非static对象和域，其正确使用方法是通过类的构造器创建一个类的对象，然后对这个对象进行某些行为来测试其表现。</p>
+<p>main方法是用作类进行调试的，因为其是一个 static 方法，所以不能使用类中的任何非static对象和域，其正确使用方法是通过类的构造器创建一个类的对象，然后对这个对象进行某些行为来测试其表现。就像在这些例子中我们的使用方式一样。</p>
 
 </div>
 </div>
@@ -12501,7 +12501,116 @@ The bird's foot is red.</code></pre>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="final-&#26041;&#27861;">final &#26041;&#27861;<a class="anchor-link" href="#final-&#26041;&#27861;">&#182;</a></h2>
+<h2 id="final-&#26041;&#27861;">final &#26041;&#27861;<a class="anchor-link" href="#final-&#26041;&#27861;">&#182;</a></h2><p>final 用作方法暗示了这个方法的最终性。final 和 private 关系很密切，起始 private 默认就相当于 private final，其不可被别的类调用，无法覆盖它。</p>
+<div class="highlight"><pre><span></span><span class="c1">//show how final works with method</span>
+<span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Overriding</span> <span class="kd">extends</span> <span class="n">WithFinals</span> <span class="o">{</span>
+    <span class="c1">//@Overriding //method does not override or implement a method from a supertype</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">f</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;Overriding final private f()&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="c1">//@Override g() in Overriding cannot override g() in WithFinals</span>
+    <span class="c1">//overridden method is final</span>
+    <span class="cm">/*</span>
+<span class="cm">    public final void g() {</span>
+<span class="cm">        print(&quot;Overriding private g()&quot;);</span>
+<span class="cm">    }*/</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">p</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;Overriding private p()&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">Overriding</span> <span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Overriding</span><span class="o">();</span>
+        <span class="n">x</span><span class="o">.</span><span class="na">f</span><span class="o">();</span>
+        <span class="n">x</span><span class="o">.</span><span class="na">g</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">WithFinals</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">f</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;WithFinals with final private f()&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">g</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;WithFinals with final public g()&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">p</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;WithFinals with public p()&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>如上代码，对于继承而言，声明 final 意味着你不想让别人去继承这个方法来做别的事情。</p>
+<p>你可以在一个 public 的父方法中重载，并且添加 Override 标识符和 final 关键字，说明这个继承到你这儿结束，不允许进一步的继承。</p>
+<p>但是对于 public final 的父类，子类不允许继承。如 g() 所示的那样。</p>
+<p>对于私有方法而言，因为其默认就不允许继承，所以对于一个添加了 private final的父类，子类也可以写一个同名的 private final，这不是方法重载。</p>
+<p>总结而言，当没有 final 声明方法时，可以重载。当有 final 声明方法时，对于 public，不可重载，对于 private 而言，可以使用，但没有发生重载，系统不会提醒出错。</p>
+<p>在很多情况下，不希望别人继承，指定 final 很有用。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="final-&#31867;">final &#31867;<a class="anchor-link" href="#final-&#31867;">&#182;</a></h2><p>final 类的目的很明显，不可继承，独此一份。</p>
+<div class="highlight"><pre><span></span><span class="c1">//final class</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">NoFather</span> <span class="kd">extends</span> <span class="n">Father</span><span class="o">{</span> <span class="c1">//error: cannot inherit from final Father</span>
+
+<span class="o">}</span>
+<span class="kd">final</span> <span class="kd">class</span> <span class="nc">Father</span> <span class="o">{</span>    <span class="o">}</span>
+</pre></div>
+<p>注意，final 方法和 final 类更多的是对继承而言的， 其都在控制继承是否能够发生，如果类整个不希望被继承，那么使用 final 类，如果类中的某些方法不希望被重载，则使用 final 方法。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="&#21547;&#26377;&#32487;&#25215;&#30340;&#21021;&#22987;&#21270;&#39034;&#24207;">&#21547;&#26377;&#32487;&#25215;&#30340;&#21021;&#22987;&#21270;&#39034;&#24207;<a class="anchor-link" href="#&#21547;&#26377;&#32487;&#25215;&#30340;&#21021;&#22987;&#21270;&#39034;&#24207;">&#182;</a></h1><p>在之前介绍过静态域、构造器的初始化顺序，现在添加继承，看看结果怎么样。</p>
+<div class="highlight"><pre><span></span><span class="c1">//show the order of var init..</span>
+<span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Bee</span> <span class="kd">extends</span> <span class="n">Animal</span> <span class="o">{</span>
+    <span class="kd">static</span> <span class="kt">int</span> <span class="n">q</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="n">Bee</span><span class="o">(){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;static q is init before, it is &quot;</span><span class="o">+</span><span class="n">q</span><span class="o">);</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;I&#39;m in the Bee.class constructor&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;I&#39;m runing the first line code in Bee.main&quot;</span><span class="o">);</span>
+        <span class="n">Bee</span> <span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Bee</span><span class="o">();</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Animal</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="kd">static</span> <span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+    <span class="n">Animal</span><span class="o">(){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;static int p is init before now, it is&quot;</span><span class="o">+</span><span class="n">p</span><span class="o">);</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;int p is init before now, it is&quot;</span><span class="o">+</span><span class="n">i</span><span class="o">);</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;I&#39;m in Animal.class constructor&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+<span class="n">I</span><span class="err">&#39;</span><span class="n">m</span> <span class="n">runing</span> <span class="n">the</span> <span class="n">first</span> <span class="n">line</span> <span class="n">code</span> <span class="n">in</span> <span class="n">Bee</span><span class="o">.</span><span class="na">main</span>
+<span class="kd">static</span> <span class="kt">int</span> <span class="n">p</span> <span class="n">is</span> <span class="n">init</span> <span class="n">before</span> <span class="n">now</span><span class="o">,</span> <span class="n">it</span> <span class="n">is2</span>
+<span class="kt">int</span> <span class="n">p</span> <span class="n">is</span> <span class="n">init</span> <span class="n">before</span> <span class="n">now</span><span class="o">,</span> <span class="n">it</span> <span class="n">is1</span>
+<span class="n">I</span><span class="err">&#39;</span><span class="n">m</span> <span class="n">in</span> <span class="n">Animal</span><span class="o">.</span><span class="na">class</span> <span class="n">constructor</span>
+<span class="kd">static</span> <span class="n">q</span> <span class="n">is</span> <span class="n">init</span> <span class="n">before</span><span class="o">,</span> <span class="n">it</span> <span class="n">is</span> <span class="mi">0</span>
+<span class="n">I</span><span class="err">&#39;</span><span class="n">m</span> <span class="n">in</span> <span class="n">the</span> <span class="n">Bee</span><span class="o">.</span><span class="na">class</span> <span class="n">constructor</span>
+</pre></div>
+<p>可以看到，和C非常不同，所有的类，只有当其被调用时才被加载，这发生在两种情况下，其一，其中的静态方法被调用，其二，一个此类的对象被构造。</p>
+<p>在调用后，首先发生的肯定是类的静态域定义，之后是动态域定义，之后是？因为现在添加了父类，所以本来应该是构造器，因为有父类，并且这里隐式声明了super()，所以调用父类，当调用父类时，我们看到，父类的动态域、静态域都被调用了，之后是父类的构造器，之后才回到子类的构造器。</p>
+<p>以上就是添加了继承后的类在被调用时的顺序。</p>
+
 </div>
 </div>
 </div>
