@@ -11974,6 +11974,7 @@ div#notebook {
 The bird have a blue eyes
 The bird have 0 foots.
 The bird's foot is red.</code></pre>
+<p><strong>变量初始化时机</strong></p>
 <p>如上所示，Bird的<code>getInfo()</code>方法组合了Eyes和Foot这两个类，在其内部创建了实例（静态的话可以不用）并且调用了其方法。这是组合的实例。需要注意，对于初始化的问题，一般而言有无个地方可以用于初始化：</p>
 <ul>
 <li>类的域，当定义时即赋值</li>
@@ -11990,9 +11991,58 @@ The bird's foot is red.</code></pre>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>继承是一种对于类形式和功能全方位的重用。在Java中，任何时候都在继承，当你没有指定被继承对象时，其默认为<code>Objcet</code>类。继承使用 <code>class Son extends Father</code> 来声明被继承的类。</p>
+<p><strong>组合的public和private问题</strong></p>
+<p>说回正题，对于组合而言，一般我们对实例的对象使用 <code>private</code> 来屏蔽外界访问，但是，在某些情况下，使用 <code>public</code> 可以让抽象更加的清晰。比如下面这个例子，从 Door 中引出 Window: <code>car.left.window.rollup()</code> 非常的自然，因此使用 <code>private</code> 较好。</p>
+<div class="highlight"><pre><span></span><span class="c1">//show what we should use in a combination, public or private</span>
+<span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Car</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">Engine</span> <span class="n">engine</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Engine</span><span class="o">();</span>
+    <span class="kd">public</span> <span class="n">Wheel</span><span class="o">[]</span> <span class="n">wheel</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Wheel</span><span class="o">[</span><span class="mi">4</span><span class="o">];</span>
+    <span class="kd">public</span> <span class="n">Door</span> <span class="n">left</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Door</span><span class="o">(),</span> <span class="n">right</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Door</span><span class="o">();</span>
+    <span class="kd">public</span> <span class="nf">Car</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">wheel</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Wheel</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">Car</span> <span class="n">car</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Car</span><span class="o">();</span>
+        <span class="n">car</span><span class="o">.</span><span class="na">left</span><span class="o">.</span><span class="na">window</span><span class="o">.</span><span class="na">rollup</span><span class="o">();</span>
+        <span class="n">car</span><span class="o">.</span><span class="na">wheel</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">inflate</span><span class="o">(</span><span class="mi">72</span><span class="o">);</span>
+        <span class="n">car</span><span class="o">.</span><span class="na">engine</span><span class="o">.</span><span class="na">service</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Engine</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">start</span><span class="o">(){}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">stop</span><span class="o">(){}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">service</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;Engine service on...&quot;</span> <span class="o">+</span> <span class="n">t</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Wheel</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">inflate</span><span class="o">(</span><span class="kt">int</span> <span class="n">psi</span><span class="o">){}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Window</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">rollup</span><span class="o">(){}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">rolldown</span><span class="o">()</span> <span class="o">{}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Door</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">Window</span> <span class="n">window</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Window</span><span class="o">();</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">open</span><span class="o">()</span> <span class="o">{}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="o">{}</span>
+<span class="o">}</span>
+<span class="n">Engine</span> <span class="n">service</span> <span class="n">on</span><span class="o">...</span><span class="na">true</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#31867;&#30340;&#32487;&#25215;">&#31867;&#30340;&#32487;&#25215;<a class="anchor-link" href="#&#31867;&#30340;&#32487;&#25215;">&#182;</a></h2><p>继承是一种对于类形式和功能全方位的重用。在Java中，任何时候都在继承，当你没有指定被继承对象时，其默认为<code>Objcet</code>类。继承使用 <code>class Son extends Father</code> 来声明被继承的类。</p>
 <p>继承可以在子类中对父类的方法进行重载，这样调用的话，使用的就是子类的方法。而那些没有在子类进行重载的方法，默认会调用父类的方法，这样就实现了重用。继承有几个重要问题，比如初始化和其顺序问题。</p>
-<h2 id="&#32487;&#25215;&#21450;&#20854;&#21021;&#22987;&#21270;">&#32487;&#25215;&#21450;&#20854;&#21021;&#22987;&#21270;<a class="anchor-link" href="#&#32487;&#25215;&#21450;&#20854;&#21021;&#22987;&#21270;">&#182;</a></h2><p><strong>没有参数的继承初始化及其顺序</strong></p>
+<p><strong>没有参数的继承初始化及其顺序</strong></p>
 <div class="highlight"><pre><span></span><span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">A</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
@@ -12047,6 +12097,81 @@ The bird's foot is red.</code></pre>
 </pre></div>
 <p>如上所示，Chess的初始化需要BoardGame，BoardGame必须有一个参数，因此如果不调用<code>super(11)</code>的话，Java不会默认调用父构造器，会出错。同理，因为BoardGame的父构造器不需要参数，因此其不用写<code>super</code>，Java会自动调用，并且按照正确顺序返回。</p>
 <p>总之，对于任何被继承的类，在初始化的时候都需要关注父类的构造器是否需要接受参数，如果需要，则必须手动调用 <code>super</code> 方法来构造父类。有一点需要注意，如果可选父类构造器，而没有手动传递 <code>super</code> 则会通过没有参数的构造器构造。这里可以看出手动构造的必要之处，我们必须选择父类被构造的状态。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>继承和protected关键字的使用</strong></p>
+<p>对于继承而言，<code>protected</code> 能够保护在类之外的地方，继承的子类可以在其内部调用父类的方法和域。如下的<code>set</code>方法，只对于继承的子类可用。</p>
+<div class="highlight"><pre><span></span><span class="c1">//use to show protected in inherit</span>
+<span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Orc</span> <span class="kd">extends</span> <span class="n">Villain</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">orcNumber</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Orc</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">orcNumber</span><span class="o">){</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">orcNumber</span> <span class="o">=</span> <span class="n">orcNumber</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">change</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">orcNumber</span><span class="o">){</span>
+        <span class="n">set</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">orcNumber</span> <span class="o">=</span> <span class="n">orcNumber</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="s">&quot;ORCNUMBER: &quot;</span> <span class="o">+</span> <span class="n">orcNumber</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="kd">super</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">Orc</span> <span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Orc</span><span class="o">(</span><span class="s">&quot;Cokrine&quot;</span><span class="o">,</span><span class="mi">20122212</span><span class="o">);</span>
+        <span class="n">print</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Villain</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Villain</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">){</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="s">&quot;I&#39;m a Villain and my name is &quot;</span> <span class="o">+</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">set</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">){</span><span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;}</span>
+<span class="o">}</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>继承中的重载：名称屏蔽</strong></p>
+<p>Java允许强制运算符重载，如下是一个例子，展示了使用<code>@Override</code>来重载时发生的错误。</p>
+<div class="highlight"><pre><span></span><span class="c1">//show how to use @Override and avoid to havn&#39;t override the super class.</span>
+<span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Fruit</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;Fruit...&quot;</span><span class="o">);</span>
+        <span class="n">Apple</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Apple</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="n">String</span> <span class="nf">nameOfIt</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="s">&quot;Fruit...&quot;</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="n">String</span> <span class="nf">nameOfIt</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">){</span>
+        <span class="k">return</span> <span class="s">&quot;Fruit...&quot;</span> <span class="o">+</span> <span class="n">n</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Apple</span> <span class="kd">extends</span> <span class="n">Fruit</span><span class="o">{</span>
+    <span class="nd">@Override</span> 
+    <span class="n">String</span> <span class="nf">nameOfIt</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">){</span>
+        <span class="k">return</span> <span class="s">&quot;Apple&quot;</span> <span class="o">+</span> <span class="n">s</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<p>对于C++而言，当一个类从另一个类中进行继承，那么被继承的类中的方法的不同版本是被屏蔽的（相同方法名称不同参数），而对于Java，如果基类有一个 <code>doA(int,float) 和 doA(int)</code> 两个方法，如果子类重载了 <code>doA(int,float)</code> 的话，那么另一个 <code>doA(int)</code> 亦然可以在子类中被访问。</p>
+<p>使用 <code>@Override</code> 可以让你清楚的强制去重载某个类，告诉Java你需要重载父类中的这个同名方法，如果父类不存在这个方法，那么就会报错。这样提高了程序的清晰程度，方便看到哪些类是重载的。</p>
+<p>注意，继承重载了域和所有的父类方法。</p>
 
 </div>
 </div>
@@ -12110,25 +12235,47 @@ The bird's foot is red.</code></pre>
         <span class="n">pl</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DinnerPlate</span><span class="o">(</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="o">);</span>
         <span class="n">print</span><span class="o">(</span><span class="s">&quot;PlaceSetting constructor&quot;</span><span class="o">);</span>
     <span class="o">}</span>
+    <span class="kt">void</span> <span class="nf">dispose</span><span class="o">(){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;Disposing Custom-Placesetting&quot;</span><span class="o">);</span>
+        <span class="n">sp</span><span class="o">.</span><span class="na">dispose</span><span class="o">();</span>
+        <span class="n">kn</span><span class="o">.</span><span class="na">dispose</span><span class="o">();</span>
+        <span class="n">pl</span><span class="o">.</span><span class="na">dispose</span><span class="o">();</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">dispose</span><span class="o">();</span>
+    <span class="o">}</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
         <span class="n">PlaceSetting</span> <span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PlaceSetting</span><span class="o">(</span><span class="mi">9</span><span class="o">);</span>
+        <span class="k">try</span><span class="o">{</span> <span class="cm">/*something*/</span><span class="o">}</span>
+        <span class="k">finally</span> <span class="o">{</span><span class="n">x</span><span class="o">.</span><span class="na">dispose</span><span class="o">();}</span>
     <span class="o">}</span>
 <span class="o">}</span>
 <span class="kd">class</span> <span class="nc">Custom</span> <span class="o">{</span>
     <span class="n">Custom</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">){</span><span class="n">print</span><span class="o">(</span><span class="s">&quot;Custom have &quot;</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s">&quot; people.&quot;</span><span class="o">);}</span>
+    <span class="kt">void</span> <span class="nf">dispose</span><span class="o">(){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;Disposing Custom&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
 <span class="o">}</span>
 <span class="kd">class</span> <span class="nc">Plate</span> <span class="o">{</span>
     <span class="n">Plate</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">){</span><span class="n">print</span><span class="o">(</span><span class="s">&quot;Plate constructor with &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="o">);}</span>
+    <span class="kt">void</span> <span class="nf">dispose</span><span class="o">(){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;Disposing Plate&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
 <span class="o">}</span>
 <span class="kd">class</span> <span class="nc">DinnerPlate</span> <span class="kd">extends</span> <span class="n">Plate</span> <span class="o">{</span>
     <span class="n">DinnerPlate</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">){</span>
         <span class="kd">super</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
         <span class="n">print</span><span class="o">(</span><span class="s">&quot;DinnerPlate constructor with &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="o">);</span>
     <span class="o">}</span>
+    <span class="kt">void</span> <span class="nf">dispose</span><span class="o">(){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;Disposing Plate&quot;</span><span class="o">);</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">dispose</span><span class="o">();</span>
+    <span class="o">}</span>
 <span class="o">}</span>
 <span class="kd">class</span> <span class="nc">Utensil</span> <span class="o">{</span>
     <span class="n">Utensil</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">){</span>
         <span class="n">print</span><span class="o">(</span><span class="s">&quot;Utensil constructor with &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kt">void</span> <span class="nf">dispose</span><span class="o">(){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;Disposing Utensil&quot;</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
 <span class="kd">class</span> <span class="nc">Spoon</span> <span class="kd">extends</span> <span class="n">Utensil</span> <span class="o">{</span>
@@ -12136,13 +12283,22 @@ The bird's foot is red.</code></pre>
         <span class="kd">super</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
         <span class="n">print</span><span class="o">(</span><span class="s">&quot;Spoon constructor with &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="o">);</span>
     <span class="o">}</span>
+    <span class="kt">void</span> <span class="nf">dispose</span><span class="o">(){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;Disposing Utensil-Spoon&quot;</span><span class="o">);</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">dispose</span><span class="o">();</span>
+    <span class="o">}</span>
 <span class="o">}</span>
 <span class="kd">class</span> <span class="nc">Knife</span> <span class="kd">extends</span> <span class="n">Utensil</span> <span class="o">{</span>
     <span class="n">Knife</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">){</span>
         <span class="kd">super</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
         <span class="n">print</span><span class="o">(</span><span class="s">&quot;Knife constructor with &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="o">);</span>
     <span class="o">}</span>
+    <span class="kt">void</span> <span class="nf">dispose</span><span class="o">(){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;Disposing Utensil-Knife&quot;</span><span class="o">);</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">dispose</span><span class="o">();</span>
+    <span class="o">}</span>
 <span class="o">}</span>
+
 
 <span class="n">Custom</span> <span class="n">have</span> <span class="mi">10</span> <span class="n">people</span><span class="o">.</span>
 <span class="n">Utensil</span> <span class="n">constructor</span> <span class="n">with</span> <span class="mi">11</span>
@@ -12152,9 +12308,20 @@ The bird's foot is red.</code></pre>
 <span class="n">Plate</span> <span class="n">constructor</span> <span class="n">with</span> <span class="mi">13</span>
 <span class="n">DinnerPlate</span> <span class="n">constructor</span> <span class="n">with</span> <span class="mi">13</span>
 <span class="n">PlaceSetting</span> <span class="n">constructor</span>
+<span class="n">Disposing</span> <span class="n">Custom</span><span class="o">-</span><span class="n">Placesetting</span>
+<span class="n">Disposing</span> <span class="n">Utensil</span><span class="o">-</span><span class="n">Spoon</span>
+<span class="n">Disposing</span> <span class="n">Utensil</span>
+<span class="n">Disposing</span> <span class="n">Utensil</span><span class="o">-</span><span class="n">Knife</span>
+<span class="n">Disposing</span> <span class="n">Utensil</span>
+<span class="n">Disposing</span> <span class="n">Plate</span>
+<span class="n">Disposing</span> <span class="n">Plate</span>
+<span class="n">Disposing</span> <span class="n">Custom</span>
 </pre></div>
 <p>其使用了继承和组合的方式来构建一个对象。对于很多真实情况，这样做是符合常理的。这种技术可以用来构建极其复杂的类，而不用拘泥于要创建一个完美抽象的对象或者使用一堆基础工具来进行拼凑。我们可以清晰的看到继承的层次，它就是按照“类”这一概念，就好比超市分门别类的物品一样进行放置的。而我们要搭建小屋，自然要买一堆东西回来，这就像是组合。</p>
 <p>这种方式赋予了面向对象方法巨大的灵活性。</p>
+<p><strong>确保正确清理</strong></p>
+<p>一般而言，Java的垃圾回收器会自动对于没有引用的对象进行清理，但是，在某些情况下，使用手动清理还是有好处的。因为一旦交给垃圾处理器，它做什么就很难知道了。</p>
+<p>对于上述使用了继承和组合的模式，清理需要对本类创建的所有对象进行清理，调用各自的清理方法，对于有继承的类，其清理方法应该包括对于父类的清理，这有助于防止某个子对象依赖另一个子对象。如上的disponse()方法就是一个很好的例子，注意：一般将其放置在 <code>try...catch...finally</code> 的末尾处。</p>
 
 </div>
 </div>
@@ -12163,12 +12330,178 @@ The bird's foot is red.</code></pre>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="&#20195;&#29702;&#65292;&#32487;&#25215;&#36824;&#26159;&#32452;&#21512;&#65311;">&#20195;&#29702;&#65292;&#32487;&#25215;&#36824;&#26159;&#32452;&#21512;&#65311;<a class="anchor-link" href="#&#20195;&#29702;&#65292;&#32487;&#25215;&#36824;&#26159;&#32452;&#21512;&#65311;">&#182;</a></h2><p>打个比方，继承就好像一心一意，优点是可以全面控制对象，可以为它扩充方法，缺点是只有一个对象。代理就好像婚内出轨，你不用看对象脸色，创建一个实例后可以选择性的代理其方法，也可以搞别的对象过来玩，但是核心还是这个主要对象。优点是提供了一个更广阔的编程环境，可以从更加宏观层面对对象们进行操作，权利更大，更自由，出了事可以自己扛着。组合就好像花花公子，对象很多，对每个对象了解都不深入，主要用来做一个容器，协同管理，出了事还要找对象自己解决，权利不大。</p>
+<h2 id="&#32487;&#25215;&#21644;&#32452;&#21512;&#30340;&#36873;&#25321;">&#32487;&#25215;&#21644;&#32452;&#21512;&#30340;&#36873;&#25321;<a class="anchor-link" href="#&#32487;&#25215;&#21644;&#32452;&#21512;&#30340;&#36873;&#25321;">&#182;</a></h2><p>打个比方，继承就好像一心一意，优点是可以全面控制对象，可以为它扩充方法，缺点是只有一个对象。代理就好像婚内出轨，你不用看对象脸色，创建一个实例后可以选择性的代理其方法，也可以搞别的对象过来玩，但是核心还是这个主要对象。优点是提供了一个更广阔的编程环境，可以从更加宏观层面对对象们进行操作，权利更大，更自由，出了事可以自己扛着。组合就好像花花公子，对象很多，对每个对象了解都不深入，主要用来做一个容器，协同管理，出了事还要找对象自己解决，权利不大。</p>
 <p>总的来看，继承和代理更像，主要关注各自的对象，组合将其拢在一起，主要关心整体的结构。</p>
 <p>从另一个角度而言，不存在代理这种模式。继承就是套用它类结构，组合就是实例化它类。它们的区别在于，继承是顺序结构（纵向），而组合是平面结构（横向）。继承能够让组合中的类结构和层次更加清晰。</p>
 <p>所谓的代理，就是阉割的组合，其含有的对象只有一两个，重点在于手动实例化了这些对象的方法，模仿了继承的结构，提高了深度。</p>
 <p>如果一个类含有很多类实例，这些类很像，并且需要对其循环计数，那么代理是个不错的主意，手动实例化这些实例的方法，同时提供了在这些实例之外进行循环计数的其他结构，比如说一个计数器类。当然，也可以使用继承，然后在其中手动实例化一个计数器类，不过，将这些类的容器看作其子孙，未免在逻辑上难以理解。对于这种使用组合太大的问题，使用代理就恰到好处。</p>
+<p>——————————————————————————</p>
+<p>以上是题外话。说回继承和组合，继承代表了<code>is-a</code>的一一对应关系，对于上上个例子，交通工具包含汽车，但是汽车是一个子集，所以不符合这种对应，使用继承毫无意义，你几乎无法想到汽车需要继承交通工具的方法的意义何在。</p>
+<p>组合代表了<code>have-a</code>的关系。被组合的实例被包含在一个更大的抽象概念中。</p>
+<p>因此，使用这个区别来决定使用组合还是继承就很好。但是，因为继承在OOP中使用的实在是很少，所以，我们说，除了一定需要<code>向上转型</code>的情况，尽量不要使用继承。</p>
+<p><strong>向上转型</strong></p>
+<p>什么是向上转型？简要而言，就是被继承的子类访问父类的方法，不是通过自身的重载和调用，要做到这一点很简单，在父类提供一个静态方法，参数为其自身的类，在这个方法中调用自身的其他方法和域，这样，子类就可以使用这个静态方法来调用父类方法，比如：</p>
+<div class="highlight"><pre><span></span><span class="c1">//up transformation</span>
+<span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Frog</span> <span class="kd">extends</span> <span class="n">Amphibian</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">Frog</span> <span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Frog</span><span class="o">();</span>
+        <span class="n">Amphibian</span><span class="o">.</span><span class="na">getColor</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+        <span class="n">x</span><span class="o">.</span><span class="na">getColor</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="c1">//@Override</span>
+    <span class="kd">static</span> <span class="kt">void</span> <span class="nf">getColor</span><span class="o">(</span><span class="n">Amphibian</span> <span class="n">a</span><span class="o">){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;In Frog&quot;</span><span class="o">);</span>
+        <span class="n">print</span><span class="o">(</span><span class="n">color</span> <span class="o">+</span><span class="s">&quot;, &quot;</span><span class="o">+</span> <span class="n">ext</span><span class="o">);</span>
+    <span class="o">}</span>
+ <span class="o">}</span>
+ <span class="kd">class</span> <span class="nc">Amphibian</span> <span class="o">{</span>
+    <span class="kd">static</span> <span class="n">String</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;red&quot;</span><span class="o">;</span>
+    <span class="kd">static</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">info</span> <span class="o">=</span> <span class="s">&quot;can access private&quot;</span><span class="o">;</span>
+    <span class="kd">static</span> <span class="kd">protected</span> <span class="n">String</span> <span class="n">ext</span> <span class="o">=</span> <span class="s">&quot;can access protected&quot;</span><span class="o">;</span>
+    <span class="kd">static</span> <span class="kt">void</span> <span class="nf">getColor</span><span class="o">(</span><span class="n">Amphibian</span> <span class="n">a</span><span class="o">){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;In Amphibian&quot;</span><span class="o">);</span>
+        <span class="n">print</span><span class="o">(</span><span class="n">color</span><span class="o">+</span><span class="s">&quot;, &quot;</span><span class="o">+</span><span class="n">info</span><span class="o">+</span><span class="s">&quot;, &quot;</span><span class="o">+</span><span class="n">ext</span><span class="o">);</span>
+    <span class="o">}</span>
+ <span class="o">}</span>
+<span class="n">In</span> <span class="n">Amphibian</span>
+<span class="n">red</span><span class="o">,</span> <span class="n">can</span> <span class="n">access</span> <span class="kd">private</span><span class="o">,</span> <span class="n">can</span> <span class="n">access</span> <span class="kd">protected</span>
+<span class="n">In</span> <span class="n">Frog</span>
+<span class="n">red</span><span class="o">,</span> <span class="n">can</span> <span class="n">access</span> <span class="kd">protected</span>
+</pre></div>
+<p>这里的getColor本来只接受Amphibian类型对象，而现在接受了Frog对象，因此称之为向上转型。</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="final-&#20851;&#38190;&#23383;">final &#20851;&#38190;&#23383;<a class="anchor-link" href="#final-&#20851;&#38190;&#23383;">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>final通常指的是无法改变的这一含义。对于数据、方法、类都可以使用这一关键字，类似于C中的const。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="final-&#25968;&#25454;">final &#25968;&#25454;<a class="anchor-link" href="#final-&#25968;&#25454;">&#182;</a></h2><p>下列代码展示了 final 在数据使用上的问题。</p>
+<div class="highlight"><pre><span></span><span class="c1">//show the difference of final and static final</span>
+<span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Num</span> <span class="o">{</span>
+    <span class="c1">//static final int O; variable O not initialized in the default constructor</span>
+    <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">A</span> <span class="o">=</span> <span class="mi">233</span><span class="o">;</span>
+    <span class="kd">static</span> <span class="kt">int</span> <span class="n">B</span> <span class="o">=</span> <span class="mi">234</span><span class="o">;</span>
+    <span class="kd">static</span> <span class="n">Integer</span> <span class="n">C</span> <span class="o">=</span> <span class="mi">235</span><span class="o">;</span>
+    <span class="kd">static</span> <span class="kd">final</span> <span class="n">Integer</span> <span class="n">D</span> <span class="o">=</span> <span class="mi">235</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;From Num.class&quot;</span><span class="o">);</span>
+        <span class="n">print</span><span class="o">(</span><span class="n">A</span><span class="o">+</span><span class="s">&quot;,&quot;</span><span class="o">+</span><span class="n">B</span><span class="o">+</span><span class="s">&quot;, &quot;</span><span class="o">+</span><span class="n">C</span><span class="o">+</span><span class="s">&quot;, &quot;</span><span class="o">+</span><span class="n">D</span><span class="o">);</span>
+        <span class="c1">//A = A + 1;  cannot assign a value to final variable a</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">B</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">C</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="c1">//D = D = 1; cannot assign a value to final variable D</span>
+        <span class="n">print</span><span class="o">(</span><span class="n">A</span><span class="o">+</span><span class="s">&quot;,&quot;</span><span class="o">+</span><span class="n">B</span><span class="o">+</span><span class="s">&quot;, &quot;</span><span class="o">+</span><span class="n">C</span><span class="o">+</span><span class="s">&quot;, &quot;</span><span class="o">+</span><span class="n">D</span><span class="o">);</span>
+
+        <span class="n">Random</span> <span class="n">rand</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">E</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+        <span class="n">print</span><span class="o">(</span><span class="n">E</span><span class="o">);</span>
+        <span class="c1">//E = 233; cannot assign a value to final variable E</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</pre></div>
+<p>简而言之，其一，必须在定义处或者构造器内进行初始化，否则不可使用，比如 第一句注释。</p>
+<p>其二，其更多的作用于基本类型而不是包装器，因为包装器定义了一个引用，引用不变不意味着引用的对象不变，这类似于C中const指针，指针不可重新赋值，但是其指向的地址的内容可以改变。</p>
+<p>如上的 E 变量，其每次都是随机生成的，也就是这个意思，final 的唯一作用就是禁止赋值，而无法阻止其值改变。</p>
+<p>其三，常用的写法是 <code>public final static int xxx</code> 这样声明了这个类型的数字变量是静态唯一、不变、公开访问的，因此称之为常量，一般使用大写。</p>
+<p><strong>空白final</strong></p>
+<p>final可以在定义的时候进行赋值，也可以在构造器内赋值，后者给与了其极大的灵活性，同时不失其本身不变的意味。</p>
+<div class="highlight"><pre><span></span><span class="c1">//use to show black final&#39;s power</span>
+<span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BlankFinal</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;Hello in BF.class&quot;</span><span class="o">);</span>
+        <span class="k">new</span> <span class="n">BlankFinal</span><span class="o">();</span>
+        <span class="n">BlankFinal</span> <span class="n">bf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BlankFinal</span><span class="o">(</span><span class="s">&quot;Corkine&quot;</span><span class="o">,</span><span class="mi">22</span><span class="o">);</span>
+        <span class="n">print</span><span class="o">(</span><span class="n">bf</span><span class="o">.</span><span class="na">name</span><span class="o">);</span>
+        <span class="c1">//bf.name = &quot;Marvin&quot;; cannot assign a value to final variable name</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="nf">BlankFinal</span><span class="o">(){</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="s">&quot;Nobody&quot;</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="nf">BlankFinal</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">age</span><span class="o">){</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;Initing with info &quot;</span><span class="o">+</span><span class="n">name</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="n">age</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="n">Hello</span> <span class="n">in</span> <span class="n">BF</span><span class="o">.</span><span class="na">class</span>
+<span class="n">Initing</span> <span class="n">with</span> <span class="n">info</span> <span class="n">Corkine</span><span class="o">,</span> <span class="mi">22</span>
+<span class="n">Corkine</span>
+</pre></div>
+<p>如上代码展示了name和age，这两个变量当初始化构造器后不可更改，但是在构造器初始化时，可以根据需要的对象来设置，这样很方便。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>main方法用作调试的细节</strong></p>
+<p>main方法是用作类进行调试的，因为其是一个 static 方法，所以不能使用类中的任何非static对象和域，其正确使用方法是通过类的构造器创建一个类的对象，然后对这个对象进行某些行为来测试其表现。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="final-&#21442;&#25968;">final &#21442;&#25968;<a class="anchor-link" href="#final-&#21442;&#25968;">&#182;</a></h2><p>final可以用作方法的参数，和C不同，C的函数参数传递的都是值，而Java的方法传递的都是对象（除了基本类型）。因此，能够禁止在方法中修改是一个很重要的功能。</p>
+<div class="highlight"><pre><span></span><span class="c1">//use to show final parameter</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Final</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">with</span><span class="o">(</span><span class="kd">final</span> <span class="n">Apple</span> <span class="n">a</span><span class="o">){</span>
+        <span class="c1">//a = new Apple(); </span>
+        <span class="c1">// final parameter a may not be assigned</span>
+    <span class="o">}</span>
+    <span class="kt">void</span> <span class="nf">without</span><span class="o">(</span><span class="n">Apple</span> <span class="n">a</span><span class="o">){</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Apple</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">Apple</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Apple</span><span class="o">();</span>
+        <span class="n">Final</span> <span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Final</span><span class="o">();</span>
+        <span class="n">x</span><span class="o">.</span><span class="na">with</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+        <span class="n">x</span><span class="o">.</span><span class="na">without</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Apple</span> <span class="o">{}</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="final-&#26041;&#27861;">final &#26041;&#27861;<a class="anchor-link" href="#final-&#26041;&#27861;">&#182;</a></h2>
 </div>
 </div>
 </div>
