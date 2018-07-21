@@ -12083,11 +12083,22 @@ div#notebook {
 </pre></div>
 <p>这里做的事情很简单，将基类变为抽象类，从抽象类提取接口，修改所有继承的子类来满足这一关系。稍微的，我们分离了部分类，放到不同文件中。</p>
 <p>这种方式提供了清晰的API接口，但是在实际情况下，我们在很多情况下很难修改我们使用的包，比如，如果包并非我们创建而，那么我们就要使用另一种方法来创造接口，这称之为<code>适配器</code>模式，在滤波器类中将看到其如何工作的：</p>
-<div class="highlight"><pre><span></span><span class="o">/</span><span class="n">FilterProcessor</span><span class="o">.</span><span class="na">java</span>
+<div class="highlight"><pre><span></span><span class="o">/</span><span class="n">LowPass</span><span class="o">.</span><span class="na">java</span> <span class="n">真实的非标准接口实现</span>
+<span class="kn">package</span> <span class="nn">inter.filter</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LowPass</span> <span class="kd">extends</span> <span class="n">Filter</span> <span class="o">{</span>
+    <span class="kt">double</span> <span class="n">cutoff</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">LowPass</span><span class="o">(</span><span class="kt">double</span> <span class="n">cutoff</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">cutoff</span> <span class="o">=</span> <span class="n">cutoff</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">Waveform</span> <span class="nf">process</span><span class="o">(</span><span class="n">Waveform</span> <span class="n">input</span><span class="o">){</span>
+        <span class="k">return</span> <span class="n">input</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="o">/</span><span class="n">FilterProcessor</span><span class="o">.</span><span class="na">java</span> <span class="n">用于将非标准实现协调到标准接口的适配器</span>
 <span class="kn">package</span> <span class="nn">inter.interfaceprocessor</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">inter.filter.*</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">inter.classprocessor.*</span><span class="o">;</span>
-<span class="kd">class</span> <span class="nc">FilterAdapter</span> <span class="kd">implements</span> <span class="n">Processor</span> <span class="o">{</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FilterAdapter</span> <span class="kd">implements</span> <span class="n">Processor</span> <span class="o">{</span>
     <span class="n">Filter</span> <span class="n">filter</span><span class="o">;</span>
     <span class="kd">public</span> <span class="nf">FilterAdapter</span><span class="o">(</span><span class="n">Filter</span> <span class="n">filter</span><span class="o">){</span>
         <span class="k">this</span><span class="o">.</span><span class="na">filter</span> <span class="o">=</span> <span class="n">filter</span><span class="o">;</span>
@@ -12096,15 +12107,8 @@ div#notebook {
     <span class="kd">public</span> <span class="n">Waveform</span> <span class="nf">process</span><span class="o">(</span><span class="n">Object</span> <span class="n">input</span><span class="o">){</span>
         <span class="k">return</span> <span class="n">filter</span><span class="o">.</span><span class="na">process</span><span class="o">((</span><span class="n">Waveform</span><span class="o">)</span><span class="n">input</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FilterProcessor</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
-        <span class="n">Waveform</span> <span class="n">w</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Waveform</span><span class="o">();</span>
-        <span class="n">Apply</span><span class="o">.</span><span class="na">process</span><span class="o">(</span><span class="k">new</span> <span class="n">FilterAdapter</span><span class="o">(</span><span class="k">new</span> <span class="n">LowPass</span><span class="o">(</span><span class="mf">1.0</span><span class="o">)),</span><span class="n">w</span><span class="o">);</span>
-        <span class="n">Apply</span><span class="o">.</span><span class="na">process</span><span class="o">(</span><span class="k">new</span> <span class="n">FilterAdapter</span><span class="o">(</span><span class="k">new</span> <span class="n">BandPass</span><span class="o">(</span><span class="mf">3.0</span><span class="o">,</span><span class="mf">4.0</span><span class="o">)),</span><span class="n">w</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="o">/</span><span class="n">Apply</span><span class="o">.</span><span class="na">java</span>
+<span class="o">}</span>  
+<span class="o">/</span><span class="n">Apply</span><span class="o">.</span><span class="na">java</span> <span class="n">接口的使用者定义</span>
 <span class="kn">package</span> <span class="nn">inter.classprocessor</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
 <span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
@@ -12114,11 +12118,26 @@ div#notebook {
         <span class="n">print</span><span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">process</span><span class="o">(</span><span class="n">s</span><span class="o">));</span>
     <span class="o">}</span>
 <span class="o">}</span>
+<span class="o">/</span><span class="n">FilterProcessor</span><span class="o">.</span><span class="na">java</span>
+<span class="n">接口使用者的实际调用</span>
+<span class="kn">package</span> <span class="nn">inter.interfaceprocessor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">inter.filter.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">inter.classprocessor.*</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FilterProcessor</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">Waveform</span> <span class="n">w</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Waveform</span><span class="o">();</span>
+        <span class="n">Apply</span><span class="o">.</span><span class="na">process</span><span class="o">(</span><span class="k">new</span> <span class="n">FilterAdapter</span><span class="o">(</span><span class="k">new</span> <span class="n">LowPass</span><span class="o">(</span><span class="mf">1.0</span><span class="o">)),</span><span class="n">w</span><span class="o">);</span>
+        <span class="n">Apply</span><span class="o">.</span><span class="na">process</span><span class="o">(</span><span class="k">new</span> <span class="n">FilterAdapter</span><span class="o">(</span><span class="k">new</span> <span class="n">BandPass</span><span class="o">(</span><span class="mf">3.0</span><span class="o">,</span><span class="mf">4.0</span><span class="o">)),</span><span class="n">w</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="n">由于Apply</span><span class="o">.</span><span class="na">process和FilterAdapter之间有标准接口通信</span><span class="err">，</span><span class="n">所以可以调用</span><span class="err">。</span>
+<span class="n">由于在FilterAdapter内部我们对于标准接口调用了非标准接口的实现方法</span><span class="err">，</span><span class="n">因此可以将LowPass传给适配器</span><span class="err">，</span><span class="n">由适配器代理这个实现</span><span class="err">。</span>
 </pre></div>
-<p>这个 <code>.java</code> 文件提供了一个使用 <code>Processor</code> 接口的 <code>FilterAdapter</code> 类。因为我们不能更改 <code>inter.filter</code> 类的任何东西。因此，这里通过创造了一个 <code>FilterAdapter</code> 来作为 <code>Processer</code> 接口的类，在这里实现了 <code>Processer</code> 的方法，注意，这里并不是一个抽象类，因为我们无法更改包的内容，所以无法修改包内类的继承关系，因此这里用一个真实的实现来代替抽象类。</p>
-<p>这个适配器用来干嘛呢？其提供了一个 <code>Apply.process() 接口调用</code> 和 <code>不可更改结构的继承类LowPass</code> 之间的桥梁。 因为 <code>Apply.process()</code> 现在是和 <code>Processer</code> 接口通信的，而我们在 <code>FilterAdapter</code> 中实现了这个接口，因此，只需要这个适配器输出可供<code>Apply.process</code>处理的行为即可。</p>
-<p>适配器是一种接口的认证，其目的在于将输入按照接口输出标准调用，并且产生合适行为。在这里，对于接口的<code>process()</code> 方法，接口标准为Object方法，而我们需要滤波器类做的就是，使用这个 process 调用时，传入 Waveform 类，产生 filter 的 process 行为，因此在适配器中实现即可。</p>
-<p>Apply 是一组利用接口进行的指令，其调用了接口的方法。而为了使滤波器类方法被正确调用，在适配器中需要满足接口认证的情况下，对每种调用设置合适的实现。这样，通过 Apply 就可以控制滤波器类，而唯一需要的仅仅是一个接口和适配器/抽象类和稍微的修改。</p>
+<p>这个 <code>.java</code> 文件提供了一个使用 <code>Processor</code> 接口的 <code>FilterAdapter</code> 类。因为我们不能更改 <code>inter.filter</code> 包的任何东西。因此，这里通过创造了一个 <code>FilterAdapter</code> 来协调我们制定的 <code>Processor</code> 接口和 <code>inter.filter</code> 包中产生的行为，注意，这里并不是一个抽象类，因为我们无法更改包的内容，所以无法修改包内类的继承关系，因此这里用一个真实的实现来代替抽象类。而这里的实现并非是对于接口的行为实现，而是连接到了非标准接口的包的实现中，因此称之为适配器（其本身不仅仅是管道，其检查内容，然后输出到不同的位置来实现，像是代理商一样，本身并不生产产品）。</p>
+<p>这个适配器提供了一个 <code>Apply.process() 接口调用</code> 和 <code>不可更改结构的继承类的类似接口实现</code> 之间的桥梁。 因为 <code>Apply.process()</code> 现在是和 <code>Processer</code> 接口通信的，而我们在 <code>FilterAdapter</code> 中使用和 <code>Processer</code> 接口一样的方法定义，而在“伪”抽象类的方法体内使用代码来调用 <code>inner.filter</code> 中各种继承类的实现方法，从而导致这个接口和这个包里实现的连通。</p>
+<p><strong>一个包的使命：</strong> 所有的编写较好的包可以看做是对一组固定接口的良好实现，作者通过不断的继承类产生差异化的行为，用户通过某种途径设置方法头，调用同一套由基类继承的方法体，这些不同的方法头会发生动态绑定，从而链接到不同的方法体中的不同行为策略，从而完成复杂的对象交互和行为。</p>
+<p>现在因为包不可修改，而基类提供的API和接口API不同，所以在这两者之间需要有一个代理和适配。适配器就是通过将基类的API和接口API结合起来而工作和得名的。其使用<code>implements</code>字段说明其方法的名称必须和接口API相同，而在每个方法的方法体zho</p>
+<p><strong>总而言之，可以将这个适配器看作是一个需要传入非标准接口实现的提供标准接口的代理类。</strong></p>
 
 </div>
 </div>
