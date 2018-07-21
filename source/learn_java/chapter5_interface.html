@@ -12150,6 +12150,140 @@ div#notebook {
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="&#22810;&#37325;&#32487;&#25215;&#21644;&#25509;&#21475;&#25193;&#23637;">&#22810;&#37325;&#32487;&#25215;&#21644;&#25509;&#21475;&#25193;&#23637;<a class="anchor-link" href="#&#22810;&#37325;&#32487;&#25215;&#21644;&#25509;&#21475;&#25193;&#23637;">&#182;</a></h1><p>区别于C++的多重继承，Java只允许多重继承对于每种方法仅有一个具体实现。多重继承主要用作处理这样的问题：<code>如果x是a，又是b，还是c</code>,那么为了使用a或者b或者c的接口，需要对x使用多重继承，像这样：<code>class x implement a, b, c {}</code></p>
+<div class="highlight"><pre><span></span><span class="o">/</span><span class="n">Adventure</span><span class="o">.</span><span class="na">java</span>
+<span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
+
+<span class="kd">interface</span> <span class="nc">CanFight</span> <span class="o">{</span> <span class="kt">void</span> <span class="nf">fight</span><span class="o">();}</span>
+<span class="kd">interface</span> <span class="nc">CanFly</span> <span class="o">{</span> <span class="kt">void</span> <span class="nf">fly</span><span class="o">();}</span>
+<span class="c1">//接口也可以继承，如果CanSwing被implement，那么CanFly中的方法定义也必须被满足</span>
+<span class="kd">interface</span> <span class="nc">CanSwing</span> <span class="kd">extends</span> <span class="n">CanFly</span> <span class="o">{</span> <span class="kt">void</span> <span class="nf">swing</span><span class="o">();}</span>
+<span class="kd">interface</span> <span class="nc">CanSwim</span> <span class="o">{</span> <span class="kt">void</span> <span class="nf">swim</span><span class="o">();}</span>
+<span class="kd">interface</span> <span class="nc">CanClimb</span> <span class="o">{</span> <span class="kt">void</span> <span class="nf">climb</span><span class="o">();}</span>
+<span class="c1">//骚操作，如果继承了这个接口，则这个接口扩展的任何借口都必须被实现。</span>
+<span class="kd">interface</span> <span class="nc">CanDoAll</span> <span class="kd">extends</span> <span class="n">CanSwing</span><span class="o">,</span> <span class="n">CanSwim</span><span class="o">,</span> <span class="n">CanClimb</span> <span class="o">{}</span>    
+
+<span class="kd">class</span> <span class="nc">Character</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">fight</span><span class="o">()</span> <span class="o">{</span> <span class="n">print</span><span class="o">(</span><span class="s">&quot;Character is fighting...&quot;</span><span class="o">);</span> <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Heros</span> <span class="kd">extends</span> <span class="n">Character</span> <span class="kd">implements</span> <span class="n">CanFight</span><span class="o">,</span> <span class="n">CanDoAll</span><span class="o">{</span>
+    <span class="c1">//可以调用多次implements，extends必须放在前面</span>
+    <span class="c1">//接口的实现可以放在基类中实现即可，不一定需要放在这个类</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">climb</span><span class="o">()</span> <span class="o">{</span> <span class="n">print</span><span class="o">(</span><span class="s">&quot;Heros can climb&quot;</span><span class="o">);</span> <span class="o">}</span>     
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">fly</span><span class="o">()</span> <span class="o">{</span> <span class="n">print</span><span class="o">(</span><span class="s">&quot;Heros can fly&quot;</span><span class="o">);</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">swing</span><span class="o">()</span> <span class="o">{</span> <span class="n">print</span><span class="o">(</span><span class="s">&quot;Heros can swing&quot;</span><span class="o">);</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">swim</span><span class="o">()</span> <span class="o">{</span> <span class="n">print</span><span class="o">(</span><span class="s">&quot;Heros can swim&quot;</span><span class="o">);</span> <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Adventure</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">CanFight</span> <span class="n">f</span><span class="o">){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;By CanFight interface&quot;</span><span class="o">);</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">b</span><span class="o">(</span><span class="n">CanSwim</span> <span class="n">s</span><span class="o">){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;By CanSwim interface&quot;</span><span class="o">);</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">c</span><span class="o">(</span><span class="n">CanFly</span> <span class="n">y</span><span class="o">){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;By Canfly interface&quot;</span><span class="o">);</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">d</span><span class="o">(</span><span class="n">CanClimb</span> <span class="n">d</span><span class="o">){</span>
+        <span class="n">print</span><span class="o">(</span><span class="s">&quot;By CanClimb interface&quot;</span><span class="o">);</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="c1">//多继承解决了x即是a，又是b，还是c的问题。</span>
+        <span class="c1">//这样的话，我们就可以让这个类被一个a的接口、b的接口和c的接口所使用了</span>
+        <span class="c1">//自动向上转型，这是使用接口进行多继承的重要原因</span>
+        <span class="n">Heros</span> <span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Heros</span><span class="o">();</span>
+        <span class="n">a</span><span class="o">(</span><span class="n">x</span><span class="o">);</span> <span class="n">b</span><span class="o">(</span><span class="n">x</span><span class="o">);</span> <span class="n">c</span><span class="o">(</span><span class="n">x</span><span class="o">);</span> <span class="n">d</span><span class="o">(</span><span class="n">x</span><span class="o">);</span> <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<p>注意上面这个例子，<code>interface</code> 可以存在继承关系，如果继承，那么继承者被<code>implement</code>后需要实现其和其父类的所有方法定义。</p>
+<p>这个例子是一个典型的接口继承，在 <code>Heros</code> 中我们看到了其实现，在 <code>Adventure</code> 中我们看到了客户端代码，也就是调用接口的代码，可以看到，这里的调用返回了 <code>Heros</code> 实现的方法体内的代码。</p>
+<p><strong>多重继承的原因</strong>：存在多重继承的原因是，为了向上转型为基类型，或者说：我们为了使用这些被继承接口的方法，所以要对一个即是a，又是b，还是c的类进行多重继承，只有这样的话，我们才可以对这个类在客户端使用a或者b或者c接口的方法。</p>
+<p><strong>多重继承时的方法名字冲突问题</strong>：注意，如果要组合多个接口，并且进行继承，那么确保这些被组合的接口中方法名字不同是很重要的，Java对此无能为力，也就是无法进行区分，因为只以来方法名和其传入参数进行区分。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="&#36866;&#37197;&#25509;&#21475;">&#36866;&#37197;&#25509;&#21475;<a class="anchor-link" href="#&#36866;&#37197;&#25509;&#21475;">&#182;</a></h1><p>在这一部分展示了真实世界中的一些例子，大体上和之前所讲的“完全解耦”部分很类似。不过这里关注的重点是利用现有的接口去标准化一个类，让它具有标准的接口以便之后调用。完全解耦部分更多的是强调要适配接口以在客户端中使用一份代码控制两个不同接口de</p>
+<h2 id="&#30452;&#25509;&#26500;&#36896;&#31867;&#36827;&#34892;&#36866;&#37197;">&#30452;&#25509;&#26500;&#36896;&#31867;&#36827;&#34892;&#36866;&#37197;<a class="anchor-link" href="#&#30452;&#25509;&#26500;&#36896;&#31867;&#36827;&#34892;&#36866;&#37197;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.nio.*</span><span class="o">;</span> <span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RandomWords</span> <span class="kd">implements</span> <span class="n">Readable</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Random</span> <span class="n">rand</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">char</span><span class="o">[]</span> <span class="n">capitals</span> <span class="o">=</span> <span class="s">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">char</span><span class="o">[]</span> <span class="n">lower</span> <span class="o">=</span> <span class="s">&quot;abcdefghijklmnopqrstuvwxyz&quot;</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">char</span><span class="o">[]</span> <span class="n">vowels</span> <span class="o">=</span> <span class="s">&quot;aeiou&quot;</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">count</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">RandomWords</span><span class="o">(</span><span class="kt">int</span> <span class="n">c</span><span class="o">){</span> <span class="k">this</span><span class="o">.</span><span class="na">count</span> <span class="o">=</span> <span class="n">c</span><span class="o">;</span> <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">read</span><span class="o">(</span><span class="n">CharBuffer</span> <span class="n">cb</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(--</span><span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="n">cb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;-&gt;&quot;</span><span class="o">);</span>
+        <span class="n">cb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">capitals</span><span class="o">[</span><span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="n">capitals</span><span class="o">.</span><span class="na">length</span><span class="o">)]);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">cb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">vowels</span><span class="o">[</span><span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="n">vowels</span><span class="o">.</span><span class="na">length</span><span class="o">)]);</span>
+            <span class="n">cb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">lower</span><span class="o">[</span><span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="n">lower</span><span class="o">.</span><span class="na">length</span><span class="o">)]);</span>
+        <span class="o">}</span>
+        <span class="n">cb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot; &quot;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="mi">12</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">RandomWords</span> <span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RandomWords</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+        <span class="n">Scanner</span> <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Scanner</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">hasNext</span><span class="o">()){</span>
+            <span class="n">print</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">next</span><span class="o">());</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="o">-&gt;</span><span class="n">Wunurufeg</span>
+<span class="o">-&gt;</span><span class="n">Wihoyajor</span>
+<span class="o">...</span>
+</pre></div>
+<p>如上是一段使用了 <code>Readable</code> 接口的我们自己的类。首先，对于 <code>Readable</code> 接口，必须提供一个 <code>read(CharBuffer cb)</code> 的实现，在这个实现中，如果读取完毕，则返回-1，否则返回读取的数字长度。其接受类型为字符串。对于 <code>Scanner</code> 类而言，其可以接受一个 Readable 的对象，然后对其进行读取，有 <code>hasNext() next()</code> 方法，和读取文本流很像，每次读取，读取到空格停顿，调用下一个 next 方法继续读取。</p>
+<p>我们实现了自己的 Readable 接口，在 RandomWords 中。这样的话，就可以调用 Scanner 传递我们自己的类来使用其内部的方法了。</p>
+<h2 id="&#20351;&#29992;&#36866;&#37197;&#22120;&#36827;&#34892;&#36866;&#37197;">&#20351;&#29992;&#36866;&#37197;&#22120;&#36827;&#34892;&#36866;&#37197;<a class="anchor-link" href="#&#20351;&#29992;&#36866;&#37197;&#22120;&#36827;&#34892;&#36866;&#37197;">&#182;</a></h2><p>有些时候，我们无法对一个现有的类进行修改，那么我们可以像在之前做的那样，构造一个适配器，如下：</p>
+<div class="highlight"><pre><span></span><span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.nio.CharBuffer</span><span class="o">;</span> <span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+<span class="c1">//用来产生浮点数的一个我们不可更改的类</span>
+<span class="kd">class</span> <span class="nc">RandomDouble</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Random</span> <span class="n">rand</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">(</span><span class="mi">233</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">next</span><span class="o">(){</span> <span class="k">return</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextDouble</span><span class="o">();}</span>
+<span class="o">}</span>
+<span class="cm">/**</span>
+<span class="cm"> * 上述类的一个适配器，其为了实现Readable接口，继承了RandomDouble类</span>
+<span class="cm"> * 这和之前我们讲的适配器不同，那里接受了一个对象，在自己的标准方法中，对对象进行了操纵</span>
+<span class="cm"> * 而在这里，没有接收对象，反而是从继承获取了一个非标准方法，而在自己标准方法中对此进行了操纵</span>
+<span class="cm"> * 它们本质上是相同的，即在自身的标准方法中接收或者继承来获取非标准的API，然后进行操纵，从而</span>
+<span class="cm"> * 返回接口期望的行为*/</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AdaptedRandomDouble</span> <span class="kd">extends</span> <span class="n">RandomDouble</span> <span class="kd">implements</span> <span class="n">Readable</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">count</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">AdaptedRandomDouble</span><span class="o">(</span><span class="kt">int</span> <span class="n">count</span><span class="o">){</span><span class="k">this</span><span class="o">.</span><span class="na">count</span> <span class="o">=</span> <span class="n">count</span><span class="o">;}</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">read</span><span class="o">(</span><span class="n">CharBuffer</span> <span class="n">cb</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(--</span><span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">Double</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">next</span><span class="o">())</span> <span class="o">+</span> <span class="s">&quot;xxx &quot;</span><span class="o">;</span>
+        <span class="c1">//cb必须接受char类型字符，使用空格隔开告诉cb这一次读结束</span>
+        <span class="c1">//不论有没有空格，read()只执行一次，不过其只保存在Scanner中</span>
+        <span class="c1">// 如果有空格，则调用read之后，Scanner会多次调用next()去读。</span>
+        <span class="n">cb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">AdaptedRandomDouble</span> <span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AdaptedRandomDouble</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+        <span class="n">Scanner</span> <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Scanner</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">hasNext</span><span class="o">()){</span>
+            <span class="n">print</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">next</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; &quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<p>和之前的那个适配器在构造的时候包含了状态不同，这里的适配器使用了继承的技术，因为我们只用继承 <code>next()</code> 方法即可，而不用传递和设置状态信息。其余部分都很相似，这个适配器的目的在于，将Readable接口和那个不可更改的类的接口连接起来，这里的旧API指的是 <code>next()</code> 方法，注意我们在 <code>read</code>这个标准API实现中对 <code>next()</code> 方法的调用和适配。</p>
+
+</div>
+</div>
+</div>
     </div>
   </div>
 </body>
