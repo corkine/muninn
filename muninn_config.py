@@ -113,6 +113,7 @@ COURSE_INFO = {
             ("初始化和清理","0","chapter2_init_finalize.html","w2"),
             ("权限、类重用","0","chapter3_permission.html","w3"),
             ("多态","0","chapter4_method.html","w4"),
+            ("接口","0","chapter5_interface.html","w5"),
         ],
     },
     "cpp":
