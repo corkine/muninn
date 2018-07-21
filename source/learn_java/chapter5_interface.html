@@ -11948,7 +11948,9 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#23436;&#20840;&#35299;&#32806;">&#23436;&#20840;&#35299;&#32806;<a class="anchor-link" href="#&#23436;&#20840;&#35299;&#32806;">&#182;</a></h1><p>如下的例子讲展示为什么需要使用接口+抽象类这样的OOP结构：</p>
+<h1 id="&#23436;&#20840;&#35299;&#32806;&#65306;&#37325;&#26500;&#31867;&#25110;&#32773;&#20351;&#29992;&#36866;&#37197;&#22120;">&#23436;&#20840;&#35299;&#32806;&#65306;&#37325;&#26500;&#31867;&#25110;&#32773;&#20351;&#29992;&#36866;&#37197;&#22120;<a class="anchor-link" href="#&#23436;&#20840;&#35299;&#32806;&#65306;&#37325;&#26500;&#31867;&#25110;&#32773;&#20351;&#29992;&#36866;&#37197;&#22120;">&#182;</a></h1><p>在这一部分将要讲解，对于不同包由继承所提供的API和状态保存的使用中发生的冲突和协调的问题。即<strong>如何在客户端中使用一套API来调用提供不同API的不同包？</strong>对于这个问题的答案有两个，重构其中之一，或者对某个包使用适配器。下面的例子讲首先介绍为什么我们会遇到这种情况，之后会分别介绍这两种方法。</p>
+<h2 id="&#23436;&#20840;&#35299;&#32806;&#38382;&#39064;">&#23436;&#20840;&#35299;&#32806;&#38382;&#39064;<a class="anchor-link" href="#&#23436;&#20840;&#35299;&#32806;&#38382;&#39064;">&#182;</a></h2><p>完全解耦想要做到的就是——在使用多个包的时候，不依靠其各自包所提供的不同的由各自基类或者抽象类或者接口产生的API，而是定义一套自己的API，然后使用自己的这套API来粘合不同包的API的问题。</p>
+<p>从一个最基本的继承的包开始谈起：</p>
 <div class="highlight"><pre><span></span><span class="o">/</span><span class="n">Apply</span><span class="o">.</span><span class="na">java</span>
 <span class="kn">package</span> <span class="nn">inter.classprocessor</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
@@ -12029,7 +12031,7 @@ div#notebook {
 <p>这也是一个典型的继承体，基类<code>Filter</code>导出的<code>BandPass和LowPass</code>类。以及用于这个继承体接受参数的辅助类<code>Waveform</code>类。区别是，这里模拟了真实的Java包结构，每个类都声明为 public，并且放置在不同文件中。</p>
 <p>注意这个 <code>Filter</code>，它看上去好像和 <code>Processer</code> 具有相同的接口元素（名称）。但是它们被制造出来压根没有想过需要使用对方的类，它们可以看作完全不相干（除了凑巧长得像）的包。那么，是否可以将 <code>Filter</code> 应用到 <code>Apply.process()</code> 类呢？</p>
 <p>为什么我们会想要这么做？很简单，因为类的继承结构（下称继承体）总是放在包中的，而这些在一个类中实例化一个类结构并且组合使用的方式是发生在应用中的，现在我们有了两个包：<code>Processer</code>和<code>Filter</code>,那么，自然想要在应用层面思考，如果它们拥有相似的接口，那么能不能共用这个 <code>Apple.process()</code> 方法呢？</p>
-<p>要做到这一点，我们需要对包中的继承结构进行稍微变化，没错，从基类中抽象出抽象类和接口。首先对<code>Processer</code>动刀：</p>
+<h2 id="&#37325;&#26500;&#31867;&#20197;&#32479;&#19968;API">&#37325;&#26500;&#31867;&#20197;&#32479;&#19968;API<a class="anchor-link" href="#&#37325;&#26500;&#31867;&#20197;&#32479;&#19968;API">&#182;</a></h2><p>要做到这一点，我们需要对包中的继承结构进行稍微变化，没错，从基类中抽象出抽象类和接口。首先对<code>Processer</code>动刀：</p>
 <div class="highlight"><pre><span></span><span class="o">/</span><span class="n">Processor</span><span class="o">.</span><span class="na">java</span>
 <span class="kn">package</span> <span class="nn">inter.classprocessor</span><span class="o">;</span>
 <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Processor</span> <span class="o">{</span>
@@ -12082,7 +12084,7 @@ div#notebook {
 <span class="o">}</span>
 </pre></div>
 <p>这里做的事情很简单，将基类变为抽象类，从抽象类提取接口，修改所有继承的子类来满足这一关系。稍微的，我们分离了部分类，放到不同文件中。</p>
-<p>这种方式提供了清晰的API接口，但是在实际情况下，我们在很多情况下很难修改我们使用的包，比如，如果包并非我们创建而，那么我们就要使用另一种方法来创造接口，这称之为<code>适配器</code>模式，在滤波器类中将看到其如何工作的：</p>
+<h2 id="&#20351;&#29992;&#36866;&#37197;&#22120;&#32479;&#19968;API">&#20351;&#29992;&#36866;&#37197;&#22120;&#32479;&#19968;API<a class="anchor-link" href="#&#20351;&#29992;&#36866;&#37197;&#22120;&#32479;&#19968;API">&#182;</a></h2><p>这种方式提供了清晰的API接口，但是在实际情况下，我们在很多情况下很难修改我们使用的包，比如，如果包并非我们创建而，那么我们就要使用另一种方法来创造接口，这称之为<code>适配器</code>模式，在滤波器类中将看到其如何工作的：</p>
 <div class="highlight"><pre><span></span><span class="o">/</span><span class="n">LowPass</span><span class="o">.</span><span class="na">java</span> <span class="n">真实的非标准接口实现</span>
 <span class="kn">package</span> <span class="nn">inter.filter</span><span class="o">;</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">LowPass</span> <span class="kd">extends</span> <span class="n">Filter</span> <span class="o">{</span>
@@ -12133,11 +12135,17 @@ div#notebook {
 <span class="n">由于Apply</span><span class="o">.</span><span class="na">process和FilterAdapter之间有标准接口通信</span><span class="err">，</span><span class="n">所以可以调用</span><span class="err">。</span>
 <span class="n">由于在FilterAdapter内部我们对于标准接口调用了非标准接口的实现方法</span><span class="err">，</span><span class="n">因此可以将LowPass传给适配器</span><span class="err">，</span><span class="n">由适配器代理这个实现</span><span class="err">。</span>
 </pre></div>
+<p><strong>适配器问题的由来和概要：</strong></p>
 <p>这个 <code>.java</code> 文件提供了一个使用 <code>Processor</code> 接口的 <code>FilterAdapter</code> 类。因为我们不能更改 <code>inter.filter</code> 包的任何东西。因此，这里通过创造了一个 <code>FilterAdapter</code> 来协调我们制定的 <code>Processor</code> 接口和 <code>inter.filter</code> 包中产生的行为，注意，这里并不是一个抽象类，因为我们无法更改包的内容，所以无法修改包内类的继承关系，因此这里用一个真实的实现来代替抽象类。而这里的实现并非是对于接口的行为实现，而是连接到了非标准接口的包的实现中，因此称之为适配器（其本身不仅仅是管道，其检查内容，然后输出到不同的位置来实现，像是代理商一样，本身并不生产产品）。</p>
-<p>这个适配器提供了一个 <code>Apply.process() 接口调用</code> 和 <code>不可更改结构的继承类的类似接口实现</code> 之间的桥梁。 因为 <code>Apply.process()</code> 现在是和 <code>Processer</code> 接口通信的，而我们在 <code>FilterAdapter</code> 中使用和 <code>Processer</code> 接口一样的方法定义，而在“伪”抽象类的方法体内使用代码来调用 <code>inner.filter</code> 中各种继承类的实现方法，从而导致这个接口和这个包里实现的连通。</p>
-<p><strong>一个包的使命：</strong> 所有的编写较好的包可以看做是对一组固定接口的良好实现，作者通过不断的继承类产生差异化的行为，用户通过某种途径设置方法头，调用同一套由基类继承的方法体，这些不同的方法头会发生动态绑定，从而链接到不同的方法体中的不同行为策略，从而完成复杂的对象交互和行为。</p>
-<p>现在因为包不可修改，而基类提供的API和接口API不同，所以在这两者之间需要有一个代理和适配。适配器就是通过将基类的API和接口API结合起来而工作和得名的。其使用<code>implements</code>字段说明其方法的名称必须和接口API相同，而在每个方法的方法体zho</p>
-<p><strong>总而言之，可以将这个适配器看作是一个需要传入非标准接口实现的提供标准接口的代理类。</strong></p>
+<p>这个适配器提供了一个 <code>Apply.process() 接口调用</code> 和 <code>不可更改结构的继承类的类似接口实现</code> 之间的桥梁。 因为 <code>Apply.process()</code> 现在是和 <code>Processer</code> 接口通信的，而我们在 <code>FilterAdapter</code> 中使用和 <code>Processer</code> 接口一样的方法定义，而在“伪”抽象类的方法体内使用代码来调用 <code>inner.filter</code> 中各种继承类的实现方法（非标准API），从而导致这个接口和这个包里实现的连通。</p>
+<p><strong>一个包的使命：</strong></p>
+<p>所有的编写较好的包可以看做是对一组固定接口的良好实现，作者通过不断的继承类产生差异化的行为，用户通过某种途径（一般是初始化一个对象）设置方法头/状态，调用同一套由基类继承的方法体，这些不同的方法头会发生动态绑定，从而链接到不同的方法体中的不同行为策略，从而完成复杂的对象交互和行为。对于一个包而言，最重要的是<strong>构造对象而带来的状态存留</strong>和<strong>由于多态提供的一套API的调用</strong>。</p>
+<p><strong>当包不可修改且其提供的接口不符合标准：</strong></p>
+<p>现在因为包不可修改，而基类提供的API和接口API不同，所以在这两者之间需要有一个代理和适配。适配器就是通过将基类的API和接口API结合起来而工作和得名的。其使用<code>implements</code>字段说明其方法的名称必须和接口API相同，而在每个方法的方法体中，其调用之前基类的API，用来规定在这种接口API调用时内部基类所发生的事情。因此，可以将适配器看作是一个基类的代理类。</p>
+<p><strong>举个例子：</strong></p>
+<p>打个比方，这就好比一个由220V输入（标准接口）的，可以有80V输出、100V输出、130V输出、5V输出（不同电压的导出类）的电源适配器，我们需要对其传递一个状态（构造包中某个导出类的对象），然后使用不标准API和其相连（比如5V的数据线，连接到其输出端，这套API就是Java提供的多态的基类的方法，其会在不同状态下切换到不同方法体执行不同策略），另一端是220V标准端口，因此就完成了适配。而当我们更改状态时，这边由于使用了动态绑定，所以会自动切换到对应电压的输出数据线上。</p>
+<p><strong>一个良好实践实例：</strong></p>
+<p>现在我们要使用这个包，于是需要传递一个状态过去，对于这个例子而言，本来这个包需要使用 <code>Filter x = new LowPass(1.0); Waveform w = new Waveform();</code> 来设置一个状态，使用<code>x.process(w)</code> 这个API来操纵对象。 这样，而有了适配器后， 我们直接将设置状态这一部在构造适配器时添加进去，之后标准API的 <code>process()</code> 方法来调用 <code>x.process(w)</code> 这个内部实现从而完成适配。</p>
 
 </div>
 </div>
