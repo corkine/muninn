@@ -114,6 +114,7 @@ COURSE_INFO = {
             ("权限、类重用","0","chapter3_permission.html","w3"),
             ("多态","0","chapter4_method.html","w4"),
             ("接口","0","chapter5_interface.html","w5"),
+            ("内部类","0","chapter6_innerclass.html","w6"),
         ],
     },
     "cpp":
