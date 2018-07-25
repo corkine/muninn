@@ -115,6 +115,7 @@ COURSE_INFO = {
             ("多态","0","chapter4_method.html","w4"),
             ("接口","0","chapter5_interface.html","w5"),
             ("内部类","0","chapter6_innerclass.html","w6"),
+            ("容器","0","chapter7_container.html","w7"),
         ],
     },
     "cpp":
