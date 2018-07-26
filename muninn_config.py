@@ -116,6 +116,7 @@ COURSE_INFO = {
             ("接口","0","chapter5_interface.html","w5"),
             ("内部类","0","chapter6_innerclass.html","w6"),
             ("容器","0","chapter7_container.html","w7"),
+            ("异常","0","chapter8_exception.html","w8"),
         ],
     },
     "cpp":
