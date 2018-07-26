@@ -117,6 +117,7 @@ COURSE_INFO = {
             ("内部类","0","chapter6_innerclass.html","w6"),
             ("容器","0","chapter7_container.html","w7"),
             ("异常","0","chapter8_exception.html","w8"),
+            ("字符串","0","chapter9_string.html","w9"),
         ],
     },
     "cpp":
