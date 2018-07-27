@@ -17,15 +17,15 @@ JUPYTER_NOTEBOOK_ROOT_FOLDER = "/root/.jupyter"
 
 HTML_DST_FOLDER = "source"
 
-COURSE_HEAD = ["pr1","mt","introc","cst","langc","cpp","java","mysql","django","visual1","ml1"]
+COURSE_HEAD = ["mt","pr1","pandas","plot","sklearn","matlab","introc","cst","langc","cpp","java","js","python","mysql","django","visual1","ml1"]
 #for debug
 # COURSE_HEAD = ["mt","c3"]
 
 COURSE_INFO = {
     "pr1":
     {
-        "show_menu_name_1st":"Probability",
-        "show_menu_name_2st":None,
+        "show_menu_name_1st":"Data Science",
+        "show_menu_name_2st":"Probability",
         "2st_addr":None,
         "address":"book_learn_stats",
         "id":"pr1",
@@ -35,6 +35,46 @@ COURSE_INFO = {
             ("离散分布模型","0.8","Week4_PMF_CDF.html","w4"),
             ("连续分布模型","0","week5.html","w5"),
             ("连续分布期望值","0","week6.html","w6"),
+        ],
+    },
+    "pandas":
+    {
+        "show_menu_name_1st":"Data Science",
+        "show_menu_name_2st":"Pandas & Numpy",
+        "2st_addr":None,
+        "address":"book_learn_stats",
+        "id":"pandas",
+        "chapter_list":[
+        ],
+    },
+    "plot":
+    {
+        "show_menu_name_1st":"Data Science",
+        "show_menu_name_2st":"Plot with Matplotlib",
+        "2st_addr":None,
+        "address":"book_learn_stats",
+        "id":"plot",
+        "chapter_list":[
+        ],
+    },
+    "sklearn":
+    {
+        "show_menu_name_1st":"Data Science",
+        "show_menu_name_2st":"SKlearn",
+        "2st_addr":None,
+        "address":"book_learn_stats",
+        "id":"sklearn",
+        "chapter_list":[
+        ],
+    },
+    "matlab":
+    {
+        "show_menu_name_1st":"Data Science",
+        "show_menu_name_2st":"MATLAB & PTB",
+        "2st_addr":None,
+        "address":"book_learn_stats",
+        "id":"matlab",
+        "chapter_list":[
         ],
     },
     "mt":
@@ -101,6 +141,16 @@ COURSE_INFO = {
             
         ],
     },
+    "cpp":
+    {
+        "show_menu_name_1st":"Computer Science",
+        "show_menu_name_2st":"C++ Primer",
+        "2st_addr":None,
+        "2st_addr":"读书笔记",
+        "address":"learn_c",
+        "id":"cpp",
+        "chapter_list":[],
+    },
     "java":
     {
         "show_menu_name_1st":"Computer Science",
@@ -120,14 +170,24 @@ COURSE_INFO = {
             ("字符串","0","chapter9_string.html","w9"),
         ],
     },
-    "cpp":
+    "js":
     {
         "show_menu_name_1st":"Computer Science",
-        "show_menu_name_2st":"C++ Primer",
+        "show_menu_name_2st":"JavaScript & Web",
         "2st_addr":None,
         "2st_addr":"读书笔记",
         "address":"learn_c",
-        "id":"cpp",
+        "id":"js",
+        "chapter_list":[],
+    },
+    "python":
+    {
+        "show_menu_name_1st":"Computer Science",
+        "show_menu_name_2st":"Advanced Python",
+        "2st_addr":None,
+        "2st_addr":"读书笔记",
+        "address":"learn_c",
+        "id":"python",
         "chapter_list":[],
     },
     "mysql":
