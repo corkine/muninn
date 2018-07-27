@@ -17,7 +17,7 @@ JUPYTER_NOTEBOOK_ROOT_FOLDER = "/root/.jupyter"
 
 HTML_DST_FOLDER = "source"
 
-COURSE_HEAD = ["pr1","mt","introc","cst","langc","cpp","java","visual1","ml1"]
+COURSE_HEAD = ["pr1","mt","introc","cst","langc","cpp","java","mysql","visual1","ml1"]
 #for debug
 # COURSE_HEAD = ["mt","c3"]
 
@@ -129,6 +129,17 @@ COURSE_INFO = {
         "address":"learn_c",
         "id":"cpp",
         "chapter_list":[],
+    },
+    "mysql":
+    {
+        "show_menu_name_1st":"Computer Science",
+        "show_menu_name_2st":"Database Usage",
+        "2st_addr":None,
+        "address":"learn_mysql",
+        "id":"mysql",
+        "chapter_list":[
+            ("mysql学习指南","0","book1_mysql_learn_guide.html","b1"),
+        ],
     },
     "visual1":
     {
