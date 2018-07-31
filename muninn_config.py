@@ -170,6 +170,8 @@ COURSE_INFO = {
             ("字符串","0","chapter9_string.html","w9"),
             ("类型信息","0","chapter10_rtti.html","w10"),
             ("泛型","0","chapter11_generics.html","w11"),
+            ("数组","0","chapter12_array.html","w12"),
+            
             
         ],
     },
