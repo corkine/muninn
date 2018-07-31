@@ -12662,6 +12662,74 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#36870;&#21464;-super">&#36870;&#21464; super<a class="anchor-link" href="#&#36870;&#21464;-super">&#182;</a></h2><p>逆变和协变正好相反，如下代码所示，逆变采用 <code>&lt;? super MyClass&gt;</code> 指的是，这个问号可以接受任何来自于 MyClass 及其基类的类型。这就很好的解决了由于协变造成的类型不安全，无法添加到一个协变引用的问题。</p>
+<p>注意，逆变在泛型方法上的应用中，提到了如何利用参数推断将一个元素写入到一个由其基类构成的List中的。</p>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SuperType</span> <span class="o">{</span>
+    <span class="c1">//1、基本逆变：&lt;? super MyClass&gt;</span>
+    <span class="c1">//使用super Fruit 代替extends，含义为：？是由某个类来界定的，Fruit是其上界</span>
+    <span class="c1">//如果这里是 super Apple, 那么只有 Fuji 和 Apple 类型可以add</span>
+    <span class="c1">//这和extends看起来功能相反，extends指的是可以扩充Fruit及其导出类</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">List</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Fruit</span><span class="o">&gt;</span> <span class="n">flist</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="c1">//flist.add(); Error, extends Fruit 类型参数不安全，无法解析传入参数具体类型</span>
+        <span class="n">List</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">Fruit</span><span class="o">&gt;</span> <span class="n">flist2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">Apple</span><span class="o">()));</span>
+        <span class="n">flist2</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Orange</span><span class="o">());</span> <span class="c1">//正确，flist2限定为了Fruit，所有添加的元素都被转型为Fruit</span>
+        <span class="n">List</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">Apple</span><span class="o">&gt;</span> <span class="n">alist</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="n">alist</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Fuji</span><span class="o">());</span>
+        <span class="c1">//alist.add(new Fruit()); //错误，无法将Fruit转化为Apple类。</span>
+    <span class="o">}</span>
+    <span class="c1">//2、逆变在泛型方法中的应用：&lt;? super T&gt;</span>
+    <span class="c1">//注意，不同于&lt;T extends MyClass&gt;，不能使用&lt;T super MyClass&gt;!!!!</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">SuperType2</span> <span class="o">{</span>
+        <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="nf">write</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">,</span> <span class="n">T</span> <span class="n">item</span><span class="o">){</span>
+            <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">item</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">Fruit</span><span class="o">&gt;</span> <span class="n">flist</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">Apple</span><span class="o">&gt;</span> <span class="n">alist</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
+            <span class="n">write</span><span class="o">(</span><span class="n">alist</span><span class="o">,</span><span class="k">new</span> <span class="n">Apple</span><span class="o">());</span> <span class="c1">//T现在为Apple</span>
+            <span class="n">write</span><span class="o">(</span><span class="n">flist</span><span class="o">,</span><span class="k">new</span> <span class="n">Apple</span><span class="o">());</span> <span class="c1">//T现在为Apple</span>
+            <span class="n">write</span><span class="o">(</span><span class="n">flist</span><span class="o">,</span><span class="k">new</span> <span class="n">Orange</span><span class="o">());</span><span class="c1">//T现在为Orange</span>
+            <span class="n">print</span><span class="o">(</span><span class="n">flist</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">getClass</span><span class="o">());</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<h2 id="&#21327;&#21464;&#21644;&#36870;&#21464;&#30340;&#27604;&#36739;">&#21327;&#21464;&#21644;&#36870;&#21464;&#30340;&#27604;&#36739;<a class="anchor-link" href="#&#21327;&#21464;&#21644;&#36870;&#21464;&#30340;&#27604;&#36739;">&#182;</a></h2><p>下面是协变和逆变的一个简单比较。注意，对于逆变而言，因为其接受参数保存更低级的元素，无法安全的向下转型为T，因此返回值为Object。如果要从一个更加泛化的列表中取/放一个特殊元素，使用逆变，反之，使用协变。</p>
+<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">SuperType3</span> <span class="o">{</span>
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Reader</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+        <span class="n">T</span> <span class="nf">getIt</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">item</span><span class="o">){</span>
+            <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">T</span> <span class="nf">getIt2</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">item</span><span class="o">){</span>
+            <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">Object</span> <span class="nf">getIt3</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">item</span><span class="o">){</span>
+            <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="o">}</span><span class="c1">//注意，Super than T，那么不能返回T，只能返回Object</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">Apple</span><span class="o">&gt;</span> <span class="n">alist</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">Apple</span><span class="o">());</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">Fruit</span><span class="o">&gt;</span> <span class="n">flist</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">Apple</span><span class="o">());</span>
+        <span class="n">Reader</span><span class="o">&lt;</span><span class="n">Fruit</span><span class="o">&gt;</span> <span class="n">r</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Reader</span><span class="o">&lt;&gt;();</span>
+        <span class="n">r</span><span class="o">.</span><span class="na">getIt</span><span class="o">(</span><span class="n">flist</span><span class="o">);</span>
+        <span class="c1">//r.getIt(alist); Wrong. Apple can&#39;t cast to Fruit</span>
+        <span class="n">r</span><span class="o">.</span><span class="na">getIt2</span><span class="o">(</span><span class="n">alist</span><span class="o">);</span> <span class="c1">// Right. Apple is extends from Fruit</span>
+
+        <span class="n">Reader</span><span class="o">&lt;</span><span class="n">Apple</span><span class="o">&gt;</span> <span class="n">r2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Reader</span><span class="o">&lt;&gt;();</span>
+        <span class="n">r2</span><span class="o">.</span><span class="na">getIt3</span><span class="o">(</span><span class="n">flist</span><span class="o">);</span> <span class="c1">// Right. Fruit is super than Apple.</span>
+        <span class="n">r2</span><span class="o">.</span><span class="na">getIt3</span><span class="o">(</span><span class="n">alist</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Java-&#27867;&#22411;&#38382;&#39064;&#19968;&#35272;">Java &#27867;&#22411;&#38382;&#39064;&#19968;&#35272;<a class="anchor-link" href="#Java-&#27867;&#22411;&#38382;&#39064;&#19968;&#35272;">&#182;</a></h1><h2 id="&#27867;&#22411;&#19981;&#33021;&#20351;&#29992;&#22522;&#26412;&#31867;&#22411;">&#27867;&#22411;&#19981;&#33021;&#20351;&#29992;&#22522;&#26412;&#31867;&#22411;<a class="anchor-link" href="#&#27867;&#22411;&#19981;&#33021;&#20351;&#29992;&#22522;&#26412;&#31867;&#22411;">&#182;</a></h2><p>泛型不接受基本类型，但是支持自动拆包和封装机制，这可能不算以个问题。</p>
 <div class="highlight"><pre><span></span><span class="c1">//Holder2&lt;int&gt; 错误</span>
 <span class="n">Holder2</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">h</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Holder2</span><span class="o">&lt;&gt;(</span><span class="mi">12</span><span class="o">);</span>
@@ -12733,7 +12801,7 @@ div#notebook {
 <span class="o">}</span>
 </pre></div>
 <p>事实证明，这种状况很少出现。</p>
-<h2 id="&#21160;&#24577;&#31867;&#22411;&#23433;&#20840;">&#21160;&#24577;&#31867;&#22411;&#23433;&#20840;<a class="anchor-link" href="#&#21160;&#24577;&#31867;&#22411;&#23433;&#20840;">&#182;</a></h2><p>在上面例子中，解决办法就是，通过将一个列表通过 checkList 进行检查后，再去添加，这样就不会出现问题。这里可能是一个动态代理实现的。总而言之，也算是Java容器的一个类型安全解决方案。</p>
+<h1 id="&#21160;&#24577;&#31867;&#22411;&#23433;&#20840;">&#21160;&#24577;&#31867;&#22411;&#23433;&#20840;<a class="anchor-link" href="#&#21160;&#24577;&#31867;&#22411;&#23433;&#20840;">&#182;</a></h1><p>在上面例子中，解决办法就是，通过将一个列表通过 checkList 进行检查后，再去添加，这样就不会出现问题。这里可能是一个动态代理实现的。总而言之，也算是Java容器的一个类型安全解决方案。</p>
 
 </div>
 </div>
@@ -12742,7 +12810,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#28508;&#22312;&#31867;&#22411;&#26426;&#21046;">&#28508;&#22312;&#31867;&#22411;&#26426;&#21046;<a class="anchor-link" href="#&#28508;&#22312;&#31867;&#22411;&#26426;&#21046;">&#182;</a></h1><p>C++ 中和Python中有一种叫做潜在类型机制的玩意儿，俗称鸭子类型。如果一个东西看起来像鸭子，叫起来像鸭子，那么就把它当作鸭子处理。区别是，C++在编译期进行检查，而Python则是在运行时抛出错误。Java由于擦除没有这种特性，但是，可以通过以下方式弥补。</p>
+<h1 id="&#28508;&#22312;&#31867;&#22411;&#26426;&#21046;&#30340;&#34917;&#20607;">&#28508;&#22312;&#31867;&#22411;&#26426;&#21046;&#30340;&#34917;&#20607;<a class="anchor-link" href="#&#28508;&#22312;&#31867;&#22411;&#26426;&#21046;&#30340;&#34917;&#20607;">&#182;</a></h1><p>C++ 中和Python中有一种叫做潜在类型机制的玩意儿，俗称鸭子类型。如果一个东西看起来像鸭子，叫起来像鸭子，那么就把它当作鸭子处理。区别是，C++在编译期进行检查，而Python则是在运行时抛出错误。Java由于擦除没有这种特性，但是，可以通过以下方式弥补。</p>
 <p>1、接口</p>
 <p>通过实现一个包含了看起来和听起来的接口，通过泛型方法传递一个协变的泛型，就间接的做到了潜在类型机制能够做到的事情。当然，这样和直接采用接口没有任何区别。</p>
 <div class="highlight"><pre><span></span><span class="kd">interface</span> <span class="nc">MayBe_Duck</span> <span class="o">{</span>
