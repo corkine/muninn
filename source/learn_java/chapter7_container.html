@@ -11776,7 +11776,7 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><span type="title">持有对象</span> | <span type="update">2018-07-24</span> - Version <span type="version">1.2</span></p>
-<p><span type="intro"><p class="card-text">本章主要讲解Java中的容器类以及其使用方法。在第一部分，快速浏览了这些容器类的类属关系，展示了如何利用泛型和接口来实现类型安全易用的容器类，展示了容器类的打印。在第二部分，介绍了常用的 List接口、Iterator接口、LinkedList类、Set接口、使用 LinkedList实现的 Queue 和 Stack 数据结构。之后还提到了 Map 这个稍微特殊的容器。在第三部分，主要讲解了如何继承或者实现容器类的方法——使用迭代器，提到了使用适配或者多重继承来构建多个迭代器接口的方法。</p></span></p>
+<p><span type="intro"><p class="card-text">本章主要讲解Java中的容器类以及其使用方法。在第一部分，快速浏览了这些容器类的类属关系，展示了如何利用泛型和接口来实现类型安全易用的容器类，展示了容器类的打印。在第二部分，介绍了常用的 List接口、Iterator接口、LinkedList类、Set接口、使用 LinkedList实现的 Queue 和 Stack 数据结构。之后还提到了 Map 这个稍微特殊的容器。</p><p class="card-text">在第三部分，主要讲解了使用容器类的几种方法：创建实例或者使用继承 or 实现，以实现 Iterator 和 继承 AbstractMap (实现享元) 为例进行了介绍。在这部分的最后提到了迭代器和数组的关系、Java内部的可选方法等细节问题。</p><p class="card-text">在第四部分，添加和补充了带有泛型的容器高级内容。首先探讨了几种不同的 Set 类型容器，特别提到了 HashSet、SortSet 用于存放自建类的注意事项。探讨了 Map 容器的几个实现：SortedMap 的使用方法、LinkedHashMap 以及LRU算法、WeakHashMap 以及Reference类型工作的原理。探讨了如何重载 hashCode 和 equals 来使用容器存放自有类。最后提到了 Collections 类中实用的静态方法：用于随机、线程安全、类型检查等实用的静态方法。</p></span></p>
 
 </div>
 </div>
@@ -12398,10 +12398,10 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#23481;&#22120;&#20351;&#29992;&#25351;&#21335;">&#23481;&#22120;&#20351;&#29992;&#25351;&#21335;<a class="anchor-link" href="#&#23481;&#22120;&#20351;&#29992;&#25351;&#21335;">&#182;</a></h1><h2 id="Q1&#65306;&#25509;&#21475;&#36824;&#26159;&#32487;&#25215;&#65311;">Q1&#65306;&#25509;&#21475;&#36824;&#26159;&#32487;&#25215;&#65311;<a class="anchor-link" href="#Q1&#65306;&#25509;&#21475;&#36824;&#26159;&#32487;&#25215;&#65311;">&#182;</a></h2><p>现在我们的问题是，如何去使用一个容器？我们看到有 Iteration, Collection interface，也有 AbstractCollection 这个纯实现了 Collection 的抽像基类，那么我们是要继承还是要实现，要实现的话，实现 Iteration 还是 Collection ？</p>
-<p>因为继承会占用一个关键字，因此推荐实现。而实现的话，实现 Iteration 对于类的限制最少，如果这可以满足需求，那么就使用迭代器（或ListIteration）。否则，继承 Collection。</p>
-<p>下面的 <code>Trials</code> 就是一个很好的例子。</p>
-<h2 id="Q2&#65306;&#36845;&#20195;&#22120;&#36824;&#26159;&#36866;&#37197;&#22120;&#65311;">Q2&#65306;&#36845;&#20195;&#22120;&#36824;&#26159;&#36866;&#37197;&#22120;&#65311;<a class="anchor-link" href="#Q2&#65306;&#36845;&#20195;&#22120;&#36824;&#26159;&#36866;&#37197;&#22120;&#65311;">&#182;</a></h2><p>第二个问题是，我们应该直接实现，还是应该添加一个中间件，让这个中间件实现后，将其作为内部类使用？这取决于我们面临的状况。对于 “迭代器设计模式” 而言，我们的抽像接口是 “包装类中的iterator方法” 和 “迭代器类中的next()和hasNext()” 方法。因此，可以最好是将多个迭代器去实现不同功能的迭代器接口，比如顺序、逆序或者随机顺序。而包装类的 iterator 方法则调用这些迭代器实现。</p>
+<h1 id="&#23481;&#22120;&#20351;&#29992;&#25351;&#21335;">&#23481;&#22120;&#20351;&#29992;&#25351;&#21335;<a class="anchor-link" href="#&#23481;&#22120;&#20351;&#29992;&#25351;&#21335;">&#182;</a></h1><h2 id="&#20351;&#29992;-Iterator-&#25509;&#21475;-&#25110;-Abstract-&#32487;&#25215;">&#20351;&#29992; Iterator &#25509;&#21475; &#25110; Abstract &#32487;&#25215;<a class="anchor-link" href="#&#20351;&#29992;-Iterator-&#25509;&#21475;-&#25110;-Abstract-&#32487;&#25215;">&#182;</a></h2><p>现在我们的问题是，如何去使用一个容器？我们看到有 Iteration, Collection interface，也有 AbstractCollection 这个纯实现了 Collection 的抽像基类，那么我们是要继承还是要实现，要实现的话，实现 Iteration 还是 Collection ？</p>
+<p>因为继承会占用一个关键字，如果仅仅是需要一个类来进行遍历，那么推荐实现 Iteration。实现 Iteration 对于类的限制最少，如果这可以满足需求，那么就使用迭代器（或ListIteration）。否则，继承 Collection。</p>
+<p>对于实现而言，下面的 <code>Trials</code> 就是一个很好的例子。</p>
+<h2 id="&#22522;&#20110;-Iterator-&#23454;&#29616;&#30340;&#25193;&#23637;&#65306;&#36866;&#37197;&#22120;-or-&#20869;&#37096;&#31867;">&#22522;&#20110; Iterator &#23454;&#29616;&#30340;&#25193;&#23637;&#65306;&#36866;&#37197;&#22120; or &#20869;&#37096;&#31867;<a class="anchor-link" href="#&#22522;&#20110;-Iterator-&#23454;&#29616;&#30340;&#25193;&#23637;&#65306;&#36866;&#37197;&#22120;-or-&#20869;&#37096;&#31867;">&#182;</a></h2><p>第二个问题是，我们应该直接实现，还是应该添加一个中间件，让这个中间件实现后，将其作为内部类使用？这取决于我们面临的状况。对于 “迭代器设计模式” 而言，我们的抽像接口是 “包装类中的iterator方法” 和 “迭代器类中的next()和hasNext()” 方法。因此，可以最好是将多个迭代器去实现不同功能的迭代器接口，比如顺序、逆序或者随机顺序。而包装类的 iterator 方法则调用这些迭代器实现。</p>
 <p>为了方便修改（因为当修改了包装类，那么迭代器的实现中next()和hasNext()的方法也必须修改，它们都是实现），将多个迭代器实现的类包括在包装类中作为内部类，如下的 SuperTrials 类所示。</p>
 <p>但是，当我们不能修改一个已经实现的类，或者仅仅希望添加代码，而不是抛弃这个类 <code>Trials</code> 的话，使用适配器模式为这个 <code>Trials</code> 类写一个能够实现反向迭代的迭代器的适配器。通过 <code>reverse()</code> 返回这个迭代器，而由于继承，使用 <code>iterator()</code> 可以返回正常的迭代器。当然，这种方法更容易出问题，并且难以继续扩展和复用。</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
@@ -12491,12 +12491,441 @@ div#notebook {
     <span class="n">print</span><span class="o">(</span><span class="n">ts</span><span class="o">.</span><span class="na">next</span><span class="o">());</span>
 <span class="o">}</span>
 </pre></div>
-<h2 id="&#32454;&#33410;&#65306;Array-&#21644;-&#36845;&#20195;&#22120;">&#32454;&#33410;&#65306;Array &#21644; &#36845;&#20195;&#22120;<a class="anchor-link" href="#&#32454;&#33410;&#65306;Array-&#21644;-&#36845;&#20195;&#22120;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="n">String</span><span class="o">[]</span> <span class="n">s</span> <span class="o">=</span> <span class="o">{</span><span class="s">&quot;Hello&quot;</span><span class="o">,</span><span class="s">&quot;Corkine&quot;</span><span class="o">};</span>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#22522;&#20110;-AbstractMap-&#23454;&#29616;&#30340;&#20139;&#20803;">&#22522;&#20110; AbstractMap &#23454;&#29616;&#30340;&#20139;&#20803;<a class="anchor-link" href="#&#22522;&#20110;-AbstractMap-&#23454;&#29616;&#30340;&#20139;&#20803;">&#182;</a></h2><p>我认为有两种接口，其一为抽象类的顶层类，和抽象类共同工作，这种接口是用于类库之间的交互和较大项目的实现使用，其一般含有的方法定义很多，对于使用而言，没有必要花那么大的力气。其二为一些专门的接口，比如Readable、Iterable接口，其生来就是被随处使用的，方法简单，容易实现。</p>
+<p>使用容器，这些接口肯定是庞大的，因此，继承AbstractMap抽象类来实现我们自己的类比直接实现Map接口要省力许多。对于简单的类，我们可以直接实现Iterator接口，但是对于Mao这种，Map的接口需要实现的方法过于复杂，因此考虑对其一个子类使用继承。实际上，所有的类库中的容器都是由这些 AbstractXXX 继承而来，而不是重新实现了一遍接口。</p>
+<p><strong>享元</strong>指的是这样一种机制，我们不在一个新类中去创建一个现有类的实例，这样对性能有影响，并且充斥着大量内部包裹的，不可对外见的无用的这些内部类的代码和浪费，比如我们在一个自有容器中包裹一个ArrayList，就造成了大量的代码浪费。享元是试图在继承体系中去修改现有类的部分行为来为我所用，因为没有实例化任何对象，性能开销很小。但是需要对这些类有足够的了解。最好是查看Map的源代码。</p>
+<p>下面的例子介绍了一个自造容器，其不可修改和删除元素，我们并未拦截这些操作，而是从根本上——Map用于删除和修改元素的方法上进行重载，返回了错误的声明来做到的。</p>
+<p>首先介绍一下Map工作原理：当我们遍历一个Map时，Map内部通过 entrySet() 方法返回一个 EntrySet 对象，而这个EntrySet 包含一个叫做 iterator 的方法，这个方法将返回 EntrySet 的一个 Iterator 迭代器，这个迭代器使用了 Iterator 接口，因此可以调用 next 和 hasNext 方法，这个迭代器具有一个叫做 remove 的方法可以删除元素。每次调用将返回一个 Entry 对象，这个对象构造需要传入一个 int（HashCode？），指明其位置，其具有 getValue() setValue() 方法，用来进行元素的修改。</p>
+<p>因此，我们唯一需要做的就是重载一个 entrySet 方法，而这个方法将提供一个 EntrySet 的对象。在下面代码中，可以看到我们构造的静态类 Entry 和 EntrySet，目的就是为了包装到这个方法中返回。至于只读，我们只需要对 EntrySet.Iterator 类的 remove 方法进行限制，对 Entry 的 setValue 方法进行限制即可。需要注意，对于 EntrySet ，如果不是非要 remove ，那么直接 new EntrySet，然后代理方法也可行，不过不纯粹。</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+<span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="err">；</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">iMap</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span><span class="o">[][]</span> <span class="n">DATA</span> <span class="o">=</span> <span class="o">{</span>
+        <span class="o">{</span><span class="s">&quot;China&quot;</span><span class="o">,</span><span class="s">&quot;BeiJing&quot;</span><span class="o">},</span> <span class="o">{</span><span class="s">&quot;American&quot;</span><span class="o">,</span><span class="s">&quot;W.D.C&quot;</span><span class="o">},</span> <span class="o">{</span><span class="s">&quot;U.K.&quot;</span><span class="o">,</span><span class="s">&quot;London&quot;</span><span class="o">},</span>
+            <span class="o">{</span><span class="s">&quot;Taiwan&quot;</span><span class="o">,</span><span class="s">&quot;Taipei&quot;</span><span class="o">},{</span><span class="s">&quot;HongKong&quot;</span><span class="o">,</span><span class="s">&quot;HongKong&quot;</span><span class="o">}</span>
+    <span class="o">};</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">FlyweightMap</span> <span class="kd">extends</span> <span class="n">AbstractMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Entry</span> <span class="kd">implements</span> <span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">index</span><span class="o">;</span>
+            <span class="n">Entry</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span><span class="k">this</span><span class="o">.</span><span class="na">index</span> <span class="o">=</span> <span class="n">index</span><span class="o">;</span> <span class="o">}</span>
+            <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">DATA</span><span class="o">[</span><span class="n">index</span><span class="o">][</span><span class="mi">0</span><span class="o">].</span><span class="na">equals</span><span class="o">(</span><span class="n">o</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="kd">public</span> <span class="n">String</span> <span class="nf">getKey</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">DATA</span><span class="o">[</span><span class="n">index</span><span class="o">][</span><span class="mi">0</span><span class="o">];</span> <span class="o">}</span>
+            <span class="kd">public</span> <span class="n">String</span> <span class="nf">getValue</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">DATA</span><span class="o">[</span><span class="n">index</span><span class="o">][</span><span class="mi">1</span><span class="o">];</span> <span class="o">}</span>
+            <span class="kd">public</span> <span class="n">String</span> <span class="nf">setValue</span><span class="o">(</span><span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span> 
+            <span class="c1">//因为我们要打造一个不支持修改的列表，因此需要屏蔽这个Entry.setValue方法</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="n">UnsupportedOperationException</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="kd">public</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">DATA</span><span class="o">[</span><span class="n">index</span><span class="o">][</span><span class="mi">0</span><span class="o">].</span><span class="na">hashCode</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="cm">/**接着要实现一个EntrySet，这个Set应该持有size信息，能够从所有元素中获取子串</span>
+<span class="cm">         * 其次，还要实现一个迭代器，以返回Entry元素</span>
+<span class="cm">         * 当然，这一步不是必须的，可以直接在entrySet中返回一个LinkedSet即可</span>
+<span class="cm">         * 但是我们在这里需要禁止remove元素(Entryset的Iter迭代器的remove方法)，</span>
+<span class="cm">         * 所以就实现了EntrySet*/</span>
+        <span class="kd">static</span> <span class="kd">class</span> <span class="nc">EntrySet</span> <span class="kd">extends</span> <span class="n">AbstractSet</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="o">{</span>
+            <span class="kd">private</span> <span class="kt">int</span>   <span class="n">size</span><span class="o">;</span>
+            <span class="n">EntrySet</span><span class="o">(</span><span class="kt">int</span> <span class="n">size</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="k">this</span><span class="o">.</span><span class="na">size</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">DATA</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="k">this</span><span class="o">.</span><span class="na">size</span> <span class="o">=</span> <span class="n">DATA</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+                <span class="k">else</span> <span class="k">this</span><span class="o">.</span><span class="na">size</span> <span class="o">=</span> <span class="n">size</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="kd">public</span> <span class="kt">int</span> <span class="nf">size</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">size</span><span class="o">;</span> <span class="o">}</span>
+            <span class="c1">//使用泛型的迭代器，注意，这里声明的是其基类Map.Entry，而不是Entry</span>
+            <span class="c1">//对于拒绝删除元素的Map而言，要屏蔽remove方法</span>
+            <span class="kd">private</span> <span class="kd">class</span> <span class="nc">Iter</span> <span class="kd">implements</span> <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="o">{</span>
+                <span class="kd">private</span> <span class="n">Entry</span> <span class="n">entry</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Entry</span><span class="o">(-</span><span class="mi">1</span><span class="o">);</span>
+                <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">hasNext</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="na">index</span> <span class="o">&lt;</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="kd">public</span> <span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">next</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="na">index</span><span class="o">++;</span>
+                    <span class="k">return</span> <span class="n">entry</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="k">throw</span> <span class="k">new</span> <span class="n">UnsupportedOperationException</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="c1">//返回一个迭代器方法iterator，这个方法产生一个迭代器，用以迭代列表中的元素</span>
+            <span class="kd">public</span> <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="nf">iterator</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="n">Iter</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="c1">//最后，终于能够返回一个EntrySet了，将此设置为static域，使用entrySet返回即可</span>
+        <span class="kd">private</span> <span class="kd">static</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">entries</span> <span class="o">=</span> <span class="k">new</span> <span class="n">EntrySet</span><span class="o">(</span><span class="n">DATA</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+        <span class="kd">public</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="nf">entrySet</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">entries</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="cm">/**这个方法被用来返回一个Map，这个Map为匿名内部类，重载了entrySet方法，返回了前size个item的信息*/</span>
+    <span class="kd">static</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">select</span><span class="o">(</span><span class="kd">final</span> <span class="kt">int</span> <span class="n">size</span><span class="o">){</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">FlyweightMap</span><span class="o">()</span> <span class="o">{</span>
+            <span class="kd">public</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="nf">entrySet</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="n">EntrySet</span><span class="o">(</span><span class="n">size</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">};</span>
+    <span class="o">}</span>
+    <span class="kd">static</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FlyweightMap</span><span class="o">();</span> <span class="c1">//内部保存一个map</span>
+    <span class="c1">//静态方法，用来截取一些不同长度map，或者直接返回这个map</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">capitals</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">map</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">capitals</span><span class="o">(</span><span class="kt">int</span> <span class="n">size</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">select</span><span class="o">(</span><span class="n">size</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">static</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">names</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">map</span><span class="o">.</span><span class="na">keySet</span><span class="o">());</span> <span class="c1">//从map中调用keySet方法返回key的set列表</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">names</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">names</span><span class="o">;</span> <span class="o">}</span><span class="c1">//静态方法，返回名称列表</span>
+    <span class="c1">//静态方法，返回截取的名称列表</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">names</span><span class="o">(</span><span class="kt">int</span> <span class="n">size</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;(</span><span class="n">select</span><span class="o">(</span><span class="n">size</span><span class="o">).</span><span class="na">keySet</span><span class="o">());</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="n">print</span><span class="o">(</span><span class="n">capitals</span><span class="o">(</span><span class="mi">10</span><span class="o">));</span>
+        <span class="n">print</span><span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">20</span><span class="o">));</span>
+        <span class="c1">//map.put(&quot;China&quot;,&quot;WuHan&quot;); //UnsupportedOperationException</span>
+        <span class="c1">//map.remove(&quot;China&quot;); //UnsupportedOperationException</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#27880;&#24847;&#65306;Array-&#21644;-&#36845;&#20195;&#22120;&#24182;&#26080;&#20851;&#31995;">&#27880;&#24847;&#65306;Array &#21644; &#36845;&#20195;&#22120;&#24182;&#26080;&#20851;&#31995;<a class="anchor-link" href="#&#27880;&#24847;&#65306;Array-&#21644;-&#36845;&#20195;&#22120;&#24182;&#26080;&#20851;&#31995;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="n">String</span><span class="o">[]</span> <span class="n">s</span> <span class="o">=</span> <span class="o">{</span><span class="s">&quot;Hello&quot;</span><span class="o">,</span><span class="s">&quot;Corkine&quot;</span><span class="o">};</span>
 <span class="c1">//s.hasNext() 错误，不能使用Iterator接口方法</span>
 <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">ss</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="s">&quot;Hello&quot;</span><span class="o">,</span><span class="s">&quot;World&quot;</span><span class="o">));</span>
 <span class="n">ss</span><span class="o">.</span><span class="na">iterator</span><span class="o">().</span><span class="na">hasNext</span><span class="o">();</span>
 </pre></div>
 <p>注意，Array 不能使用 Iterator 接口的方法！虽然它也可以使用 for-each。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#27880;&#24847;&#65306;&#23481;&#22120;&#20869;&#37096;&#30340;&#21487;&#36873;&#25805;&#20316;">&#27880;&#24847;&#65306;&#23481;&#22120;&#20869;&#37096;&#30340;&#21487;&#36873;&#25805;&#20316;<a class="anchor-link" href="#&#27880;&#24847;&#65306;&#23481;&#22120;&#20869;&#37096;&#30340;&#21487;&#36873;&#25805;&#20316;">&#182;</a></h2><p>不一定需要将所有的接口方法全部实现，因为我们有时候并不需要全部接口方法。而重新设计接口的话，会造成无所谓的浪费和混淆。比如下面这个例子，对于一些依靠固定尺寸数据结构的方法，比如 asList，返回的是不可更改的列表，虽然我们转型成了 List，但是调用 add 等方法在运行时依旧会出错，这在语法上是没有问题的。这就是可选操作带来的副作用：UnsupportedOperation异常。</p>
+<p>此外，对于一些尚未完全实现的方法，也可以先这么搞。</p>
+<div class="highlight"><pre><span></span><span class="c1">//对于Collection类，添加和删除都是可选操作，实现类不必须提供定义。这是为了让一些情况，比如不可修改的Collections</span>
+<span class="c1">//类似于只能实现部分方法的特例复用Collection提供的方法定义。</span>
+
+<span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">,</span><span class="s">&quot;from&quot;</span><span class="o">,</span><span class="s">&quot;corkine&quot;</span><span class="o">,</span><span class="s">&quot;ma&quot;</span><span class="o">);</span>
+<span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">l2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">l</span><span class="o">);</span>
+<span class="c1">//l.add(&quot;something&quot;); //UnsupportedOperationException</span>
+<span class="n">l2</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;something&quot;</span><span class="o">);</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Java-&#23481;&#22120;&#36827;&#38454;">Java &#23481;&#22120;&#36827;&#38454;<a class="anchor-link" href="#Java-&#23481;&#22120;&#36827;&#38454;">&#182;</a></h1><h2 id="Set-&#25509;&#21475;&#23481;&#22120;">Set &#25509;&#21475;&#23481;&#22120;<a class="anchor-link" href="#Set-&#25509;&#21475;&#23481;&#22120;">&#182;</a></h2><p>Set 接口相关的容器类有：HashSet, LinkedHashSet, 一个叫做 SortSet 的接口和其唯一的实现 TreeSet。</p>
+<p>上文展示了Java内置的类作为元素的容器操作，当我们使用容器存放自己的类时，可能出现问题。对于 Hash系列的容器而言，必须实现：</p>
+<ul>
+<li>hashCode() 用于快速存储 </li>
+<li>equals() 用来判断是否重复 </li>
+</ul>
+<p>对于 hash 和 LinkedHash 而言，这两个都是必须的。而对 sortSet 和 treeSet 而言，除此之外，还要实现 Comparable 接口的方法，用于排序。下面是一个示例：</p>
+<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">TypeA</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">keep</span><span class="o">;</span>
+    <span class="n">TypeA</span><span class="o">(</span><span class="kt">int</span> <span class="n">keep</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">keep</span> <span class="o">=</span> <span class="n">keep</span><span class="o">;}</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="n">Object</span> <span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">obj</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getSimpleName</span><span class="o">()</span> <span class="o">==</span> <span class="s">&quot;TypeA&quot;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">((</span><span class="n">TypeA</span><span class="o">)</span><span class="n">obj</span><span class="o">).</span><span class="na">keep</span> <span class="o">==</span> <span class="k">this</span><span class="o">.</span><span class="na">keep</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot;: &quot;</span> <span class="o">+</span> <span class="n">keep</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">hashCode</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="n">Random</span> <span class="n">rand</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
+<span class="n">Set</span><span class="o">&lt;</span><span class="n">TypeA</span><span class="o">&gt;</span> <span class="n">set</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;&gt;();</span>
+
+<span class="c1">//对于同一个引用，set只会添加一次</span>
+<span class="n">TypeA</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TypeA</span><span class="o">(</span><span class="mi">7</span><span class="o">);</span>
+<span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+    <span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="n">print</span><span class="o">(</span><span class="n">set</span><span class="o">);</span>
+
+<span class="n">TypeA</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TypeA</span><span class="o">(</span><span class="mi">7</span><span class="o">);</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">&quot;b equals a? %b \nb == a? %b&quot;</span><span class="o">,</span><span class="n">b</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">a</span><span class="o">),</span> <span class="n">b</span> <span class="o">==</span> <span class="n">a</span><span class="o">);</span> <span class="c1">//false true</span>
+<span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">b</span><span class="o">);</span>
+<span class="n">print</span><span class="o">(</span><span class="s">&quot;\n&quot;</span><span class="o">+</span><span class="n">set</span><span class="o">);</span>
+</pre></div>
+<p>下面的例子将演示 sortset 接口的常用方法：截取子串 subSet headSet、获取头尾元素 first last higher。</p>
+<div class="highlight"><pre><span></span><span class="c1">//TreeSet是唯一实现了SortSet的类，任何使用sortset的类必须除了实现hash和equals，还必须实现Comparator。</span>
+<span class="n">SortedSet</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeSet</span><span class="o">&lt;&gt;();</span>
+<span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">x</span> <span class="o">:</span> <span class="s">&quot;hello central hello china normal university&quot;</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">&quot; &quot;</span><span class="o">)){</span>
+    <span class="n">s</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+<span class="o">}</span> <span class="n">print</span><span class="o">(</span><span class="n">s</span><span class="o">);</span> <span class="c1">//没有发现重复的元素</span>
+<span class="c1">//常见的SortSet方法：截取子串、获取头尾元素</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">&quot;first ele: %s\nlase ele: %s\nhiger than china ele: %s\n&quot;</span>
+        <span class="o">,</span><span class="n">s</span><span class="o">.</span><span class="na">first</span><span class="o">(),</span><span class="n">s</span><span class="o">.</span><span class="na">last</span><span class="o">(),((</span><span class="n">TreeSet</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;)</span> <span class="n">s</span><span class="o">).</span><span class="na">higher</span><span class="o">(</span><span class="s">&quot;china&quot;</span><span class="o">));</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">&quot;subset from [central to normal): %s\n&quot;</span><span class="o">,((</span><span class="n">TreeSet</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;)</span> <span class="n">s</span><span class="o">).</span>
+                        <span class="n">subSet</span><span class="o">(</span><span class="s">&quot;central&quot;</span><span class="o">,</span><span class="s">&quot;normal&quot;</span><span class="o">));</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">&quot;head subset to normal: %s\n&quot;</span><span class="o">,((</span><span class="n">TreeSet</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;)</span> <span class="n">s</span><span class="o">).</span><span class="na">headSet</span><span class="o">(</span><span class="s">&quot;normal&quot;</span><span class="o">));</span>
+
+<span class="o">[</span><span class="n">central</span><span class="o">,</span> <span class="n">china</span><span class="o">,</span> <span class="n">hello</span><span class="o">,</span> <span class="n">normal</span><span class="o">,</span> <span class="n">university</span><span class="o">]</span>
+<span class="n">first</span> <span class="n">ele</span><span class="o">:</span> <span class="n">central</span>
+<span class="n">lase</span> <span class="n">ele</span><span class="o">:</span> <span class="n">university</span>
+<span class="n">higer</span> <span class="n">than</span> <span class="n">china</span> <span class="n">ele</span><span class="o">:</span> <span class="n">hello</span>
+<span class="n">subset</span> <span class="n">from</span> <span class="o">[</span><span class="n">central</span> <span class="n">to</span> <span class="n">normal</span><span class="o">):</span> <span class="o">[</span><span class="n">central</span><span class="o">,</span> <span class="n">china</span><span class="o">,</span> <span class="n">hello</span><span class="o">]</span>
+<span class="n">head</span> <span class="n">subset</span> <span class="n">to</span> <span class="n">normal</span><span class="o">:</span> <span class="o">[</span><span class="n">central</span><span class="o">,</span> <span class="n">china</span><span class="o">,</span> <span class="n">hello</span><span class="o">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Map-&#25509;&#21475;&#23481;&#22120;">Map &#25509;&#21475;&#23481;&#22120;<a class="anchor-link" href="#Map-&#25509;&#21475;&#23481;&#22120;">&#182;</a></h2><p>Map 包括：HashMap、weakHashMap、TreeMap、LinkedHashMap。</p>
+<p>Map 对类型的需求和 List 类似，必须实现 HashCode 和 equals 方法，如果需要排序，则还要实现 Comparable 方法。</p>
+<p>常见的Map实现的用途:</p>
+<ul>
+<li>HashMap 使用HashCode替代线性搜索，提高速度</li>
+<li>LinkedHashMap 在HashMap基础上使用链表保存插入次序，在迭代中速度更快</li>
+<li>WeakHashMap 映射之外没有指向某个键的引用，就回收它</li>
+<li>TreeMap 自动排序（红黑树）的MAP，需要实现Comparable方法</li>
+</ul>
+<p><strong>SortedMap DEMO</strong></p>
+<p>下面介绍了 SortedMap 和其唯一的实现：TreeMap 的使用方法，大体和上面的Set类似， tailMap 截取， keySet、entrySet 返回SET， firstKey、lowerKey 返回 KEY。</p>
+<div class="highlight"><pre><span></span><span class="n">SortedMap</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeMap</span><span class="o">&lt;&gt;();</span>
+<span class="n">Random</span> <span class="n">rand</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">(</span><span class="mi">30</span><span class="o">);</span>
+<span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">x</span> <span class="o">:</span> <span class="s">&quot;Hello from Central China Normal University&quot;</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">&quot; &quot;</span><span class="o">)){</span>
+    <span class="n">s</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">10</span><span class="o">),</span><span class="n">x</span><span class="o">);</span>
+<span class="o">}</span> <span class="n">printf</span><span class="o">(</span><span class="s">&quot;&quot;</span><span class="o">+</span><span class="n">s</span><span class="o">);</span> <span class="c1">//排过序的</span>
+<span class="c1">//下面展示了其方法，可以返回键set、键对set、首键、尾键、比较的键</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">&quot;keyset: %s\nentry set: %s\nfirst key: %s\nlower key than 8: %s\n&quot;</span><span class="o">,</span>
+        <span class="n">s</span><span class="o">.</span><span class="na">keySet</span><span class="o">(),</span><span class="n">s</span><span class="o">.</span><span class="na">entrySet</span><span class="o">(),</span><span class="n">s</span><span class="o">.</span><span class="na">firstKey</span><span class="o">(),((</span><span class="n">TreeMap</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;)</span> <span class="n">s</span><span class="o">).</span><span class="na">lowerKey</span><span class="o">(</span><span class="mi">8</span><span class="o">));</span>
+<span class="c1">//此外，还可以截取Map（因为排过序了）</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">&quot;tail map from 5: %s\n&quot;</span><span class="o">,((</span><span class="n">TreeMap</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;)</span> <span class="n">s</span><span class="o">).</span><span class="na">tailMap</span><span class="o">(</span><span class="mi">5</span><span class="o">));</span>
+
+<span class="o">{</span><span class="mi">4</span><span class="o">=</span><span class="n">China</span><span class="o">,</span> <span class="mi">5</span><span class="o">=</span><span class="n">Central</span><span class="o">,</span> <span class="mi">6</span><span class="o">=</span><span class="n">Normal</span><span class="o">,</span> <span class="mi">8</span><span class="o">=</span><span class="n">University</span><span class="o">}</span>
+<span class="nl">keyset:</span> <span class="o">[</span><span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">8</span><span class="o">]</span>
+<span class="n">entry</span> <span class="n">set</span><span class="o">:</span> <span class="o">[</span><span class="mi">4</span><span class="o">=</span><span class="n">China</span><span class="o">,</span> <span class="mi">5</span><span class="o">=</span><span class="n">Central</span><span class="o">,</span> <span class="mi">6</span><span class="o">=</span><span class="n">Normal</span><span class="o">,</span> <span class="mi">8</span><span class="o">=</span><span class="n">University</span><span class="o">]</span>
+<span class="n">first</span> <span class="n">key</span><span class="o">:</span> <span class="mi">4</span>
+<span class="n">lower</span> <span class="n">key</span> <span class="n">than</span> <span class="mi">8</span><span class="o">:</span> <span class="mi">6</span>
+<span class="n">tail</span> <span class="n">map</span> <span class="n">from</span> <span class="mi">5</span><span class="o">:</span> <span class="o">{</span><span class="mi">5</span><span class="o">=</span><span class="n">Central</span><span class="o">,</span> <span class="mi">6</span><span class="o">=</span><span class="n">Normal</span><span class="o">,</span> <span class="mi">8</span><span class="o">=</span><span class="n">University</span><span class="o">}</span>
+</pre></div>
+<p><strong>LinkedHashMap DEMO</strong></p>
+<p>LinkedHashMap 和 HashMap 一样，对于所有的元素都实现了散列。但是，它依旧按照插入的链表顺序进行返回元素。当然，也可以不保存这个顺序，传入参数，可以按照LRU算法，将那些没有访问过的元素自动排序，放在最前面，下面的6和9访问多次，可以看到多次访问后，其顺序被拉在了后面。</p>
+<div class="highlight"><pre><span></span><span class="n">LinkedHashMap</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">s</span> <span class="o">=</span><span class="k">new</span> <span class="n">LinkedHashMap</span><span class="o">&lt;&gt;(</span><span class="mi">16</span><span class="o">,</span><span class="mf">0.75f</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+<span class="n">Random</span> <span class="n">rand</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">(</span><span class="mi">42</span><span class="o">);</span>
+<span class="n">StringBuilder</span> <span class="n">sb</span><span class="o">;</span>
+<span class="kt">char</span> <span class="n">c</span><span class="o">;</span> <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+    <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="o">(</span><span class="kt">char</span><span class="o">)</span><span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">Character</span><span class="o">.</span><span class="na">isAlphabetic</span><span class="o">(</span><span class="n">c</span><span class="o">)){</span>
+            <span class="n">m</span><span class="o">++;</span>
+            <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">m</span> <span class="o">==</span> <span class="mi">5</span><span class="o">)</span> <span class="o">{</span><span class="k">break</span><span class="o">;}</span>
+    <span class="o">}</span>
+    <span class="n">s</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">10</span><span class="o">),</span><span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+<span class="o">}</span> <span class="n">print</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+    <span class="n">s</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">6</span><span class="o">);</span>
+    <span class="n">s</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">9</span><span class="o">);</span>
+<span class="o">}</span> <span class="n">print</span><span class="o">(</span><span class="n">s</span><span class="o">);</span> <span class="c1">//由于过多的访问6和9，因此其顺序靠后了。</span>
+
+<span class="o">{</span><span class="mi">2</span><span class="o">=</span><span class="n">TFRLL</span><span class="o">,</span> <span class="mi">3</span><span class="o">=</span><span class="n">FWUOA</span><span class="o">,</span> <span class="mi">0</span><span class="o">=</span><span class="n">NQcTA</span><span class="o">,</span> <span class="mi">6</span><span class="o">=</span><span class="n">QYcJU</span><span class="o">,</span> <span class="mi">9</span><span class="o">=</span><span class="n">bBNBO</span><span class="o">,</span> <span class="mi">7</span><span class="o">=</span><span class="n">JDNXE</span><span class="o">}</span>
+<span class="o">{</span><span class="mi">2</span><span class="o">=</span><span class="n">TFRLL</span><span class="o">,</span> <span class="mi">3</span><span class="o">=</span><span class="n">FWUOA</span><span class="o">,</span> <span class="mi">0</span><span class="o">=</span><span class="n">NQcTA</span><span class="o">,</span> <span class="mi">7</span><span class="o">=</span><span class="n">JDNXE</span><span class="o">,</span> <span class="mi">6</span><span class="o">=</span><span class="n">QYcJU</span><span class="o">,</span> <span class="mi">9</span><span class="o">=</span><span class="n">bBNBO</span><span class="o">}</span>
+</pre></div>
+<p><strong>WeakHashMap DEMO</strong></p>
+<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">Element</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">ident</span><span class="o">;</span>
+    <span class="n">Element</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">ident</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">ident</span><span class="o">.</span><span class="na">hashCode</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">ident</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="n">Object</span> <span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">obj</span> <span class="k">instanceof</span> <span class="n">Element</span> <span class="o">&amp;&amp;</span> <span class="n">ident</span><span class="o">.</span><span class="na">equals</span><span class="o">(((</span><span class="n">Element</span><span class="o">)</span> <span class="n">obj</span><span class="o">).</span><span class="na">ident</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">finalize</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Finalizing &quot;</span> <span class="o">+</span> <span class="n">getClass</span><span class="o">().</span><span class="na">getSimpleName</span><span class="o">()</span> 
+                            <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">ident</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Key</span> <span class="kd">extends</span> <span class="n">Element</span> <span class="o">{</span>
+    <span class="n">Key</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span> <span class="kd">super</span><span class="o">(</span><span class="n">id</span><span class="o">);}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Value</span> <span class="kd">extends</span> <span class="n">Element</span> <span class="o">{</span>
+    <span class="n">Value</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span> <span class="kd">super</span><span class="o">(</span><span class="n">id</span><span class="o">);}</span>
+<span class="o">}</span>
+</pre></div>
+<p>我们创建一个元素类 Element，其重载了 hashCode、equals和 finalize 方法。使用这个类继承了两个子类。</p>
+<div class="highlight"><pre><span></span><span class="n">Key</span><span class="o">[]</span> <span class="n">keys</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Key</span><span class="o">[</span><span class="mi">1000</span><span class="o">];</span>
+<span class="n">WeakHashMap</span><span class="o">&lt;</span><span class="n">Key</span><span class="o">,</span><span class="n">Value</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">WeakHashMap</span><span class="o">&lt;&gt;();</span>
+<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+    <span class="n">Key</span> <span class="n">k</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Key</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
+    <span class="n">Value</span> <span class="n">v</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Value</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="o">){</span>
+        <span class="n">keys</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">;</span> <span class="c1">//添加引用，在WeakMap中进行垃圾回收时不至于清除</span>
+    <span class="o">}</span>
+    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">k</span><span class="o">,</span><span class="n">v</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="n">print</span><span class="o">(</span><span class="n">map</span><span class="o">);</span>
+<span class="n">System</span><span class="o">.</span><span class="na">gc</span><span class="o">();</span> <span class="c1">//启动垃圾回收，那些没有引用的对象全部清除了</span>
+<span class="n">print</span><span class="o">(</span><span class="n">map</span><span class="o">);</span> <span class="c1">//现在只剩下了带有引用的那些，也就是3的倍数</span>
+
+<span class="o">{</span><span class="mi">901</span><span class="o">=</span><span class="mi">901</span><span class="o">,</span> <span class="mi">255</span><span class="o">=</span><span class="mi">255</span><span class="o">,</span> <span class="mi">902</span><span class="o">=</span><span class="mi">902</span><span class="o">,</span> <span class="mi">256</span><span class="o">=</span><span class="mf">256.</span><span class="o">..}</span>
+<span class="o">{</span><span class="mi">255</span><span class="o">=</span><span class="mi">255</span><span class="o">,</span> <span class="mi">900</span><span class="o">=</span><span class="mi">900</span><span class="o">,</span> <span class="mi">906</span><span class="o">=</span><span class="mi">906</span><span class="o">,</span> <span class="mi">903</span><span class="o">=</span><span class="mf">903.</span><span class="o">..}</span>
+</pre></div>
+<p>接下来创建一个WeakHashMap，在这个Map中，添加1000个Key类，然后，如果是3的倍数，那么同时把这个引用放在一个数组中。执行 gc 之后，发现，除了 3 的倍数的元素被留下来，其余的全部被清空了。</p>
+<p>WeakHashMap自动处理那些没有引用的对象，这在对内存要求紧张的情况下十分有用。</p>
+<p>下面探究一下它是如何工作的：</p>
+<p>其实 WeakHashMap 内部保存的并非对象，而是 WeakReference 引用。</p>
+<p>当一个对象，没有了引用，那么系统就会判定其需要进行垃圾回收，只要一个对象是可获得的，那么系统的垃圾回收器就不能回收它。</p>
+<p>如果你没有持有某个对象，但是又想让垃圾管理器不着急释放它，而是紧急情况，比如内存占用过大再去释放。我们将这个对象存入 Reference 中，然后引用这个 Reference 引用。Reference 有三种类型：SoftReference、WeakReference、PhantomReference，其可获得性由强到弱。</p>
+<p>ReferenceQueue是一个回收前用作处理的工具，当满足一定条件后，可以选择将这三个 Reference 对象放置到 ReferenceQueue 中，垃圾处理器会在任何时候处理这个 Queue 里的对象。如果被加入Queue之后，那么将不允许复活，不能使用 get 方法获取元素。</p>
+<p>这样，如果系统负载正常，那么我们可以丢失对对象的直接持有，而是持有一个保存这个对象的 Reference的引用，并从中获得这个对象。如果条件恶劣，那么自动将 Reference 中的对象移动到 Queue 中准备进行垃圾回收，降低系统负担。这样就提供给对象一个延迟处理的机会，以备需要时重新从 Reference 中获取，或者不需要时从 Reference 转移到 Queue 中，兵直接丢弃。</p>
+<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">VeryBig</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">SIZE</span> <span class="o">=</span> <span class="mi">10000</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">long</span><span class="o">[]</span> <span class="n">la</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">long</span><span class="o">[</span><span class="n">SIZE</span><span class="o">];</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">ident</span><span class="o">;</span>
+    <span class="n">VeryBig</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">){</span> <span class="k">this</span><span class="o">.</span><span class="na">ident</span> <span class="o">=</span> <span class="n">s</span><span class="o">;</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">ident</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">finalize</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">getClass</span><span class="o">().</span><span class="na">getSimpleName</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">ident</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<p>上述构造了一个类，这个类的对象占用空间很大。</p>
+<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">References</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">ReferenceQueue</span><span class="o">&lt;</span><span class="n">VeryBig</span><span class="o">&gt;</span> <span class="n">rq</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ReferenceQueue</span><span class="o">&lt;&gt;();</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">checkQueue</span><span class="o">(){</span>
+        <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">ref</span><span class="o">.</span><span class="na">Reference</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">VeryBig</span><span class="o">&gt;</span> <span class="n">inq</span> <span class="o">=</span> <span class="n">rq</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+        <span class="n">count</span><span class="o">++;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">inq</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;In quenue: &quot;</span><span class="o">+</span><span class="n">inq</span><span class="o">.</span><span class="na">get</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">count</span><span class="o">);</span>
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="c1">//对于Soft而言，因为其内存占用过高，所以当没有直接引用时，会将其添加到Queue中进行清除。</span>
+        <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">SoftReference</span><span class="o">&lt;</span><span class="n">VeryBig</span><span class="o">&gt;&gt;</span> <span class="n">sa</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">sa</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">SoftReference</span><span class="o">&lt;</span><span class="n">VeryBig</span><span class="o">&gt;(</span><span class="k">new</span> <span class="n">VeryBig</span><span class="o">(</span><span class="s">&quot;Weak:&quot;</span><span class="o">+</span><span class="n">i</span><span class="o">),</span><span class="n">rq</span><span class="o">));</span>
+            <span class="n">checkQueue</span><span class="o">();</span> <span class="c1">//没有被放入Queue中，直接清除了</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">gc</span><span class="o">();</span>
+        <span class="n">print</span><span class="o">(</span><span class="n">rq</span><span class="o">);</span>
+
+        <span class="c1">//对于Weak而言，如果其保有Soft或者本身引用，则不清楚，反之，如果内存过高，则添加到Queue中</span>
+        <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">VeryBig</span><span class="o">&gt;&gt;</span> <span class="n">wa</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">wa</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">VeryBig</span><span class="o">&gt;(</span><span class="k">new</span> <span class="n">VeryBig</span><span class="o">(</span><span class="s">&quot;Weak:&quot;</span><span class="o">+</span><span class="n">i</span><span class="o">),</span><span class="n">rq</span><span class="o">));</span>
+            <span class="n">checkQueue</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">gc</span><span class="o">();</span> <span class="c1">//可以看到，被添加到Queue中了，不可从Queue中直接获取对象并提取</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<p>上文介绍了 Queue 和 SoftReference 的使用，注意这三个 Ref 的区别。</p>
+<ul>
+<li>对于SReference：只要对于对象的直接引用还在，就不会清除ref。而当没有引用且内存占用高，则随时会清除ref，将其添加到queue中</li>
+<li>对于WReference：当直接对象引用不再，且引用此对象的SReference也不存在的话，则同上</li>
+<li>对于PReference：当直接引用不在，没有其S/W引用时，则同上</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#23454;&#29616;-Hash-&#21644;-equals-&#26041;&#27861;">&#23454;&#29616; Hash &#21644; equals &#26041;&#27861;<a class="anchor-link" href="#&#23454;&#29616;-Hash-&#21644;-equals-&#26041;&#27861;">&#182;</a></h2><p>对于我们自己的类，一定要实现 HashCode 和 equals 方法。</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span> <span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
+
+<span class="kd">class</span> <span class="nc">Toy</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">int</span> <span class="n">num</span><span class="o">;</span>
+    <span class="n">Toy</span><span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">num</span> <span class="o">=</span> <span class="n">num</span><span class="o">;}</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">num</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="n">Object</span> <span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">obj</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getSimpleName</span><span class="o">()</span> <span class="o">==</span> <span class="s">&quot;Toy&quot;</span><span class="o">){</span>
+            <span class="k">return</span> <span class="o">((</span><span class="n">Toy</span><span class="o">)</span><span class="n">obj</span><span class="o">).</span><span class="na">num</span> <span class="o">==</span> <span class="k">this</span><span class="o">.</span><span class="na">num</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="n">Toy</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Toy</span><span class="o">(</span><span class="mi">3</span><span class="o">);</span>
+<span class="n">Toy</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Toy</span><span class="o">(</span><span class="mi">5</span><span class="o">);</span>
+<span class="n">Toy</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Toy</span><span class="o">(</span><span class="mi">2</span><span class="o">);</span>
+<span class="n">Toy</span> <span class="n">e</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Toy</span><span class="o">(</span><span class="mi">2</span><span class="o">);</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">&quot;%b %b\n&quot;</span><span class="o">,</span><span class="n">c</span><span class="o">==</span><span class="n">e</span><span class="o">,</span><span class="n">c</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">e</span><span class="o">));</span> <span class="c1">// false true</span>
+<span class="c1">//equals的实现用于比较对象</span>
+
+<span class="n">HashSet</span><span class="o">&lt;</span><span class="n">Toy</span><span class="o">&gt;</span> <span class="n">hs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;&gt;();</span>
+<span class="n">hs</span><span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">a</span><span class="o">,</span><span class="n">b</span><span class="o">,</span><span class="n">c</span><span class="o">));</span>
+<span class="n">print</span><span class="o">(</span><span class="n">hs</span><span class="o">);</span> <span class="c1">//[Toy@2, Toy@3, Toy@5]</span>
+</pre></div>
+<p><strong>equals介绍</strong></p>
+<p>一个正确的equals必须满足：</p>
+<ul>
+<li>【逻辑性】equals(null) 永远为false</li>
+<li>【对称性】a equals b == b equals a</li>
+<li>【自反性】a euqals a 永远为true</li>
+<li>【一致性】对于一次判断，无论进行多少次，结果都一样</li>
+<li>【传递性】a equals b, b equals c, 那么 c 一定 equals a</li>
+</ul>
+<p><strong>HashCode介绍</strong></p>
+<p>在Hashxxx内部，容器使用数组保存数据。当我们查询一个 HashMap 的 Key 的时候，先去计算这个 Key 的散列值（int），然后用其作为下标到数组中寻找对应的值的 list，使用 equals 进行比较，找到这个散列值对应列表中对应的值，然后返回给我们。</p>
+<p>因此，hashCode的生成不能依赖易变的信息，否则这个数据就无法找到，比如，一个实例是String的 hashCode 明显是基于String内容的：</p>
+<div class="highlight"><pre><span></span><span class="n">String</span><span class="o">[]</span> <span class="n">s</span> <span class="o">=</span> <span class="o">{</span><span class="s">&quot;corkine&quot;</span><span class="o">,</span><span class="s">&quot;corkine&quot;</span><span class="o">,</span><span class="s">&quot;ma&quot;</span><span class="o">};</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">&quot;%d, %d, %d\n&quot;</span><span class="o">,</span><span class="n">s</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">hashCode</span><span class="o">(),</span><span class="n">s</span><span class="o">[</span><span class="mi">1</span><span class="o">].</span><span class="na">hashCode</span><span class="o">(),</span><span class="n">s</span><span class="o">[</span><span class="mi">2</span><span class="o">].</span><span class="na">hashCode</span><span class="o">());</span> 
+<span class="c1">//954960411, 954960411, 3476</span>
+</pre></div>
+<p>此外，hashcode应该尽量均匀分布，否则负载会很重。</p>
+<p>HashMAP&amp;hashSet可以通过参数传递设置桶位数和负载因子，其含义如下：</p>
+<p>初始容量 指的是 初始桶位数，容量 指的是 桶位数，负载因子空表示 0 负载，0.5 表示半满的表，负载越轻，那么发生冲突可能性就越小，那么不用 equals 比较list，速度就很快。当负载达到规定水平时，Java自动增多桶位数（容量加倍）。默认负载因子为 0.75。如果负载因子过大，那么内存占用越多，但查找越快，如果负载过小，那么内存占用少，但是查找慢。</p>
+<p>通常来说，Hashxxx总是最优的选择，除非你有特殊的需求，比如顺序，那么选择tree，比如插入或者迭代，那么选择linked。</p>
+<h2 id="Collections-&#23454;&#29992;&#26041;&#27861;&#27010;&#36848;">Collections &#23454;&#29992;&#26041;&#27861;&#27010;&#36848;<a class="anchor-link" href="#Collections-&#23454;&#29992;&#26041;&#27861;&#27010;&#36848;">&#182;</a></h2><p>Collections中含有大量的实用方法，比如快速添加、搜索、类型检查、填充、最大，最小、打乱顺序、交换、反序、线程同步。</p>
+<div class="highlight"><pre><span></span><span class="c1">//下面展示Java容器类的fail-fast快速报错，比如一个线程在写，而另一个线程在读这种情况</span>
+<span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">,</span><span class="s">&quot;world&quot;</span><span class="o">));</span>
+<span class="n">Iterator</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+<span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;news&quot;</span><span class="o">);</span> <span class="c1">//获取完迭代器后又添加元素，当然失败，这是 fail-fast 线程安全的例子</span>
+<span class="n">print</span><span class="o">(</span><span class="n">i</span><span class="o">.</span><span class="na">next</span><span class="o">());</span>
+
+<span class="n">Exception</span> <span class="n">in</span> <span class="n">thread</span> <span class="s">&quot;main&quot;</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">ConcurrentModificationException</span>
+<span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="na">base</span><span class="o">/</span><span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">ArrayList$Itr</span><span class="o">.</span><span class="na">checkForComodification</span>
+</pre></div>
 
 </div>
 </div>
