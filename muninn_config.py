@@ -159,7 +159,7 @@ COURSE_INFO = {
         "address":"learn_java",
         "id":"c3",
         "chapter_list":[
-            ("对象、操作符和流程控制","0","chapter_1_play_java.html","w1"),
+            ("对象、操作符和流程控制","0","chapter1_play_java.html","w1"),
             ("初始化和清理","0","chapter2_init_finalize.html","w2"),
             ("权限、类重用","0","chapter3_permission.html","w3"),
             ("多态","0","chapter4_cast.html","w4"),
@@ -171,6 +171,7 @@ COURSE_INFO = {
             ("类型信息","0","chapter10_rtti.html","w10"),
             ("泛型","0","chapter11_generics.html","w11"),
             ("数组","0","chapter12_array.html","w12"),
+            ("IO","0","chapter13_io.html","w13"),
             
             
         ],
