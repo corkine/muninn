@@ -11775,8 +11775,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><span type="title">对象、操作符和流程控制</span> | <span type="update">2018-07-15</span> - Version <span type="version">1.2</span></p>
-<p><span type="intro"><p class="card-text">在开头简要的介绍了Java面向对象思想以及问题抽象过程：对象是保存状态和行为和标识的构件，类是一种维持一系列对象相同状态和行为的标准。之后介绍了设计者应该如何把问题分解成不同细度的对象，然后使用组合、继承、接口、内部类来复用代码，搭建结构层级并且提供服务的流程。最后提到了容器、持久化存储以及对象的创建和生命周期问题。</p><p class="card-text">第一部分主要介绍对象，这对应着C中的数据类型。首先从对象的创建：基础类型、包装器以及引用在内存中的存储位置讲起，接着介绍了对象的销毁，包括作用域，对象、对象的引用、基本类型在销毁上的不同。然后介绍了使用类定义一个对象的方法，包括字段、方法。接着，介绍了对象的参数、返回值问题，在最后，介绍了一些杂项，比如注释、编译、static字段和命名空间的问题。</p><p class="card-text">第二部分主要讲解了Java的运算符以及注意事项，比如赋值操作符中的别名问题，关系操作符中的引用陷阱、逻辑运算符中的短路、直接常量的必须性、类型转换操作符的截尾、舍入和提升，以及指数符号、println中的字符串转换、random的使用等小技巧。</p><p class="card-text">第三部分主要讲解流程控制，包括if-else，for，foreach，while，do-while，switch语句和break、continue控制符。大多数的这些知识来自于C，包括语法。</p></span></p>
+<p><span type="title">面向对象和设计流程</span> | <span type="update">2018-07-15</span> - Version <span type="version">1.2</span></p>
+<p><span type="intro"><p class="card-text">在开头简要的介绍了Java面向对象思想以及问题抽象过程：对象是保存状态和行为和标识的构件，类是一种维持一系列对象相同状态和行为的标准。之后介绍了设计者应该如何把问题分解成不同细度的对象，然后使用组合、继承、接口、内部类来复用代码，搭建结构层级并且提供服务的流程。最后提到了容器、持久化存储以及对象的创建和生命周期问题。</p><p class="card-text">第一部分主要介绍对象，这对应着C中的数据类型。首先从对象的创建、引用变量讲起，讲解了primitive类型以及引用类型的区别，探讨了其在内存中的不同位置和不同特性，之后介绍了Java数组、包装器自动转换，接着介绍了对象的销毁，包括作用域，对象、对象的引用、基本类型在销毁上的不同。然后介绍了使用类定义一个对象的方法，包括字段、方法。接着，介绍了对象的参数、返回值问题，在最后，介绍了一些杂项，比如注释、编译、static字段、封装和命名空间的问题。</p><p class="card-text">第二部分主要讲解了Java的运算符以及注意事项，比如赋值操作符中的别名问题，关系操作符中的引用陷阱、逻辑运算符中的短路、直接常量的必须性、类型转换操作符的截尾、舍入和提升，以及指数符号、println中的字符串转换、random的使用等小技巧。</p><p class="card-text">第三部分主要讲解流程控制，包括if-else，for，foreach，while，do-while，switch语句和break、continue控制符。大多数的这些知识来自于C，包括语法。</p></span></p>
 
 </div>
 </div>
@@ -11888,16 +11888,27 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="1.-&#19968;&#20999;&#37117;&#26159;&#23545;&#35937;">1. &#19968;&#20999;&#37117;&#26159;&#23545;&#35937;<a class="anchor-link" href="#1.-&#19968;&#20999;&#37117;&#26159;&#23545;&#35937;">&#182;</a></h1><h2 id="1.1-&#24341;&#29992;&#21644;&#21019;&#24314;&#23545;&#35937;">1.1 &#24341;&#29992;&#21644;&#21019;&#24314;&#23545;&#35937;<a class="anchor-link" href="#1.1-&#24341;&#29992;&#21644;&#21019;&#24314;&#23545;&#35937;">&#182;</a></h2><p>在Java中，使用引用 Reference 操纵内存中的元素，对于C类来说，使用指针做同样的工作。其实Java的引用更接近CPP的引用而不是指针。</p>
+<h1 id="1.-&#19968;&#20999;&#37117;&#26159;&#23545;&#35937;">1. &#19968;&#20999;&#37117;&#26159;&#23545;&#35937;<a class="anchor-link" href="#1.-&#19968;&#20999;&#37117;&#26159;&#23545;&#35937;">&#182;</a></h1><h2 id="1.1-&#24341;&#29992;&#21644;&#21019;&#24314;&#23545;&#35937;">1.1 &#24341;&#29992;&#21644;&#21019;&#24314;&#23545;&#35937;<a class="anchor-link" href="#1.1-&#24341;&#29992;&#21644;&#21019;&#24314;&#23545;&#35937;">&#182;</a></h2><p><strong>创建和使用引用</strong></p>
+<p>在Java中，使用引用 Reference 操纵内存中的元素，对于C类来说，使用指针做同样的工作。其实Java的引用更接近CPP的引用而不是指针。</p>
 <p>比如 String s; 声明了一个引用。</p>
 <p>String s = new String("Hello World");</p>
 <p>在Java中，所有的对象都必须由我们自己创建，使用 new 操作符创建一个引用，并且将其关联到一个新对象。</p>
-<p>所有的数据存储在以下区域：寄存器（不能直接控制）、堆栈（快速，一些Java数据存储其中，但是Java对象并不在此），堆（通用内存池，用来存放所有Java对象，在此处编译器不知道存活时间，清理耗时大），常量存储，非RAM存储（流或者硬盘，可以不受程序任何控制）。</p>
+<p>可以将引用变量看作一个遥控器，在创建引用变量的时候，其被指向了一个对象，同时这个引用变量被指定为一个类型，这个类型通常为对象的类型，不过也可能是对象能够向上/下转型的类型。使用 <code>Dog myDog = new Dog()</code> 在堆创建一个Dog()对象，同时在堆栈创建一个myDog引用，这个引用被限定类型为Dog。等号建立起引用和对象之间关系，也就是将堆中的变量和堆栈中的引用联系起来了，使用这个引用可以直接找到这个堆中的对象。</p>
+<p><strong>数据存储位置</strong></p>
+<p>所有的数据存储在以下区域：</p>
+<ul>
+<li>寄存器（不能直接控制）</li>
+<li>堆栈 （快速，一些Java数据，比如 primitive类型数据，Java对象引用存储其中，但是Java对象并不在此）</li>
+<li>堆（通用内存池，用来存放所有Java对象，在此处编译器不知道存活时间，清理耗时大）</li>
+<li>常量存储</li>
+<li>非RAM存储（流或者硬盘，可以不受程序任何控制）</li>
+</ul>
+<p><strong>基本类型和包装器类型</strong></p>
 <p>Java拥有一些基本类型和包装器类型，前者用于在堆栈中创建快速的不是引用的值，也就是说创建的变量直接存储值而不是引用，并存放在堆栈中。比如：</p>
 <p>boolean - Boolean 基本类型和包装器类型</p>
 <p>float - Float 基本类型和包装器类型</p>
 <p><code>char c = 'c'; Character c = new Character('c'); Character ch = 'x'; char c = ch</code> 前者创建值，后者创建引用，引用指向值，倒数第二个，转换成包装器类，最后一个，转换成基本类型。</p>
-<p>注意这一段程序，很有意思。</p>
+<p>注意这一段程序，很有意思。包装器类型和primitive类型之间不能随意的跨类型赋值，primitive类型之间可以转换，但是包装器不能直接转换类型。</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ctr</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">arg</span><span class="o">){</span>
@@ -11913,9 +11924,12 @@ div#notebook {
 <span class="o">}</span>
 </pre></div>
 <p>BigInteger、BigDecimal 仅支持引用，支持任意精度整数和小数，当然，速度很慢。</p>
+<p>需要注意，Java没有C的跨平台不通用性，因此所有的byte都是8bit，所有的char都是16it，所有的short都是16bit，所有的int都是32bit，所有的long都是64bit，默认浮点为double 64bit而不是float 32bit。</p>
+<p><strong>Java数组</strong></p>
 <p>int[] a; Java中的数组创建后，默认指向null（被初始化为null）。在任何引用前，如果尚未指定对象，那么运行会报错。</p>
-<p><code>int a[] = new int[]; int a[] = {0};</code> 类似，后者是 C 的写法。注意，这里存储在堆栈而非堆，生成的是值？</p>
-<p>如下，<strong>Java的数组也是一个引用，并且可以直接被传递赋值。</strong></p>
+<p><code>int a[] = new int[]; int a[] = {0};</code> 可以使用字面量直接声明值。</p>
+<p>需要注意，即便数组保存着primitive变量，但是数组本身却是一个对象，其存在于堆中，其引用存在于堆栈中，因为这个特性，导致了Java数组的引用可以直接赋值传递。此外，数组可以保存引用，这些引用存在于堆栈中，被映射到堆中的数组对应位置，其指向堆中其他位置的特定对象。</p>
+<p>如下，<strong>Java的数组也是一个对象，其引用可以直接被传递赋值。</strong></p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ctr</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">arg</span><span class="o">){</span>
@@ -11952,6 +11966,7 @@ div#notebook {
 </pre></div>
 <p><strong>对象</strong></p>
 <p>对象的作用域也很有意思，超出花括号之后，对象的引用消失了，但那时对象仍然存在。Java的垃圾回收期会自动监视所有用new创建的对象，如果没有被引用，则释放其内存空间。因此就解决了内存泄漏的问题。</p>
+<p>因为Java所有的对象都是在堆上创建的，而默认情况下，编译器对于堆上的对象一无所知，无法管理，必须手动操作，Java会监测指向对象的引用，如果引用死掉，那么就会启动垃圾回收机制去清除堆上的对象。</p>
 <h2 id="1.3-&#31867;&#21644;&#23545;&#35937;&#30340;&#26500;&#36896;">1.3 &#31867;&#21644;&#23545;&#35937;&#30340;&#26500;&#36896;<a class="anchor-link" href="#1.3-&#31867;&#21644;&#23545;&#35937;&#30340;&#26500;&#36896;">&#182;</a></h2><p>对象的定义和引用如下所示：<code>class ATypeName{/*do something here*/}; Atypename a = new ATypeName()</code></p>
 <p>每个对象都有其内部的字段，用来存储数据，比如：</p>
 <div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">DataOnly</span><span class="o">{</span>
@@ -11969,6 +11984,7 @@ div#notebook {
 <p>字段可以被赋值和引用，引用很简单，只用引用对象，使用圆点操作符后加上字段名称就行。</p>
 <p>如上所示，data.d没有被赋值，但是也对应一个值，这是因为，<strong>如果对想的成员是基本数据类型，即使没有被初始化，Java也会保证其获得一个默认值</strong>，但是对于你自己声明的那种基本对象，不赋值就使用就会出错：<code>char c; println(c);//错误，c只是引用，没有赋值，虽然其是基本类型</code></p>
 <h2 id="1.4-&#26041;&#27861;&#12289;&#21442;&#25968;&#21644;&#36820;&#22238;&#20540;">1.4 &#26041;&#27861;&#12289;&#21442;&#25968;&#21644;&#36820;&#22238;&#20540;<a class="anchor-link" href="#1.4-&#26041;&#27861;&#12289;&#21442;&#25968;&#21644;&#36820;&#22238;&#20540;">&#182;</a></h2><p>Java是一门完全的面向对象程序设计语言，因此，按照惯用叫法，对于C中的函数，称之为方法。方法包括其名称、参数、返回值和方法体。参数列表中需要像C一样声明数据类型，这里传递的并不是C中的数据，而是引用。（除了boolean、char、short、int、long、float、double基本对象，这些传递的是对象/值）。</p>
+<p>Ps.或许这样说有些混淆。Java的参数是值传递（拷贝传递）的，也就是，对于基本类型，传递这个变量对应的数值，对于引用类型，传递这个引用所指向的堆上的对象。对于引用类型，是将这个引用变量拷贝一份，这个拷贝同样指向那个对象，然后传入这个拷贝，传入的引用变量如果指向别的对象，那么传入的参数不受影响。</p>
 <div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Hello</span> <span class="o">{</span>
     <span class="kt">int</span> <span class="n">a</span><span class="o">;</span>
     <span class="kt">float</span> <span class="n">b</span><span class="o">;</span>
@@ -12056,6 +12072,16 @@ java HelloDate --&gt; HelloDate.exe</code></pre>
     <span class="o">}</span>
 <span class="o">}</span>
 </pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="1.6-&#23553;&#35013;&#23545;&#35937;">1.6 &#23553;&#35013;&#23545;&#35937;<a class="anchor-link" href="#1.6-&#23553;&#35013;&#23545;&#35937;">&#182;</a></h2><p>Java中的数据/状态和方法，有一些是为内部服务的，不希望暴露给消费者，因此需要进行封装，一般而言，将所有的数据添加隐藏关键字，然后使用getXXX() 和 setXXX() 方法来访问这个变量。这样可能稍显繁琐，但是好处是，在消费者访问这个数据时，我们可以在中间进行一些操作，比如监视、更改、限制、添加条件等等。Java提供了方便易用的关键字用来区分可以继承的、可以公开访问的、只能私有访问的、只有包内访问权限的不同数据和方法。</p>
+<p>这比该死的Python强太多了，Python就好像光着奶子的女人，嘴里说着“要像成年人一样行事”，带来的却是无尽的混乱，以至于容易出现重构地狱的情况。</p>
 
 </div>
 </div>
@@ -12254,6 +12280,18 @@ c is 111111111111111
 <span class="o">}</span>
 </pre></div>
 <p>此外，break，continue 和 C 完全一样。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="4.-&#35774;&#35745;&#31243;&#24207;">4. &#35774;&#35745;&#31243;&#24207;<a class="anchor-link" href="#4.-&#35774;&#35745;&#31243;&#24207;">&#182;</a></h1><p>在第一部分，我们简要介绍了如何将问题简化，表述成相对应的类，如何设计类的层次，比如内部、匿名、继承、接口、组合等等。在第二部分，我们介绍了如何设计并且调试一个类。在这里，我们将会谈到，作为开发者，如何去设计一个程序。</p>
+<p>我们介绍过从上到下的设计和从下到上的设计。从上到下容易出现的问题是：过于僵硬，难以修改，但其实，这取决于我们要从上到下设计什么东西。如果我们在一开始就要指定类、类的方法以及类的结构的话，那么显然是容易出现问题的。高层设计不应该是独揽全局，而应该是剖析问题，划分职责范围。</p>
+<p>因此，我们要从需要解决问题出发，来设计常见的服务流程（注意，不是类的结构以及其接口！！！）。根据服务流程，我们将不同的服务分包给不同的类，组合使用类，并且尽量只使用组合来创建类的结构。这是因为，将组合拆分成继承、接口、内部类很简单，并且不需要进行过多的其余操作，但是重新定义类的接口、合并和删除类将会十分困难，尤其是一个已经实现好的类。因此，一开始使用组合，并且仅在自己知道自己在做什么的情况下使用设计模式来构建类的高级结构。</p>
+<p>现在根据流程我们决定由四个类来完成工作，meige</p>
 
 </div>
 </div>
