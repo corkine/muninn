@@ -11827,7 +11827,59 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="0.9-Java-&#22522;&#26412;&#27010;&#24565;">0.9 Java &#22522;&#26412;&#27010;&#24565;<a class="anchor-link" href="#0.9-Java-&#22522;&#26412;&#27010;&#24565;">&#182;</a></h2><h3 id="Java-&#31243;&#24207;&#32467;&#26500;">Java &#31243;&#24207;&#32467;&#26500;<a class="anchor-link" href="#Java-&#31243;&#24207;&#32467;&#26500;">&#182;</a></h3><p>Java的源代码一般以.java结尾。经过 javac 的编译器，会生成同名的 xxx.class 类文件，我们的源代码中含有多少个</p>
+<h2 id="0.9-Java-&#22522;&#26412;&#27010;&#24565;">0.9 Java &#22522;&#26412;&#27010;&#24565;<a class="anchor-link" href="#0.9-Java-&#22522;&#26412;&#27010;&#24565;">&#182;</a></h2><h3 id="Java-&#31243;&#24207;&#32467;&#26500;">Java &#31243;&#24207;&#32467;&#26500;<a class="anchor-link" href="#Java-&#31243;&#24207;&#32467;&#26500;">&#182;</a></h3><p>Java的源代码一般以.java结尾。经过 javac 的编译器，会生成同名的 xxx.class 类文件，我们的源代码中含有多少个class，就会生成多少个class文件，包括且不限于公共、私有、内部、匿名类。java不可直接在操作系统运行，因此不会有命令行界面exe程序（像C那样），而是直接通过 java 虚拟机运行 .class 字节码，输入 <code>java xxx</code> (不加.class后缀) 来运行Java程序。这意味着，在Windows下，不能双击打开命令行界面，需要在CMD中输入 java + 命令，此处可以接受输入和程序运行参数信息。</p>
+<h3 id="main-&#26041;&#27861;">main &#26041;&#27861;<a class="anchor-link" href="#main-&#26041;&#27861;">&#182;</a></h3><p>Java 是一门几乎完全的面向对象的程序设计语言，这意味着，最小的功能单位不是函数而是类，每个类对应一个 .class 文件。在执行时，JVM会寻找对应类名的 main 方法位点，然后进入执行，就好像 C 一样。程序一直运行到main方法结束为止。一般而言，main方法被用来测试一个类的功能性，当然，你也可以使用一个单独的静态匿名类来进行测试，后者的好处在于不会影响被测试类的代码纯粹性，前者不会留下测试痕迹。</p>
+<p>类的其余方法可以被看作是“函数”，而类的main方法被看作是执行位点，这样看起来和C没有什么区别。在main中调用函数，使用循环、判断和条件语句以及一些基本的数据类型来进行计算，由于Java直接使用了C的大部分语法，你甚至发现，在main中，完全无法区分一个程序是C还是Java。</p>
+<h3 id="&#20989;&#25968;&#21644;&#26041;&#27861;&#30340;&#21306;&#21035;">&#20989;&#25968;&#21644;&#26041;&#27861;&#30340;&#21306;&#21035;<a class="anchor-link" href="#&#20989;&#25968;&#21644;&#26041;&#27861;&#30340;&#21306;&#21035;">&#182;</a></h3><p>很显然，这样的使用方式是完全错误的。因为我们不能无限制的将“函数”放在执行的类中充当其方法，而是要根据问题使用不同类别的对象，在每个对象内部建立其相关的方法，然后在执行类的main中创建这些对象、调用其方法来解决问题。从C的角度看，这样好像是把“函数”进行了分组，分派到不同的类中去了。或许你认为C的包和Java的类是相似的概念，主要作用是区分这些“函数”（方法），很显然，Java的类用于区分这些方法要比C按照包区分函数强得多，原因之一就是类和对象允许保留其自己的数据，有其自己的状态，加上继承和重载机制，不同的对象的同样的方法调用可以产生不同的行为。Java也有自己的package和module，这和C的包是对应的。类可以在某种程度上看作是对函数的分组，但在更大意义上，我们更倾向于认为类是对于问题的大脑的外在延伸。类是对于问题的重新表述，而不是解决方案。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="0.10-&#38754;&#21521;&#23545;&#35937;&#30340;&#20248;&#36234;&#24615;">0.10 &#38754;&#21521;&#23545;&#35937;&#30340;&#20248;&#36234;&#24615;<a class="anchor-link" href="#0.10-&#38754;&#21521;&#23545;&#35937;&#30340;&#20248;&#36234;&#24615;">&#182;</a></h2><p>对于圆形、正方形、三角形，如果我们现在需要让其具有旋转和播放声音的行为，那么对于C而言：</p>
+<div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">rotate</span><span class="p">(</span><span class="kt">char</span><span class="p">[]</span> <span class="n">name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">degree</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="n">xxx</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="n">yyy</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<p>基本上需要些两个函数，用来旋转和播放声音，在每个函数中需要使用条件if或者switch判断对象，然后产生不同的行为。</p>
+<p>对于OOP而言：</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Square</span>
+    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="n">degree</span><span class="p">):</span>
+        <span class="o">//</span><span class="n">do</span> <span class="n">something</span>
+    <span class="k">def</span> <span class="nf">playSound</span><span class="p">():</span>
+        <span class="o">//</span><span class="n">play</span> <span class="n">sound</span>
+
+<span class="k">class</span> <span class="nc">Circle</span>
+    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="n">degree</span><span class="p">):</span>
+        <span class="o">//</span><span class="n">do</span> <span class="n">something</span>
+    <span class="k">def</span> <span class="nf">playSound</span><span class="p">():</span>
+        <span class="o">//</span><span class="n">play</span> <span class="n">sound</span>
+</pre></div>
+<p>看起来好像面向过程更简单一些，但，如果现在我们要添加一种对象，比如五边形，或者要修改三角形旋转的方法，那么对于面向过程而言，就需要很小心的修改函数，并且容易酿成大错，而面向对象则只需要新建一个类就好了。</p>
+<p>当然，为了显示OOP的优越性，我们可以使用继承来简化代码：</p>
+<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">Stuff</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">rotate</span><span class="o">(</span><span class="n">Integer</span> <span class="n">degree</span><span class="o">)</span> <span class="o">{};</span>
+    <span class="kt">void</span> <span class="nf">playSound</span><span class="o">()</span> <span class="o">{}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Square</span> <span class="kd">extends</span> <span class="n">Stuff</span> <span class="o">{</span>
+    <span class="nd">@Override</span> <span class="kt">void</span> <span class="nf">playSound</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">//play something new</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Circle</span> <span class="kd">extends</span> <span class="n">Stuff</span> <span class="o">{}</span>
+</pre></div>
+<p>这样的话，我们可以重复使用Stuff类的代码，如果子类行为和父类一致，那么甚至不用写方法，比如Circle，extends暗含了其继承自父类所有的方法和数据，可以直接使用：<code>new Circle().rotate(10)</code> 如果需要一点改变，重载父类的方法即可: <code>@Override</code>。</p>
+<h3 id="Java-&#32534;&#31243;&#27969;&#31243;&#27010;&#35201;">Java &#32534;&#31243;&#27969;&#31243;&#27010;&#35201;<a class="anchor-link" href="#Java-&#32534;&#31243;&#27969;&#31243;&#27010;&#35201;">&#182;</a></h3><p><strong>一个类的诞生</strong></p>
+<p>一般而言，在创建好类，定义好方法名称、返回值和传入数据之后，立即在main方法中对这个类的功能进行测试是一个好主意，虽然现在还没有实现这些方法，换句话说，现在的类纯粹是规则，而不含任何实质内容，还是应该立马编写好测试代码。</p>
+<p><strong>设计←→测试——实现</strong>流程是非常常用的手段。虽然你的测试代码需要在实现你的方法后才能使用，但是，先编写测试方法能让你更加清楚解决问题的大致流程如何，避免设计出一大堆不需要的方法，在设计和测试代码编写的交互过程中，你会更加清楚程序应该使用什么方法来完成功能，提供服务。这避免了在设计好方法并实现后调整的困难，毕竟现在我们尚未开始填充这些方法，因此，如果新建的方法名称、返回值、参数不合适，直接删除重建即可，成本较低。</p>
+<p>在main中进行测试，可以使用断点，或者在每句话后使用print打印其状态来判断程序当前所处的状态，以及其是否符合我们的期望。</p>
+<p><strong>类的结构和层次</strong></p>
+<p>实际上，根据在之前我们的介绍，解决问题的第一部是创建足够覆盖问题并且足够简单的类，现在我们创建了一个类，并且定义好了其方法，并且测试了其代码，对于其余的类也要如此。之后，就是设计模式登场的时候了，我们要组织这些类的结构，进行一系列的选择：使用组合还是继承，是否要使用内部类、是否要使用匿名类、使用接口或者继承等等。在建立好类的层次后，就可以对多个类协同完成任务进行总的测试了。</p>
+<p>需要注意，不一定要先创建所有的类，然后再进行组合，也可以根据总体规划，比如规定实现这个服务要组合几个类，要使用内部类或者匿名类等等，然后再去实现类的方法。但总体而言，类的不同角色和位置是非常灵活的，使用接口或者继承也是容易修改的。但，对于问题，能够使用合适的设计模式，并且针对设计模式进行类的排布和设计，也就是从上到下的设计，是非常理想且高效的状态。实际上我们可能面临各种需求，不确定的情况，因此，在一些时候也会使用到自下到上的设计。</p>
 
 </div>
 </div>
@@ -11863,7 +11915,7 @@ div#notebook {
 <p>BigInteger、BigDecimal 仅支持引用，支持任意精度整数和小数，当然，速度很慢。</p>
 <p>int[] a; Java中的数组创建后，默认指向null（被初始化为null）。在任何引用前，如果尚未指定对象，那么运行会报错。</p>
 <p><code>int a[] = new int[]; int a[] = {0};</code> 类似，后者是 C 的写法。注意，这里存储在堆栈而非堆，生成的是值？</p>
-<p>如下，Java的数组也是一个引用，并且可以直接被传递赋值。</p>
+<p>如下，<strong>Java的数组也是一个引用，并且可以直接被传递赋值。</strong></p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ctr</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">arg</span><span class="o">){</span>
