@@ -17,9 +17,10 @@ JUPYTER_NOTEBOOK_ROOT_FOLDER = "/root/.jupyter"
 
 HTML_DST_FOLDER = "source"
 
-COURSE_HEAD = ["mt","pr1","pandas","plot","sklearn","matlab","introc","cst","langc","cpp","java","js","python","mysql","django","visual1","ml1"]
+COURSE_HEAD = ["mt","pr1","pandas","plot","sklearn","matlab","introc","cst","langc","javase","javaee","js","database","python","visual1","ml1"]
 #for debug
 # COURSE_HEAD = ["mt","c3"]
+#delete python cpp 2018-08-30
 
 COURSE_INFO = {
     "pr1":
@@ -141,17 +142,7 @@ COURSE_INFO = {
             
         ],
     },
-    "cpp":
-    {
-        "show_menu_name_1st":"Computer Science",
-        "show_menu_name_2st":"C++ Primer",
-        "2st_addr":None,
-        "2st_addr":"读书笔记",
-        "address":"learn_c",
-        "id":"cpp",
-        "chapter_list":[],
-    },
-    "java":
+    "javase":
     {
         "show_menu_name_1st":"Computer Science",
         "show_menu_name_2st":"Thinking in Java",
@@ -176,43 +167,43 @@ COURSE_INFO = {
             
         ],
     },
-    "js":
+    "javaee":
     {
         "show_menu_name_1st":"Computer Science",
-        "show_menu_name_2st":"JavaScript & Web",
+        "show_menu_name_2st":"Java Web & SSH",
         "2st_addr":None,
         "2st_addr":"读书笔记",
-        "address":"learn_c",
+        "address":"learn_javaee",
         "id":"js",
         "chapter_list":[],
     },
-    "python":
+    "js":
     {
         "show_menu_name_1st":"Computer Science",
-        "show_menu_name_2st":"Advanced Python",
+        "show_menu_name_2st":"JavaScript & React",
         "2st_addr":None,
         "2st_addr":"读书笔记",
-        "address":"learn_c",
-        "id":"python",
+        "address":"learn_javascript",
+        "id":"js",
         "chapter_list":[],
     },
-    "mysql":
+    "database":
     {
         "show_menu_name_1st":"Computer Science",
-        "show_menu_name_2st":"Learn MySQL",
+        "show_menu_name_2st":"MySQL & MongoDB",
         "2st_addr":None,
-        "address":"learn_mysql",
+        "address":"learn_database",
         "id":"mysql",
         "chapter_list":[
             ("mysql学习指南","0","book1_mysql_learn_guide.html","b1"),
         ],
     },
-    "django":
+    "python":
     {
         "show_menu_name_1st":"Computer Science",
-        "show_menu_name_2st":"Play with Django",
+        "show_menu_name_2st":"Python & PyQt & Django",
         "2st_addr":None,
-        "address":"learn_django",
+        "address":"learn_python",
         "id":"mysql",
         "chapter_list":[
             ("play_with_django","0","learn_django_1.html","c1"),
