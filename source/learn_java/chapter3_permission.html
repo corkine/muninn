@@ -11940,7 +11940,9 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Java&#31867;&#30340;&#37325;&#29992;">Java&#31867;&#30340;&#37325;&#29992;<a class="anchor-link" href="#Java&#31867;&#30340;&#37325;&#29992;">&#182;</a></h1><h2 id="&#31867;&#30340;&#32452;&#21512;">&#31867;&#30340;&#32452;&#21512;<a class="anchor-link" href="#&#31867;&#30340;&#32452;&#21512;">&#182;</a></h2><p>组合指的是将多个类组合在一起使用，新的类一般包含着其余类的实例，这样就可以在这个类中调用那些类的方法了，这种方法其使用了类的功能，复用了代码而非形式。</p>
+<h1 id="Java&#31867;&#30340;&#37325;&#29992;">Java&#31867;&#30340;&#37325;&#29992;<a class="anchor-link" href="#Java&#31867;&#30340;&#37325;&#29992;">&#182;</a></h1><p>Java 类的重用可以分为两个方向，其一是使用实例变量，将其余类的对象保存成类的实例变量进行组合使用，这种方式需要额外的设置类的状态（通过构造器或者方法），提供方法获取这些实例变量，但是优点是能够将变化和相对不变的部分进行解耦，这种方式在设计模式中称之为策略模式。其二是对于类的方法进行重用，一般而言，这指的是通过继承来复用父类的代码。</p>
+<p>组合代表了一种更为松散的类和类之间的关系，而继承耦合的则很紧密。此外，组合提供了一种has-a的关系，而继承则提供了一种is-a的关系。根据经验来说，我们使用到组合的场景会更多一些。</p>
+<h2 id="&#31867;&#30340;&#32452;&#21512;">&#31867;&#30340;&#32452;&#21512;<a class="anchor-link" href="#&#31867;&#30340;&#32452;&#21512;">&#182;</a></h2><p>组合指的是将多个类组合在一起使用，新的类一般包含着其余类的实例，这样就可以在这个类中调用那些类的方法了，这种方法其使用了类的功能，复用了代码而非形式。</p>
 <div class="highlight"><pre><span></span><span class="kn">import static</span> <span class="nn">com.mazhangjing.Print.*</span><span class="o">;</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Bird</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
@@ -12378,9 +12380,15 @@ The bird's foot is red.</code></pre>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Java-&#31867;&#30340;&#32467;&#26500;">Java &#31867;&#30340;&#32467;&#26500;<a class="anchor-link" href="#Java-&#31867;&#30340;&#32467;&#26500;">&#182;</a></h1><p>在上文中介绍了Java类的组合和继承。其中组合是最为常用的方式。继承是OOP最经典且最具代表性的使用方法，但是在实际工作中使用不多，且层次深度有限。Java类的结构模式就是为了提高代码的重用率，常见的结构模式有：组合、继承、接口、抽象类、内部类、匿名类、静态类，根据这些结构模式，诞生了十几种设计模式，这些模式用来构建类的层次结构。</p>
-<p>对于初学者，应该关注问题流程，建立类的流程映射，根据调试编写类的接口，实现类即可。而对于高阶使用者，在此基础上应该重构代码，使用设计模式复用代码，将类进行有效的排列组合，方便开发和维护。</p>
-<p>在之后的几章中将会介绍继承、多态、接口、抽象类、内部类等结构模式。这里做一个预览，并且给出如何做出选择使用何种结构模式的理由。</p>
+<h1 id="&#22797;&#29992;&#20195;&#30721;&#30340;&#21407;&#21017;">&#22797;&#29992;&#20195;&#30721;&#30340;&#21407;&#21017;<a class="anchor-link" href="#&#22797;&#29992;&#20195;&#30721;&#30340;&#21407;&#21017;">&#182;</a></h1><h2 id="&#23558;&#21487;&#21464;&#21644;&#19981;&#21487;&#21464;&#36827;&#34892;&#20998;&#31163;">&#23558;&#21487;&#21464;&#21644;&#19981;&#21487;&#21464;&#36827;&#34892;&#20998;&#31163;<a class="anchor-link" href="#&#23558;&#21487;&#21464;&#21644;&#19981;&#21487;&#21464;&#36827;&#34892;&#20998;&#31163;">&#182;</a></h2><p>对于初学者，应该关注问题流程，建立类的流程映射，根据调试编写类的接口，实现类即可。而对于高阶使用者，在此基础上应该重构代码，使用设计模式复用代码（比如组合就是策略模式），将类进行有效的排列组合，方便开发和维护。其中，复用代码的两大方向是使用实例变量或者在方法上下手，此外，要遵循一定的原则进行操作：</p>
+<p>在OOP中最为重要的两条原则是：</p>
+<ul>
+<li>将可变的和不可变的分离</li>
+<li>面向接口编程</li>
+</ul>
+<p>在上文中介绍了Java类的组合和继承。其中组合是最为常用的方式。继承是OOP最经典且最具代表性的使用方法。其中组合对应has-a关系，继承对应is-a关系。你可能还想知道如何选择组合和继承。在一个类中组合另外的类，换句话说，使用策略保存状态，这个状态其实代表了更容易变化的部分。除了is-a和has-a的关系，实例变量和类方法的另外一个不同在于，后者更加稳定，前者更容易变化。因此，我们可以总结出这样的规律：<strong>对于更容易变化，且满足has-a关系的部分，使用实例变量来复用代码，对于更加稳定，且满足is-a，like-a关系的部分，对类方法进行重用（继承）来复用代码</strong>。</p>
+<h2 id="&#38754;&#21521;&#25509;&#21475;&#32534;&#31243;">&#38754;&#21521;&#25509;&#21475;&#32534;&#31243;<a class="anchor-link" href="#&#38754;&#21521;&#25509;&#21475;&#32534;&#31243;">&#182;</a></h2><p>不论是使用组合还是继承，如果我们直接在调用中写死需要调用的方法，那么这对于调用的代码耦合过于紧密，不能够重复使用，因此，第二个重要原则就是，面向接口编程。面向接口编程概念的理解需要后几章之后才能明白，这里首先给出一些概念：面向接口是建立在接口或者内部类抽象基础上对于多态行为的利用来复用代码的。这里的接口指的是广义上的interface接口提供的方法，和抽象类提供的方法，以及普通类提供的父类的方法。</p>
+<p>基本概念如下：</p>
 <p><strong>继承</strong></p>
 <p>对于多个对象，如果其中一些类具有相似的方法，那么可以定一个规则，将它们划分到这个类中。这个类提供了一种声明：所有属于我的对象都可以调用这些共通的方法或者字段。比如猫、狗对象都具有叫、长相这两个方法，可以将其合并为动物类。这样的话，对于猫和狗，使用extends关键字即可直接复用父类——动物类的方法，如果想要自定义，只用覆盖父类方法即可。这叫做继承，继承的优点是：子类可以直接调用父类的方法，使用父类的行为。尽管在子类中实际上没有写这些方法和其实现。</p>
 <p><strong>多态</strong></p>
@@ -12394,7 +12402,68 @@ The bird's foot is red.</code></pre>
 <p>内部类是为了解决接口的一个重要的问题而存在的。即：接口不能有默认实现，因此早期的Java设计者往往在接口下提供一个AbstractXXX的类默认实现接口，这样做的原因是，如果接口过于复杂，那么对于一个实现了接口的类负担太重。此外的一种解决方案，也是解决单根继承的方案不是接口，而是使用内部类。内部类指的是在一个类中的子类，这个类具有外部类完全的访问权限，反之不然，其和外部类关系密切。比如Cat可以有一个getPet()的方法，返回CatPet的内部类，这个类继承自Pet，而外部类继承自Animal，这样间接实现了多根继承，唯一麻烦的是调用内部类时需要调用这个生成内部类的方法。</p>
 <p>内部类还有其余优点，比如同一个内部类可以被多次调用并且保存完全不同的状态，这是多重继承和接口不能做到的。比如，如果有多个接口或者继承需要实现，使用内部类让代码层次更加清晰，功能更加直白，更容易维护。内部类多用于实现接口，当然，也可以用于“多重”继承。此外，对于那些不满足is-a关系的类和类，使用内部类更加恰当，如果不想要直接保存实例对象的话，比如汽车.发动机。</p>
 <p>匿名类、静态类是为了特殊、方便使用而诞生的类结构，此处不再详解。</p>
-<h2 id="&#22914;&#20309;&#36873;&#25321;">&#22914;&#20309;&#36873;&#25321;<a class="anchor-link" href="#&#22914;&#20309;&#36873;&#25321;">&#182;</a></h2><p>一般而言，选择单体类、继承、接口还是抽象类要看你的需求。如果你的类希望复用其余类的代码且满足is-a关系，那么使用继承即可。如果你的类希望扮演一个角色或者多个角色，使用接口更优。如果你的类希望扮演n个角色，或者不太满足is-a关系且不希望使用组合，那么使用内部类。如果你的类希望成为一个标准，如果是家族楷模，那么变成抽象类，如果是角色先锋，那么变成接口。以上都不满足，那么使用单体类或者组合。</p>
+<p><strong>继承方法中不同结构类型的选择标准</strong></p>
+<p>一般而言，选择单体类、继承、接口还是抽象类要看你的需求。如果你的类希望复用其余类的代码且满足is-a关系，那么使用继承即可。如果你的类希望扮演一个角色或者多个角色，使用接口更优。如果你的类希望扮演n个角色，或者不太满足is-a关系且不希望使用组合，那么使用内部类。如果你的类希望成为一个标准，如果是家族楷模，那么变成抽象类，如果是角色先锋，那么变成接口。以上都不满足，那么使用单体类或者组合。</p>
+<p>举例如下：</p>
+<p>对于组合面向接口编程大概这个样子：</p>
+<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">PerformShout</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">shout</span><span class="o">()</span> <span class="o">{}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">DogShout</span> <span class="kd">extends</span> <span class="n">PerformShout</span> <span class="o">{</span>
+    <span class="nd">@Override</span> <span class="kt">void</span> <span class="nf">shout</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&quot;Wang Wang Wang Wang!&quot;</span><span class="o">)</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">CatShout</span> <span class="kd">extends</span> <span class="n">PerformShout</span> <span class="o">{</span>
+    <span class="nd">@Override</span> <span class="kt">void</span> <span class="nf">shout</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&quot;Mow~~~&quot;</span><span class="o">)</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">Animal</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">PerformShout</span> <span class="n">shout</span><span class="o">;</span>
+    <span class="kd">abstract</span> <span class="kt">void</span> <span class="nf">setShout</span><span class="o">(</span><span class="n">PerformShout</span> <span class="n">shout</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">shout</span> <span class="o">=</span> <span class="n">shout</span><span class="o">;</span> <span class="o">}</span>
+    <span class="kt">void</span> <span class="nf">shout</span><span class="o">()</span> <span class="o">{</span> <span class="n">shout</span><span class="o">.</span><span class="na">shout</span><span class="o">();</span> <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Cat</span> <span class="kd">extends</span> <span class="n">Animal</span> <span class="o">{</span>
+    <span class="nd">@Override</span> <span class="kt">void</span> <span class="nf">setShout</span><span class="o">()</span> <span class="o">{</span> <span class="n">shout</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CatShout</span><span class="o">();</span> <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Dog</span> <span class="kd">extends</span> <span class="n">Animal</span> <span class="o">{</span>
+    <span class="nd">@Override</span> <span class="kt">void</span> <span class="nf">setShout</span><span class="o">()</span> <span class="o">{</span> <span class="n">shout</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DogShout</span><span class="o">();</span> <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">TomCat</span><span class="o">{</span>
+    <span class="n">PerformShout</span> <span class="n">shout</span><span class="o">;</span>
+    <span class="kt">void</span> <span class="nf">setShout</span><span class="o">(</span><span class="n">PerformShout</span> <span class="n">shout</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">shout</span> <span class="o">=</span> <span class="n">shout</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kt">void</span> <span class="nf">shout</span><span class="o">()</span> <span class="o">{</span>
+       <span class="n">shout</span><span class="o">.</span><span class="na">shout</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">class</span> <span class="nc">Play</span> <span class="o">{</span>
+    <span class="n">Animal</span> <span class="nf">getAnimal</span><span class="o">(</span><span class="n">Class</span> <span class="n">cls</span><span class="o">,</span> <span class="n">Class</span> <span class="n">shout</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Animal</span> <span class="n">pet</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getInstance</span><span class="o">();</span>
+        <span class="n">pet</span><span class="o">.</span><span class="na">setShout</span><span class="o">(</span><span class="n">shout</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getInstance</span><span class="o">());</span>
+        <span class="k">return</span> <span class="n">pet</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Animal</span> <span class="n">pet</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Dog</span><span class="o">();</span>
+        <span class="n">pet</span><span class="o">.</span><span class="na">shout</span><span class="o">();</span>
+
+        <span class="n">getAnimal</span><span class="o">(</span><span class="n">Cat</span><span class="o">.</span><span class="na">class</span><span class="o">,</span><span class="n">CatShout</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">shout</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>注意到，这里使用了PerformShout作为方法参数，在Play类中，使用类Animal作为返回值，这都是多态复用调用代码的例子。</p>
+<p>使用组合后，我们面向接口编程，这意味着所有的调用都必须使用这变化中不变的部分，也就是接口或者抽象类。比如在TomCat中，setShout我们使用的是PerformShout，这样的话，使用策略模式可以更加轻松的应对可变部分，只需要继承一个PerformShout，然后使用过去的代码载入类，保存成其状态即可。</p>
+<p>实际上，在任何情况下，使用 “.” 来调用方法时，都绝对不应该调用一个类中的方法，这绝对会造成耦合过紧的问题，应该对这个调用树立规则，使用接口或者抽象类契约来声明它。为了良好实践，对于任何类de</p>
 
 </div>
 </div>

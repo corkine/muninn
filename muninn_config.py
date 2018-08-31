@@ -17,10 +17,9 @@ JUPYTER_NOTEBOOK_ROOT_FOLDER = "/root/.jupyter"
 
 HTML_DST_FOLDER = "source"
 
-COURSE_HEAD = ["mt","pr1","pandas","plot","sklearn","matlab","introc","cst","langc","javase","javaee","js","database","python","visual1","ml1"]
+COURSE_HEAD = ["mt","pr1","pandas","plot","sklearn","matlab","introc","cst","langc","javase","javaee","design_pattern","database","js","python","visual1","ml1"]
 #for debug
 # COURSE_HEAD = ["mt","c3"]
-#delete python cpp 2018-08-30
 
 COURSE_INFO = {
     "pr1":
@@ -166,31 +165,31 @@ COURSE_INFO = {
             
             
         ],
+    },    
+    "design_pattern":
+    {
+        "show_menu_name_1st":"Computer Science",
+        "show_menu_name_2st":"Design Pattern",
+        "2st_addr":None,
+        "2st_addr":"读书笔记",
+        "address":"learn_design_pattern",
+        "id":"dp",
+        "chapter_list":[],
     },
     "javaee":
     {
         "show_menu_name_1st":"Computer Science",
-        "show_menu_name_2st":"Java Web & SSH",
+        "show_menu_name_2st":"Learn Java EE",
         "2st_addr":None,
         "2st_addr":"读书笔记",
         "address":"learn_javaee",
         "id":"js",
         "chapter_list":[],
     },
-    "js":
-    {
-        "show_menu_name_1st":"Computer Science",
-        "show_menu_name_2st":"JavaScript & React",
-        "2st_addr":None,
-        "2st_addr":"读书笔记",
-        "address":"learn_javascript",
-        "id":"js",
-        "chapter_list":[],
-    },
     "database":
     {
         "show_menu_name_1st":"Computer Science",
-        "show_menu_name_2st":"MySQL & MongoDB",
+        "show_menu_name_2st":"Learn Database",
         "2st_addr":None,
         "address":"learn_database",
         "id":"mysql",
@@ -198,10 +197,20 @@ COURSE_INFO = {
             ("mysql学习指南","0","book1_mysql_learn_guide.html","b1"),
         ],
     },
+    "js":
+    {
+        "show_menu_name_1st":"Computer Science",
+        "show_menu_name_2st":"Using JavaScript",
+        "2st_addr":None,
+        "2st_addr":"读书笔记",
+        "address":"learn_javascript",
+        "id":"js",
+        "chapter_list":[],
+    },
     "python":
     {
         "show_menu_name_1st":"Computer Science",
-        "show_menu_name_2st":"Python & PyQt & Django",
+        "show_menu_name_2st":"Using Python",
         "2st_addr":None,
         "address":"learn_python",
         "id":"mysql",
@@ -249,24 +258,6 @@ COURSE_INFO = {
     #         ("使用因式分解推荐歌曲","0.9","song_recommender.html","sr"),
     #     ],
     # }
-}
-
-COURSE_INFO2 = {
-    "mt":
-    {
-        "show_menu_name_1st":"Model Thinking",
-        "show_menu_name_2st":None,
-        "2st_addr":None,
-        "address":"coursera_learn_models",
-        "id":"mt",
-        "chapter_list":[
-            ("[O] Aggragation(S) & Decision(P)","1.3","WEEK2_model_thinking.html","ad"),
-            ("[I] How People Think & Modeling Data","1.1","Week3_Model_Thinking.html","pd"),
-            ("[F] Tipping Point & Growth Model","0.8","week4_tipping_point.html","tg"),
-            ("[F] Perspectives & Marklv Processing","0.8","week5_problem_soving.html","pm"),
-            ("Lyapunov Functions","0.8","week7_lyapunov_functions.html","lf"),
-        ],
-    },
 }
 
 
