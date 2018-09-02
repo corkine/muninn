@@ -176,6 +176,7 @@ COURSE_INFO = {
         "id":"dp",
         "chapter_list":[
             ("面向对象概论，策略模式以及观察者模式","0","chapter1_design_pattern_intro.html","w1"),
+            ("工厂模式","0","chapter2_factory.html","w2"),
         ],
     },
     "javaee":
