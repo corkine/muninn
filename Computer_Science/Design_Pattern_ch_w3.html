@@ -2,7 +2,7 @@
             <html lang="zh_cn">
             <head>
                 <meta charset="UTF-8">
-                <title>Visual Percipience - 课程和笔记</title>
+                <title>Design Pattern - 课程和笔记</title>
                 <link rel="stylesheet" href="/css/bootstrap.css">
                 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
                 <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -72,16 +72,16 @@
                 
         <nav class="nav nav-tabs bg-light">
             <li class="nav-item">
-                <small><a class="nav-link">Visual Percipience</a></small>
+                <small><a class="nav-link">Design Pattern</a></small>
             </li>
             <li class="nav-item">
-                <small><a class="nav-link active" href="#">Overview</a></small>
+                <small><a class="nav-link " href="Design_Pattern_overview.html">Overview</a></small>
             </li>
             <li class="nav-item">
                 <small><a class="nav-link" href="#">Course Info</a></small>
             </li>
             <li class="nav-item">
-                <small><a class="nav-link disabled" href="#">Notebook</a></small>
+                <small><a class="nav-link active" href="#">Notebook</a></small>
             </li>
         </nav>
             <div class="container mt-5 ml-auto">
@@ -90,17 +90,24 @@
                     <div class="col-md-4">
                         <!--章节名称-->
                         <div class="list-group list-group-flush">
-                            <a href="Visual_Percipience_ch_sp.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                角度、长度、大小、距离、深度感知<span class="badge badge-primary badge-pill">1</span></a>
-                                <a href="Visual_Percipience_ch_sm.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                运动、方向、速度感知<span class="badge badge-primary badge-pill">1</span></a>
-                                <a href="Visual_Percipience_ch_su.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                一个整合视觉错觉的统一理论<span class="badge badge-primary badge-pill">1</span></a>
-                                
+                            <a href="Design_Pattern_ch_w1.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                策略模式、观察者模式和装饰器模式<span class="badge badge-primary badge-pill">1.1</span></a>
+                                <a href="Design_Pattern_ch_w2.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                简单工厂，工厂方法和抽象工厂模式<span class="badge badge-primary badge-pill">1.2</span></a>
+                                <a href="Design_Pattern_ch_w3.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active">
+                                单件模式和命令模式<span class="badge badge-primary badge-pill">1.0</span></a>
                         </div>
                         <!--章节详细信息-->
                         <div class="card mt-4">
-                            
+                              <ul class="list-group">
+                            <li class="list-group-item list-group-item-light">章节目录</li>
+                        <li class="list-group-item">
+                                &#21333;&#20214;&#27169;&#24335;
+                                <ul class="list-group list-group-flush"><li class="list-group-item">&#21333;&#32447;&#31243;&#29256;&#26412;</li><li class="list-group-item">&#22810;&#32447;&#31243;&#29256;&#26412;</li></ul>
+                            </li>
+                        <li class="list-group-item">
+                                &#21629;&#20196;&#27169;&#24335;
+                                <ul class="list-group list-group-flush"></ul></li>
                         </div>
                     </div>
             <!--右侧-->
@@ -109,9 +116,9 @@
                         <div class="card">
                             <div class="card-header">本章概览</div>
                             <div class="card-body">
-                                    尚未添加内容
+                                    <p class="card-text">本章介绍单件模式和命令模式。对于单件模式而言，其强调一个类只能有一个实例，对此，我们使用私有化构造器并且提供一个实例变量，通过一个静态方法获取这个变量的方式实现。单件面临多线程问题，解决方案是使用全局变量或者使用锁，或者使用双重检查加锁来实现快速，安全的多线程单件模式。</p><p class="card-text">命令模式通过将请求封装成对象，然后单个或者组合的参数化其余对象以提供服务，命令模式强调动作的发出者和动作的执行者的解耦。这种设计模式支持日志、队列、撤销等操作。</p>
                                 <p class="card-text">
-                                    <small class="text-muted">最后更新于 2018-01-01 <a href="#" target="_black" class="card-link">查看笔记</a></small>
+                                    <small class="text-muted">最后更新于 2018-09-02 <a href="/source/learn_design_pattern/chapter3_singleton_command.html" target="_black" class="card-link">查看笔记</a></small>
                                 </p>
                             </div>
                         </div>

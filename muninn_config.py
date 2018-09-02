@@ -175,8 +175,9 @@ COURSE_INFO = {
         "address":"learn_design_pattern",
         "id":"dp",
         "chapter_list":[
-            ("面向对象概论，策略模式以及观察者模式","0","chapter1_design_pattern_intro.html","w1"),
+            ("策略模式，观察者模式和装饰器模式","0","chapter1_design_pattern_intro.html","w1"),
             ("工厂模式","0","chapter2_factory.html","w2"),
+            ("单件模式和命令模式","0","chapter3_singleton_command.html","w3"),
         ],
     },
     "javaee":
