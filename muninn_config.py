@@ -178,6 +178,7 @@ COURSE_INFO = {
             ("策略模式，观察者模式和装饰器模式","0","chapter1_design_pattern_intro.html","w1"),
             ("工厂模式","0","chapter2_factory.html","w2"),
             ("单件模式和命令模式","0","chapter3_singleton_command.html","w3"),
+            ("适配器模式和外观模式","0","chapter4_adaptor_skin.html","w4"),
         ],
     },
     "javaee":
