@@ -179,6 +179,7 @@ COURSE_INFO = {
             ("工厂模式","0","chapter2_factory.html","w2"),
             ("单件模式和命令模式","0","chapter3_singleton_command.html","w3"),
             ("适配器模式和外观模式","0","chapter4_adaptor_skin.html","w4"),
+            ("模板方法模式，迭代器和组合模式","0","chapter5_template_iterator.html","w5"),
         ],
     },
     "javaee":
