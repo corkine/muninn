@@ -180,6 +180,8 @@ COURSE_INFO = {
             ("单件模式和命令模式","0","chapter3_singleton_command.html","w3"),
             ("适配器模式和外观模式","0","chapter4_adaptor_skin.html","w4"),
             ("模板方法模式，迭代器和组合模式","0","chapter5_template_iterator.html","w5"),
+            ("状态模式和策略模式","0","chapter6_status.html","w6"),
+            
         ],
     },
     "javaee":

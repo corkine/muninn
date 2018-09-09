@@ -2,7 +2,7 @@
             <html lang="zh_cn">
             <head>
                 <meta charset="UTF-8">
-                <title>Pandas & Numpy - 课程和笔记</title>
+                <title>Design Pattern - 课程和笔记</title>
                 <link rel="stylesheet" href="/css/bootstrap.css">
                 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
                 <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -72,16 +72,16 @@
                 
         <nav class="nav nav-tabs bg-light">
             <li class="nav-item">
-                <small><a class="nav-link">Pandas & Numpy</a></small>
+                <small><a class="nav-link">Design Pattern</a></small>
             </li>
             <li class="nav-item">
-                <small><a class="nav-link active" href="#">Overview</a></small>
+                <small><a class="nav-link " href="Design_Pattern_overview.html">Overview</a></small>
             </li>
             <li class="nav-item">
                 <small><a class="nav-link" href="#">Course Info</a></small>
             </li>
             <li class="nav-item">
-                <small><a class="nav-link disabled" href="#">Notebook</a></small>
+                <small><a class="nav-link active" href="#">Notebook</a></small>
             </li>
         </nav>
             <div class="container mt-5 ml-auto">
@@ -90,11 +90,26 @@
                     <div class="col-md-4">
                         <!--章节名称-->
                         <div class="list-group list-group-flush">
-                            
+                            <a href="Design_Pattern_ch_w1.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                策略模式、观察者模式和装饰器模式<span class="badge badge-primary badge-pill">1.1</span></a>
+                                <a href="Design_Pattern_ch_w2.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                简单工厂，工厂方法和抽象工厂模式<span class="badge badge-primary badge-pill">1.2</span></a>
+                                <a href="Design_Pattern_ch_w3.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                单件模式和命令模式<span class="badge badge-primary badge-pill">1.0</span></a>
+                                <a href="Design_Pattern_ch_w4.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                适配器模式和外观模式<span class="badge badge-primary badge-pill">1.0</span></a>
+                                <a href="Design_Pattern_ch_w5.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                模板方法模式和迭代器、组合模式<span class="badge badge-primary badge-pill">1.2</span></a>
+                                <a href="Design_Pattern_ch_w6.html" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active">
+                                状态模式和策略模式<span class="badge badge-primary badge-pill">1.0</span></a>
                         </div>
                         <!--章节详细信息-->
                         <div class="card mt-4">
-                            
+                              <ul class="list-group">
+                            <li class="list-group-item list-group-item-light">章节目录</li>
+                        <li class="list-group-item">
+                                &#29366;&#24577;&#27169;&#24335;
+                                <ul class="list-group list-group-flush"><li class="list-group-item">&#29366;&#24577;&#27169;&#24335;&#30340;&#23450;&#20041;</li><li class="list-group-item">&#29366;&#24577;&#27169;&#24335;&#21644;&#31574;&#30053;&#27169;&#24335;</li><li class="list-group-item">&#27880;&#24847;&#20107;&#39033;</li><li class="list-group-item">&#31034;&#20363;&#20195;&#30721;</li></ul></li>
                         </div>
                     </div>
             <!--右侧-->
@@ -103,9 +118,9 @@
                         <div class="card">
                             <div class="card-header">本章概览</div>
                             <div class="card-body">
-                                    尚未添加内容
+                                    <p class="card-text">本章主要介绍状态模式。状态模式使用组合+委托的方式，调用被委托的对象提供服务。区别于策略方法，状态模式重点关注不同状态之间的切换，在某一个时刻，由其中的一个状态对象来接管主类提供服务，而对于策略方法而言，被委托的对象只是为主类提供的服务提供支持，其并不能替代主类完全自主提供服务。</p><p class="card-text">状态模式和策略模式都是使用组合来提供服务的设计模式，在大类上属于提供服务的设计模式。如果一个对象的行为具有这种状态特异性（对于不同情境下的反应均不相同），采用状态模式，反之，如果对象行为稳定，变化仅仅在于小范围之内，则使用策略模式来发挥组合+委托的威力。除此之外，还可选用工厂方法或者模板方法，将行为分层处理，或者集中管理对象的构造，使用“交给子类”模式来提供服务。</p>
                                 <p class="card-text">
-                                    <small class="text-muted">最后更新于 2018-01-01 <a href="#" target="_black" class="card-link">查看笔记</a></small>
+                                    <small class="text-muted">最后更新于 2018-09-08 <a href="/source/learn_design_pattern/chapter6_status.html" target="_black" class="card-link">查看笔记</a></small>
                                 </p>
                             </div>
                         </div>
