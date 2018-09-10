@@ -182,6 +182,8 @@ COURSE_INFO = {
             ("模板方法模式，迭代器和组合模式","0","chapter5_template_iterator.html","w5"),
             ("状态模式和策略模式","0","chapter6_status.html","w6"),
             ("复合模式","0","chapter7_combination.html","w7"),
+            ("代理模式","0","chapter8_proxy.html","w8"),
+            
             
         ],
     },
