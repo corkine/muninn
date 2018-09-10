@@ -11811,7 +11811,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="RMI-&#23454;&#20363;&#20195;&#30721;">RMI &#23454;&#20363;&#20195;&#30721;<a class="anchor-link" href="#RMI-&#23454;&#20363;&#20195;&#30721;">&#182;</a></h1><h2 id="&#23450;&#20041;&#25509;&#21475;">&#23450;&#20041;&#25509;&#21475;<a class="anchor-link" href="#&#23450;&#20041;&#25509;&#21475;">&#182;</a></h2><p>首先要协商好传送的对象和服务端能够提供的方法，需要继承自 Remote 类，每个方法需要抛出 RemoteException 异常。</p>
+<h1 id="RMI-&#31034;&#20363;&#20195;&#30721;">RMI &#31034;&#20363;&#20195;&#30721;<a class="anchor-link" href="#RMI-&#31034;&#20363;&#20195;&#30721;">&#182;</a></h1><h2 id="&#23450;&#20041;&#25509;&#21475;">&#23450;&#20041;&#25509;&#21475;<a class="anchor-link" href="#&#23450;&#20041;&#25509;&#21475;">&#182;</a></h2><p>首先要协商好传送的对象和服务端能够提供的方法，需要继承自 Remote 类，每个方法需要抛出 RemoteException 异常。</p>
 <div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">AutoMatRemote</span> <span class="kd">extends</span> <span class="n">Remote</span> <span class="o">{</span>
     <span class="n">State</span> <span class="nf">getState</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">RemoteException</span><span class="o">;</span>
     <span class="kt">int</span> <span class="nf">getCount</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">RemoteException</span><span class="o">;</span>
