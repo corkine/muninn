@@ -183,7 +183,7 @@ COURSE_INFO = {
             ("状态模式和策略模式","0","chapter6_status.html","w6"),
             ("代理模式","0","chapter7_proxy.html","w7"),
             ("复合模式","0","chapter8_combination.html","w8"),
-            
+            ("MVC模式","0","chapter9_mvc.html","w9"),
             
         ],
     },
