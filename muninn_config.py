@@ -184,6 +184,7 @@ COURSE_INFO = {
             ("代理模式","0","chapter7_proxy.html","w7"),
             ("复合模式","0","chapter8_combination.html","w8"),
             ("MVC模式","0","chapter9_mvc.html","w9"),
+            ("领域设计模式","0","chapter10_other_design_patterns.html","w10"),
             
         ],
     },
