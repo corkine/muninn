@@ -196,7 +196,9 @@ COURSE_INFO = {
         "2st_addr":"读书笔记",
         "address":"learn_javaee",
         "id":"js",
-        "chapter_list":[],
+        "chapter_list":[
+            ("serlvet_jsp_basic","0","chapter1_servelt_basic.html","c1"),
+        ],
     },
     "database":
     {
