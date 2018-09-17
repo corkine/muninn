@@ -17,7 +17,7 @@ JUPYTER_NOTEBOOK_ROOT_FOLDER = "/root/.jupyter"
 
 HTML_DST_FOLDER = "source"
 
-COURSE_HEAD = ["mt","pr1","pandas","plot","sklearn","matlab","introc","cst","langc","javase","javaee","design_pattern","database","js","python","visual1","ml1"]
+COURSE_HEAD = ["mt","pr1","pandas","plot","sklearn","matlab","introc","cst","langc","javase","javaee","design_pattern","database","js","python","visual1","neuro","ml1"]
 #for debug
 # COURSE_HEAD = ["mt","c3"]
 
@@ -244,6 +244,17 @@ COURSE_INFO = {
             ("角度、长度、大小、距离、深度感知","1","Week3_see_space.html","sp"),
             ("运动、方向、速度感知","1","Week_4_Seeing_Motion.html","sm"),
             ("一个整合视觉错觉的统一理论","1","Week_5_SumUp.html","su"),
+        ],
+    },
+    "neuro":
+    {
+        "show_menu_name_1st":"Neuro Science",
+        "show_menu_name_2st":"Medical Neuroscience",
+        "2st_addr":None,
+        "address":"learn_neuroscience",
+        "id":"neuro",
+        "chapter_list":[
+            ("导论","0","chapter1_intro.html","c1"),
         ],
     },
     "ml1":
