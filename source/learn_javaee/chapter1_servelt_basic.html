@@ -11775,8 +11775,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><span type="title">Servlet 和 JSP 概要</span> | <span type="update">2018-09-16</span> - Version <span type="version">1.1</span></p>
-<p><span type="intro"><p class="card-text">本章主要对 Servlet 和 JSP 有一个概要性的介绍。此外，主要介绍了HTTP的URL、GET/POST方法、Response响应码、HTML的主要格式、Web服务器和应用服务器的工作流程（包括web.xml文件配置）。</p></span></p>
+<p><span type="title">Servlet 和 JSP 概要</span> | <span type="update">2018-09-16</span> - Version <span type="version">1.3</span></p>
+<p><span type="intro"><p class="card-text">本章主要对 Servlet 和 JSP 有一个概要性的介绍。简要来说，介绍了HTTP的URL、GET/POST方法、Response响应码、HTML的主要格式、Web服务器和应用服务器的工作流程（包括web.xml文件配置、动态参数加载、属性监听和线程安全、Servlet生命周期、JSP派发等）。</p></span></p>
 
 </div>
 </div>
@@ -12070,15 +12070,19 @@ div#notebook {
     <span class="n">os</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">bytes</span><span class="o">,</span><span class="mi">0</span><span class="o">,</span><span class="n">read</span><span class="o">);</span>
 <span class="o">}</span> <span class="n">os</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span> <span class="n">os</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
 </pre></div>
-<p>注意上面使用了 servletContext 对象的 getResourceAsStream 方法获取文件，注意其MIME类型。此外，这个文件的路径，如果是相对路径，则当前文件夹在此程序所在的文件夹，也就是servlet/jsp所在文件夹。如果是绝对路径，则根目录指的是APP的根目录，而不是WEB-INF的根目录。</p>
+<p>注意上面使用了 servletContext 对象的 getResourceAsStream 方法获取文件，注意其MIME类型。此外，这个文件的路径，不能是相对路径。如果是绝对路径，则根目录指的是APP的根目录，而不是WEB-INF的根目录。</p>
 <h2 id="&#35831;&#27714;&#27966;&#21457;-RequestDispatcher">&#35831;&#27714;&#27966;&#21457; RequestDispatcher<a class="anchor-link" href="#&#35831;&#27714;&#27966;&#21457;-RequestDispatcher">&#182;</a></h2><p>对于 request，在 servlet 中进行处理后，可以交给 dispatcher 进行转交。这一过程使用：</p>
-<div class="highlight"><pre><span></span><span class="n">req</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">&quot;result.jsp&quot;</span><span class="o">).</span><span class="na">forward</span><span class="o">(</span><span class="n">req</span><span class="o">,</span><span class="n">resp</span><span class="o">);</span>
+<div class="highlight"><pre><span></span><span class="n">req</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">&quot;result.jsp&quot;</span><span class="o">).</span><span class="na">forward</span><span class="o">(</span><span class="n">req</span><span class="o">,</span><span class="n">resp</span><span class="o">);</span> <span class="c1">//相对路径对于当前Servlet相应时的URL而言</span>
 </pre></div>
 <p>来处理，这里需要注意，dispatcher 可以来自于 req 对象，也可以来自于 context :</p>
-<div class="highlight"><pre><span></span><span class="n">getServletContext</span><span class="o">().</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">&quot;/result.jsp&quot;</span><span class="o">).</span><span class="na">forward</span><span class="o">(</span><span class="n">req</span><span class="o">,</span><span class="n">resp</span><span class="o">);</span>
+<div class="highlight"><pre><span></span><span class="n">getServletContext</span><span class="o">().</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">&quot;/result.jsp&quot;</span><span class="o">).</span><span class="na">forward</span><span class="o">(</span><span class="n">req</span><span class="o">,</span><span class="n">resp</span><span class="o">);</span> <span class="c1">//绝对路径相对物理逻辑路径而言</span>
 </pre></div>
-<p>不过，这样有点繁琐，因为反正 forward 要用到 req 对象。其次，它和 req 的 dispatcher 有区别，派发器的地址必须是/绝对路径开头，因为context对象没有相对路径的记录。而req则必然依附在一个servlet上，因此可以使用相对路径。一般使用 req 对象的属性得到派发器。</p>
-<p>其次，可以使用 forward 和 include 进行派发。区别是，前者将权力完全移交，后者只是请求帮助，在处理后必须使用另一个 include/forward 来返回处理结果，才能结束寻求帮助的servlet生命周期。一般常用的是 forward。</p>
+<p>不过，这样有点繁琐，因为反正 forward 要用到 req 对象。其次，它和 req 的 dispatcher 有区别，派发器的地址必须是/绝对路径开头，因为context对象没有相对路径的记录。而req则必然依附在一个servlet上，因此可以使用相对路径。一般使用 req 对象的属性得到派发器。注意，此处的 servlet 相对路径指的是相对于 当前 servlet URL展示的除去最后请求文件的那个路径(/Select.do 去除 Select.do 后剩余的斜杠)，而不是指的物理逻辑路径（/WEB-INF/classes）。此处的绝对路径指的是WEB的根目录（斜杠）。</p>
+<p>这里容易混淆的原因是，我们需要根据物理路径寻找 jsp 文件，但是相对路径则是基于 URL 路径的。你可以使用绝对物理路径（/WEB-INF/result.jsp，/result.jsp） 来避免 servlet 位置的影响，这时使用的就是物理路径。</p>
+<p>其实这里的相对路径原因可能是我们希望建立像静态WEB那样的文件夹，然后URL模仿这种文件夹的映射，jsp作为资源文件放在这些文件夹中。但现实是，URL可以是任意的，不存在物理映射的，因此这种根据URL找资源的方式在这种情况下很容易出错（没有物理映射）。</p>
+<p>其次，可以使用 forward 和 include 进行派发。区别是，前者将权力完全移交，后者只是请求帮助，在处理后还会返回此Servlet。因此，对于 include，可以在当前 servlet 调用 getWriter，反正还是要返回，但是对于 forward，在当前 servlet 一旦调用 getWriter().flush 则会直接出错（因为已经派发，但是自己又要返回），一般常用的是 forward。</p>
+<p><strong>派发的request对象不同于原本的request对象</strong></p>
+<p>当进行派发时，request对象变化了，被派发的request对象并非派发前的request对象。通过 getAttritube("javax.servlet.forward/include.xxx") 来获取这些派发前的属性/字符串值。</p>
 
 </div>
 </div>
@@ -12147,6 +12151,7 @@ com.mazj.dog.DogListener.class</p>
 <li><p>ServletContextAttributeListener - ServletContextAttribute - 针对上下文属性增删改时的通知</p>
 </li>
 </ul>
+<p>注意，监听器监听属性的修改，Event返回的是旧值。</p>
 <h2 id="&#32447;&#31243;&#23433;&#20840;&#30340;&#23646;&#24615;&#22788;&#29702;">&#32447;&#31243;&#23433;&#20840;&#30340;&#23646;&#24615;&#22788;&#29702;<a class="anchor-link" href="#&#32447;&#31243;&#23433;&#20840;&#30340;&#23646;&#24615;&#22788;&#29702;">&#182;</a></h2><p>对于 context 的属性，其可以进行添加和删除，作用域存在于 APP 初始化到 APP 终结为止，所有APP内的 servlet 和 jsp 甚至 listener 均可访问。 对于 Session 的属性，其也可以进行添加和删除，作用域存在于用户的会话到期为止，所有在到期前被调用的 servlet 和 jsp 均可以访问。对于 request，只有特定的 servlet 和其派发 request 可以访问，作用域一直持续到返回视图为止。</p>
 <p>除了局部变量和请求属性，所有的用户会话属性以及上下文属性都不是线程安全的，因为每次请求会使用servlet的不同线程而不是不同实例，如果在set之后，get之前被CPU切换到另一个servlet线程或者另一个servlet实例，那么会发生同步错误。因此，经常对于set进行同步化来避免线程问题：</p>
 <div class="highlight"><pre><span></span><span class="kd">synchronized</span> <span class="o">(</span><span class="n">getServletContext</span><span class="o">())</span> <span class="o">{</span>
@@ -12159,6 +12164,7 @@ com.mazj.dog.DogListener.class</p>
 <span class="o">}</span>
 </pre></div>
 <p>注意，synchronized 需要对于 Object 加锁，也就是 session 和 getServletContext 加锁。其次，不对 doGet 方法加锁的原因是，不只因为同一 servlet 的不同线程可能访问属性，不同servlet实例也有可能同时对于属性进行读写。因此，对于属性的宿主加锁是唯一可以保证线程安全的方案。</p>
+<h2 id="&#39034;&#24207;&#24050;&#30693;&#30340;&#30417;&#21548;">&#39034;&#24207;&#24050;&#30693;&#30340;&#30417;&#21548;<a class="anchor-link" href="#&#39034;&#24207;&#24050;&#30693;&#30340;&#30417;&#21548;">&#182;</a></h2><p>不同于监听者模式，因为DD中监听的顺序一定，所以监听者被通知的顺序也得到保证，这一点和JAVASE某些实现不同。</p>
 
 </div>
 </div>
