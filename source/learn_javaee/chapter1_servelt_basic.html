@@ -11775,7 +11775,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><span type="title">Servlet 和 JSP 概要</span> | <span type="update">2018-09-16</span> - Version <span type="version">1.5</span></p>
+<p><span type="title">Servlet 和 JSP 概要</span> | <span type="update">2018-09-16</span> - Version <span type="version">1.6</span></p>
 <p><span type="intro"><p class="card-text">本章主要对 Servlet 和 JSP 有一个概要性的介绍。简要来说，介绍了HTTP的URL、GET/POST方法、Response响应码、HTML的主要格式、Web服务器和应用服务器的工作流程（包括web.xml文件配置、动态参数加载、属性监听和线程安全、Servlet生命周期、JSP派发等）。</p></span></p>
 
 </div>
@@ -12016,8 +12016,6 @@ div#notebook {
 <span class="o">}</span>
 </pre></div>
 <p>这个Servlet程序对response对象设置了类型，然后对于输出流添加了HTML文档，当容器检测到对于这个Servlet调用时，会进入 doGet 进行处理，返回 response 的文档格式和文档内容。URL到Servlet的映射可以通过注解和XML标记文件指定。</p>
-<h2 id="Servlet-&#21644;-JSP-&#30340;&#22788;&#29702;&#27969;&#31243;">Servlet &#21644; JSP &#30340;&#22788;&#29702;&#27969;&#31243;<a class="anchor-link" href="#Servlet-&#21644;-JSP-&#30340;&#22788;&#29702;&#27969;&#31243;">&#182;</a></h2><p>对于一个请求，TOMCAT容器的处理步骤为：容器首先创建一个 HttpServletRequest 和 HttpServletResponse 对象，然后调用 Servlet 的一个线程，调用 service() 方法，之后 service 方法根据POST还是GET调用 doPost() 和 doGet() 中的方法，并且传递 request 和 response 对象作为参数，方便我们进行处理，处理后，将其中的 response 方法的流返回，进行相应。此时，HttpServletRequest 和 Response 对象死掉，Servlet 的相关线程死掉。</p>
-<p>需要注意，在MVC设计模式中，HTML的GET or POST 请求，在 Servlet 中，我们会从 req 中提取 parameter 参数，然后交给 Model 进行处理，得到的结果再交给 req，set 到 attritube 上。注意，parameter 指的是从HTML到Servlet的参数传递，默认为 String，但是Attritube则不同，其一般为方便JSP进行后期处理的Java类型，attritube 多用于 Model 交付结果给 JSP 进行页面展示的。</p>
 <h2 id="Servlet-&#23545;&#35937;&#30340;&#29983;&#21629;&#21608;&#26399;">Servlet &#23545;&#35937;&#30340;&#29983;&#21629;&#21608;&#26399;<a class="anchor-link" href="#Servlet-&#23545;&#35937;&#30340;&#29983;&#21629;&#21608;&#26399;">&#182;</a></h2><p>在处理流程中，我们说到，servlet对象对于每个请求派发一个线程，而不是启动一个实例。对于一台电脑的多个请求会对应多个线程，对于分布式，则每个JVM包含一个实例，然后再分成多个线程。</p>
 <p>servlet对象的创建如下：</p>
 <ul>
@@ -12028,6 +12026,8 @@ div#notebook {
 <li>servlet的destory方法，销毁前的准备，比如关闭文件流或者数据库</li>
 </ul>
 <p>注意，init和destory只进行一次，对于多个请求，容器会多次在不同线程中调用serve方法进行处理。不要把任何代码放到servlet的构造器中去。因为这个时候很可能我们想要的数据还没有被初始化，比如上下文信息。</p>
+<h2 id="Servlet-&#21644;-JSP-&#30340;&#22788;&#29702;&#27969;&#31243;">Servlet &#21644; JSP &#30340;&#22788;&#29702;&#27969;&#31243;<a class="anchor-link" href="#Servlet-&#21644;-JSP-&#30340;&#22788;&#29702;&#27969;&#31243;">&#182;</a></h2><p>对于一个请求，TOMCAT容器的处理步骤为：容器首先创建一个 HttpServletRequest 和 HttpServletResponse 对象，然后调用 Servlet 的一个线程，调用 service() 方法，之后 service 方法根据POST还是GET调用 doPost() 和 doGet() 中的方法，并且传递 request 和 response 对象作为参数，方便我们进行处理，处理后，将其中的 response 方法的流返回，进行相应。此时，HttpServletRequest 和 Response 对象死掉，Servlet 的相关线程死掉。</p>
+<p>需要注意，在MVC设计模式中，HTML的GET or POST 请求，在 Servlet 中，我们会从 req 中提取 parameter 参数，然后交给 Model 进行处理，得到的结果再交给 req，set 到 attritube 上。注意，parameter 指的是从HTML到Servlet的参数传递，默认为 String，但是Attritube则不同，其一般为方便JSP进行后期处理的Java类型，attritube 多用于 Model 交付结果给 JSP 进行页面展示的。</p>
 <h2 id="servletConfig-&#21644;-servletContext">servletConfig &#21644; servletContext<a class="anchor-link" href="#servletConfig-&#21644;-servletContext">&#182;</a></h2><p>每个 servlet 对象都有一个 servletConfig 对象，此对象用于向servlet传递部署时的信息，这些信息在xml文件中，可以方便的进行更改。此外，servletConfig对象还可以用于访问 servletContext 对象，后者其实应该叫做AppContext，因为每个Web APP只有一个servletContext对象，此对象用于访问服务器信息，API版本信息，Web应用的参数以及路径下的其他可访问文件等。换句话说，servletContext像是一个App的外在环境背景。此对象必须通过servletConfig对象获得，servletConfig对象针对单一的servlet进行配置，传递每个servlet独特的参数（而不是APP全局的参数），以及提供对于servletContext的访问。</p>
 <h2 id="HttpRequest-&#23545;&#35937;">HttpRequest &#23545;&#35937;<a class="anchor-link" href="#HttpRequest-&#23545;&#35937;">&#182;</a></h2><p>HttpRequest 对象由容器生成，并且在调用 service -&gt; doXXX() 方法时作为参数传入。当我们需要使用RequestDispicter时，一般会先 getParameter 交给 Model 处理后获得结果以Java类型 setAttritube 到 Request 对象上，由JSP负责解析。</p>
 <p>Request 常见方法一般为端口相关、内容相关、附带的参数和属性的获取</p>
@@ -12059,9 +12059,7 @@ div#notebook {
 </li>
 </ul>
 <h2 id="HttpResponse-&#23545;&#35937;">HttpResponse &#23545;&#35937;<a class="anchor-link" href="#HttpResponse-&#23545;&#35937;">&#182;</a></h2><p>Response 的方法相比 Request 的就简单许多，对于 ServletResponse 而言，常见的是 get/setContentType, getOutputStream/Writer 输出内容相关的方法，对于 HttpResponse 而言，多了 addCookie，addHeader，encodeURL，sendError，setStatus，sendRedirect这些添加头部、改变URL、添加Cookie、更改状态以及重定向的方法。</p>
-<h3 id="Redirect-&#37325;&#23450;&#21521;-&#27880;&#24847;&#20107;&#39033;">Redirect &#37325;&#23450;&#21521; &#27880;&#24847;&#20107;&#39033;<a class="anchor-link" href="#Redirect-&#37325;&#23450;&#21521;-&#27880;&#24847;&#20107;&#39033;">&#182;</a></h3><p>对于 setRedirect 方法，需要注意，其必须在 getWriter/getOutputStream 之前被调用，否则会返回状态错误。此外，redirect接受string字符串，可选绝对路径或者相对路径。相对路径是相对于用户输入URL去除文件所指向的目录，绝对路径指的是相对于根域名的目录（而不是APP的目录）。</p>
-<p>比如：访问 <code>www.mazhangjing.com/appname/folder_a/index.html</code> 此时指向相对目录 <code>folder_b/index.html</code> 则意思是 <code>www.mazhangjing.com/appname/folder_a/folder_b/index.html</code>。而如果现在是绝对目录，则意识是 <code>/folder_b/index.html</code> =&gt; <code>www.mazhangjing.com/folder_b/index.html</code> 注意，appname 这一层消失了。可以看到，对于重定向是基于URL的，要么是基于CWD，要么是基于根域名，和APP根目录没有关系。这和 context.getResourceAsStream 非常不同，后者的绝对目录是以 App 为根而不是以服务器地址为根。</p>
-<h3 id="&#35835;&#20889;-MIME-&#25968;&#25454;-&#27880;&#24847;&#20107;&#39033;">&#35835;&#20889; MIME &#25968;&#25454; &#27880;&#24847;&#20107;&#39033;<a class="anchor-link" href="#&#35835;&#20889;-MIME-&#25968;&#25454;-&#27880;&#24847;&#20107;&#39033;">&#182;</a></h3><p>Servlet 的 Response 是一个动态的发送，对于浏览器而言，我们不知道到底接收到的是什么，反正是数据流，因此需要使用MIME类型来标记，比如：</p>
+<h2 id="MIME-&#25968;&#25454;&#35835;&#20889;">MIME &#25968;&#25454;&#35835;&#20889;<a class="anchor-link" href="#MIME-&#25968;&#25454;&#35835;&#20889;">&#182;</a></h2><p>Servlet 的 Response 是一个动态的发送，对于浏览器而言，我们不知道到底接收到的是什么，反正是数据流，因此需要使用MIME类型来标记，比如：</p>
 <div class="highlight"><pre><span></span><span class="n">response</span><span class="o">.</span><span class="na">setContentType</span><span class="o">(</span><span class="s">&quot;application/jar&quot;</span><span class="o">);</span>
 <span class="n">InputStream</span> <span class="o">=</span> <span class="n">getServletContext</span><span class="o">().</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="s">&quot;/something.jar&quot;</span><span class="o">);</span>
 <span class="n">OutputStream</span> <span class="n">os</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">getOutputStream</span><span class="o">();</span>
@@ -12071,7 +12069,7 @@ div#notebook {
 <span class="o">}</span> <span class="n">os</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span> <span class="n">os</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
 </pre></div>
 <p>注意上面使用了 servletContext 对象的 getResourceAsStream 方法获取文件，注意其MIME类型。此外，这个文件的路径，不能是相对路径。如果是绝对路径，则根目录指的是APP的根目录，而不是WEB-INF的根目录。</p>
-<h2 id="&#35831;&#27714;&#27966;&#21457;-RequestDispatcher">&#35831;&#27714;&#27966;&#21457; RequestDispatcher<a class="anchor-link" href="#&#35831;&#27714;&#27966;&#21457;-RequestDispatcher">&#182;</a></h2><p>对于 request，在 servlet 中进行处理后，可以交给 dispatcher 进行转交。这一过程使用：</p>
+<h2 id="RequestDispatcher-&#35831;&#27714;&#27966;&#21457;">RequestDispatcher &#35831;&#27714;&#27966;&#21457;<a class="anchor-link" href="#RequestDispatcher-&#35831;&#27714;&#27966;&#21457;">&#182;</a></h2><p>对于 request，在 servlet 中进行处理后，可以交给 dispatcher 进行转交。这一过程使用：</p>
 <div class="highlight"><pre><span></span><span class="n">req</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">&quot;result.jsp&quot;</span><span class="o">).</span><span class="na">forward</span><span class="o">(</span><span class="n">req</span><span class="o">,</span><span class="n">resp</span><span class="o">);</span> <span class="c1">//相对路径对于当前Servlet相应时的URL-Pattern而言</span>
 </pre></div>
 <p>来处理，这里需要注意，dispatcher 可以来自于 req 对象，也可以来自于 context :</p>
@@ -12084,6 +12082,8 @@ div#notebook {
 <p>其次，可以使用 forward 和 include 进行派发。区别是，前者将权力完全移交，后者只是请求帮助，在处理后还会返回此Servlet。因此，对于 include，可以在当前 servlet 调用 getWriter，反正还是要返回，但是对于 forward，在当前 servlet 一旦调用 getWriter().flush 则会直接出错（因为已经派发，但是自己又要返回），一般常用的是 forward。</p>
 <p><strong>派发的request对象不同于原本的request对象</strong></p>
 <p>当进行派发时，request对象变化了，被派发的request对象并非派发前的request对象。通过 getAttritube("javax.servlet.forward/include.xxx") 来获取这些派发前的属性/字符串值。</p>
+<h2 id="Redirect-&#37325;&#23450;&#21521;">Redirect &#37325;&#23450;&#21521;<a class="anchor-link" href="#Redirect-&#37325;&#23450;&#21521;">&#182;</a></h2><p>对于 setRedirect 方法，需要注意，其必须在 getWriter/getOutputStream 之前被调用，否则会返回状态错误。此外，redirect接受string字符串，可选绝对路径或者相对路径。相对路径是相对于用户输入URL去除文件所指向的目录，绝对路径指的是相对于根域名的目录（而不是APP的目录）。</p>
+<p>比如：访问 <code>www.mazhangjing.com/appname/folder_a/index.html</code> 此时指向相对目录 <code>folder_b/index.html</code> 则意思是 <code>www.mazhangjing.com/appname/folder_a/folder_b/index.html</code>。而如果现在是绝对目录，则意识是 <code>/folder_b/index.html</code> =&gt; <code>www.mazhangjing.com/folder_b/index.html</code> 注意，appname 这一层消失了。可以看到，对于重定向是基于URL的，要么是基于CWD，要么是基于根域名，和APP根目录没有关系。这和 context.getResourceAsStream 非常不同，后者的绝对目录是以 App 为根而不是以服务器地址为根。</p>
 
 </div>
 </div>
@@ -12153,6 +12153,7 @@ com.mazj.dog.DogListener.class</p>
 </li>
 </ul>
 <p>注意，监听器监听属性的修改，Event返回的是旧值。</p>
+<p><strong>顺序已知的监听</strong> 不同于监听者模式，因为DD中监听的顺序一定，所以监听者被通知的顺序也得到保证，这一点和JAVASE某些实现不同。</p>
 <h2 id="&#32447;&#31243;&#23433;&#20840;&#30340;&#23646;&#24615;&#22788;&#29702;">&#32447;&#31243;&#23433;&#20840;&#30340;&#23646;&#24615;&#22788;&#29702;<a class="anchor-link" href="#&#32447;&#31243;&#23433;&#20840;&#30340;&#23646;&#24615;&#22788;&#29702;">&#182;</a></h2><p>对于 context 的属性，其可以进行添加和删除，作用域存在于 APP 初始化到 APP 终结为止，所有APP内的 servlet 和 jsp 甚至 listener 均可访问。 对于 Session 的属性，其也可以进行添加和删除，作用域存在于用户的会话到期为止，所有在到期前被调用的 servlet 和 jsp 均可以访问。对于 request，只有特定的 servlet 和其派发 request 可以访问，作用域一直持续到返回视图为止。</p>
 <p>除了局部变量和请求属性，所有的用户会话属性以及上下文属性都不是线程安全的，因为每次请求会使用servlet的不同线程而不是不同实例，如果在set之后，get之前被CPU切换到另一个servlet线程或者另一个servlet实例，那么会发生同步错误。因此，经常对于set进行同步化来避免线程问题：</p>
 <div class="highlight"><pre><span></span><span class="kd">synchronized</span> <span class="o">(</span><span class="n">getServletContext</span><span class="o">())</span> <span class="o">{</span>
@@ -12165,7 +12166,6 @@ com.mazj.dog.DogListener.class</p>
 <span class="o">}</span>
 </pre></div>
 <p>注意，synchronized 需要对于 Object 加锁，也就是 session 和 getServletContext 加锁。其次，不对 doGet 方法加锁的原因是，不只因为同一 servlet 的不同线程可能访问属性，不同servlet实例也有可能同时对于属性进行读写。因此，对于属性的宿主加锁是唯一可以保证线程安全的方案。</p>
-<h2 id="&#39034;&#24207;&#24050;&#30693;&#30340;&#30417;&#21548;">&#39034;&#24207;&#24050;&#30693;&#30340;&#30417;&#21548;<a class="anchor-link" href="#&#39034;&#24207;&#24050;&#30693;&#30340;&#30417;&#21548;">&#182;</a></h2><p>不同于监听者模式，因为DD中监听的顺序一定，所以监听者被通知的顺序也得到保证，这一点和JAVASE某些实现不同。</p>
 
 </div>
 </div>
