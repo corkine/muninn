@@ -11976,6 +11976,14 @@ div#notebook {
 
 <span class="nt">&lt;/web-app&gt;</span>
 </pre></div>
+<h2 id="initParameter-&#21442;&#25968;&#21160;&#24577;&#21152;&#36733;">initParameter &#21442;&#25968;&#21160;&#24577;&#21152;&#36733;<a class="anchor-link" href="#initParameter-&#21442;&#25968;&#21160;&#24577;&#21152;&#36733;">&#182;</a></h2><p>对于不想要硬编码在 Servlet 或者 JSP 中的数据，也不想放到数据库中的数据，可以放在XML描述文件中。放在这里的数据可以通过 getContext 或者 getConfig 的 initParameter 参数获得。但是，TOMCAT需要热重启来加载这些数据（因为这些数据在初始化servlet后被加载，之后再也不被访问）。关于使用 config 还是 context，如果数据是单个 servlet 使用，则使用 config，否则使用 context。</p>
+<p>换句话说，这些参数是“常量”。</p>
+<div class="highlight"><pre><span></span><span class="n">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&quot;USER: &quot;</span> <span class="o">+</span> <span class="n">getServletConfig</span><span class="o">().</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">&quot;username&quot;</span><span class="o">));</span>
+<span class="n">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&quot;APP: &quot;</span> <span class="o">+</span> <span class="n">getServletConfig</span><span class="o">().</span><span class="na">getServletContext</span><span class="o">().</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">&quot;appname&quot;</span><span class="o">));</span>
+
+<span class="c1">//USER: null APP: muninn</span>
+</pre></div>
+<p>尤其需要注意，getServletConfig() 中必须使用对应的 servlet 的参数。上述代码为 null 的原因是，我们的 servlet 将 resp 派发给了 jsp，这个 jsp 是另一个 servlet，因此，自然获取不到数据。此外， getServletContext是由 getServletConfig 方法的 Config 对象提供的。</p>
 
 </div>
 </div>
@@ -12063,6 +12071,15 @@ div#notebook {
 <span class="o">}</span> <span class="n">os</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span> <span class="n">os</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
 </pre></div>
 <p>注意上面使用了 servletContext 对象的 getResourceAsStream 方法获取文件，注意其MIME类型。此外，这个文件的路径，如果是相对路径，则当前文件夹在此程序所在的文件夹，也就是servlet/jsp所在文件夹。如果是绝对路径，则根目录指的是APP的根目录，而不是WEB-INF的根目录。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Listener:-&#20107;&#20214;&#30417;&#21548;&#21644;&#22788;&#29702;">Listener: &#20107;&#20214;&#30417;&#21548;&#21644;&#22788;&#29702;<a class="anchor-link" href="#Listener:-&#20107;&#20214;&#30417;&#21548;&#21644;&#22788;&#29702;">&#182;</a></h1><h2 id="ServletContextListener">ServletContextListener<a class="anchor-link" href="#ServletContextListener">&#182;</a></h2><p>我们说过，对于 servlet 而言，将数据库的初始化和销毁之类的工作放在 init 和 destory 方法中，在 servlet 构造时只会执行一次。但是，对于想要g</p>
 
 </div>
 </div>
