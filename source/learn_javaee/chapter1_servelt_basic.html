@@ -12071,6 +12071,14 @@ div#notebook {
 <span class="o">}</span> <span class="n">os</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span> <span class="n">os</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
 </pre></div>
 <p>注意上面使用了 servletContext 对象的 getResourceAsStream 方法获取文件，注意其MIME类型。此外，这个文件的路径，如果是相对路径，则当前文件夹在此程序所在的文件夹，也就是servlet/jsp所在文件夹。如果是绝对路径，则根目录指的是APP的根目录，而不是WEB-INF的根目录。</p>
+<h2 id="&#35831;&#27714;&#27966;&#21457;-RequestDispatcher">&#35831;&#27714;&#27966;&#21457; RequestDispatcher<a class="anchor-link" href="#&#35831;&#27714;&#27966;&#21457;-RequestDispatcher">&#182;</a></h2><p>对于 request，在 servlet 中进行处理后，可以交给 dispatcher 进行转交。这一过程使用：</p>
+<div class="highlight"><pre><span></span><span class="n">req</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">&quot;result.jsp&quot;</span><span class="o">).</span><span class="na">forward</span><span class="o">(</span><span class="n">req</span><span class="o">,</span><span class="n">resp</span><span class="o">);</span>
+</pre></div>
+<p>来处理，这里需要注意，dispatcher 可以来自于 req 对象，也可以来自于 context :</p>
+<div class="highlight"><pre><span></span><span class="n">getServletContext</span><span class="o">().</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">&quot;/result.jsp&quot;</span><span class="o">).</span><span class="na">forward</span><span class="o">(</span><span class="n">req</span><span class="o">,</span><span class="n">resp</span><span class="o">);</span>
+</pre></div>
+<p>不过，这样有点繁琐，因为反正 forward 要用到 req 对象。其次，它和 req 的 dispatcher 有区别，派发器的地址必须是/绝对路径开头，因为context对象没有相对路径的记录。而req则必然依附在一个servlet上，因此可以使用相对路径。一般使用 req 对象的属性得到派发器。</p>
+<p>其次，可以使用 forward 和 include 进行派发。区别是，前者将权力完全移交，后者只是请求帮助，在处理后必须使用另一个 include/forward 来返回处理结果，才能结束寻求帮助的servlet生命周期。一般常用的是 forward。</p>
 
 </div>
 </div>
@@ -12139,7 +12147,18 @@ com.mazj.dog.DogListener.class</p>
 <li><p>ServletContextAttributeListener - ServletContextAttribute - 针对上下文属性增删改时的通知</p>
 </li>
 </ul>
-<h2 id="&#32447;&#31243;&#23433;&#20840;&#30340;&#23646;&#24615;&#22788;&#29702;">&#32447;&#31243;&#23433;&#20840;&#30340;&#23646;&#24615;&#22788;&#29702;<a class="anchor-link" href="#&#32447;&#31243;&#23433;&#20840;&#30340;&#23646;&#24615;&#22788;&#29702;">&#182;</a></h2><p>对于  context 的属性，其可以进行添加和删除，作用域存在于 APP 初始化到 APP 终结为止。 对于 Session 的属性，其也可以进行添加和删除，作用域存在于用户的hui'hu</p>
+<h2 id="&#32447;&#31243;&#23433;&#20840;&#30340;&#23646;&#24615;&#22788;&#29702;">&#32447;&#31243;&#23433;&#20840;&#30340;&#23646;&#24615;&#22788;&#29702;<a class="anchor-link" href="#&#32447;&#31243;&#23433;&#20840;&#30340;&#23646;&#24615;&#22788;&#29702;">&#182;</a></h2><p>对于 context 的属性，其可以进行添加和删除，作用域存在于 APP 初始化到 APP 终结为止，所有APP内的 servlet 和 jsp 甚至 listener 均可访问。 对于 Session 的属性，其也可以进行添加和删除，作用域存在于用户的会话到期为止，所有在到期前被调用的 servlet 和 jsp 均可以访问。对于 request，只有特定的 servlet 和其派发 request 可以访问，作用域一直持续到返回视图为止。</p>
+<p>除了局部变量和请求属性，所有的用户会话属性以及上下文属性都不是线程安全的，因为每次请求会使用servlet的不同线程而不是不同实例，如果在set之后，get之前被CPU切换到另一个servlet线程或者另一个servlet实例，那么会发生同步错误。因此，经常对于set进行同步化来避免线程问题：</p>
+<div class="highlight"><pre><span></span><span class="kd">synchronized</span> <span class="o">(</span><span class="n">getServletContext</span><span class="o">())</span> <span class="o">{</span>
+    <span class="n">getContext</span><span class="o">().</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">&quot;boo&quot;</span><span class="o">,</span><span class="s">&quot;res1&quot;</span><span class="o">);</span>
+    <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">getContext</span><span class="o">().</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">&quot;boo&quot;</span><span class="o">));</span>
+<span class="o">}</span>
+<span class="kd">synchronized</span> <span class="o">(</span><span class="n">req</span><span class="o">.</span><span class="na">getSession</span><span class="o">())</span> <span class="o">{</span>
+    <span class="n">session</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">&quot;foo&quot;</span><span class="o">,</span><span class="s">&quot;42&quot;</span><span class="o">);</span>
+    <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">session</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">&quot;foo&quot;</span><span class="o">));</span>
+<span class="o">}</span>
+</pre></div>
+<p>注意，synchronized 需要对于 Object 加锁，也就是 session 和 getServletContext 加锁。其次，不对 doGet 方法加锁的原因是，不只因为同一 servlet 的不同线程可能访问属性，不同servlet实例也有可能同时对于属性进行读写。因此，对于属性的宿主加锁是唯一可以保证线程安全的方案。</p>
 
 </div>
 </div>
