@@ -12079,7 +12079,67 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Listener:-&#20107;&#20214;&#30417;&#21548;&#21644;&#22788;&#29702;">Listener: &#20107;&#20214;&#30417;&#21548;&#21644;&#22788;&#29702;<a class="anchor-link" href="#Listener:-&#20107;&#20214;&#30417;&#21548;&#21644;&#22788;&#29702;">&#182;</a></h1><h2 id="ServletContextListener">ServletContextListener<a class="anchor-link" href="#ServletContextListener">&#182;</a></h2><p>我们说过，对于 servlet 而言，将数据库的初始化和销毁之类的工作放在 init 和 destory 方法中，在 servlet 构造时只会执行一次。但是，对于想要g</p>
+<h1 id="Listener:-&#23646;&#24615;&#21644;&#20107;&#20214;&#30417;&#21548;">Listener: &#23646;&#24615;&#21644;&#20107;&#20214;&#30417;&#21548;<a class="anchor-link" href="#Listener:-&#23646;&#24615;&#21644;&#20107;&#20214;&#30417;&#21548;">&#182;</a></h1><h2 id="ServletContextListener-&#31034;&#20363;">ServletContextListener &#31034;&#20363;<a class="anchor-link" href="#ServletContextListener-&#31034;&#20363;">&#182;</a></h2><p>我们说过，对于 servlet 而言，将数据库的初始化和销毁之类的工作放在 init 和 destory 方法中，在 servlet 构造时只会执行一次。但是，对于想要共享给多个 servlet 和 jsp 的数据库，我们就束手无策了。现在知道 context-param 是放置 string 字符串参数的地方，在 xml 中声明 context-param 可以让多个 servlet 共享字符串参数，但是对于 Java 对象，我们需要使用 “context-attritube”。</p>
+<p>没有这样一个地方（main方法）让我们初始化上下文属性的，因此，我们需要使用 listener，当监听到TOMCAT创建上下文，初始化APP时，开始我们的小动作。在监听器中，通过设置context-attritube，我们可以使用 context.getAttritube() 方法来获取这些 POJO 属性。并且多个 servlet 共用。listener 需要在 xml 中配置类的地址，以便 TOMCAT 初始化监听器并自动加入监视列表。</p>
+<p>web.xml</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;context-param&gt;</span>
+    <span class="nt">&lt;param-name&gt;</span>breed<span class="nt">&lt;/param-name&gt;</span>
+    <span class="nt">&lt;param-value&gt;</span>something here<span class="nt">&lt;/param-value&gt;</span>
+<span class="nt">&lt;/context-param&gt;</span>
+<span class="nt">&lt;listener&gt;</span>
+    <span class="nt">&lt;listener-class&gt;</span>com.mazj.dog.DogListener<span class="nt">&lt;/listener-class&gt;</span>
+<span class="nt">&lt;/listener&gt;</span>
+</pre></div>
+<p>com.mazj.dog.Dog.class || 
+com.mazj.dog.DogListener.class</p>
+<div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">com.mazj.dog</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Dog</span> <span class="o">{</span>
+    <span class="n">String</span> <span class="n">breed</span><span class="o">;</span>
+    <span class="n">Dog</span><span class="o">(</span><span class="n">String</span> <span class="n">breed</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">breed</span> <span class="o">=</span> <span class="n">breed</span><span class="o">;</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getBreed</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">breed</span><span class="o">;</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setBreed</span><span class="o">(</span><span class="n">String</span> <span class="n">breed</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">breed</span> <span class="o">=</span> <span class="n">breed</span><span class="o">;}</span>
+<span class="o">}</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DogListener</span> <span class="kd">implements</span> <span class="n">ServletContextListener</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">contextInitialized</span><span class="o">(</span><span class="n">ServletContextEvent</span> <span class="n">sce</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">breed</span>  <span class="o">=</span> <span class="n">sce</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">().</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">&quot;breed&quot;</span><span class="o">);</span>
+        <span class="n">sce</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">().</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">&quot;dog&quot;</span><span class="o">,</span><span class="k">new</span> <span class="n">Dog</span><span class="o">(</span><span class="n">breed</span><span class="o">));</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">contextDestroyed</span><span class="o">(</span><span class="n">ServletContextEvent</span> <span class="n">sce</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<p>index.jsp</p>
+<div class="highlight"><pre><span></span><span class="k">&lt;%@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&quot;com.mazj.dog.Dog&quot;</span> <span class="k">%&gt;</span>
+<span class="nt">&lt;p&gt;</span><span class="k">&lt;%</span>
+    <span class="n">String</span> <span class="n">res</span> <span class="o">=</span> <span class="o">((</span><span class="n">Dog</span><span class="o">)</span><span class="n">getServletConfig</span><span class="o">().</span><span class="na">getServletContext</span><span class="o">().</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">&quot;dog&quot;</span><span class="o">)).</span><span class="na">getBreed</span><span class="o">();</span>
+    <span class="n">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">res</span><span class="o">+</span><span class="s">&quot;\n&quot;</span><span class="o">);</span>
+<span class="k">%&gt;</span><span class="nt">&lt;/p&gt;</span>
+</pre></div>
+<h2 id="&#24120;&#35265;&#30340;8&#22823;&#30417;&#21548;&#32773;">&#24120;&#35265;&#30340;8&#22823;&#30417;&#21548;&#32773;<a class="anchor-link" href="#&#24120;&#35265;&#30340;8&#22823;&#30417;&#21548;&#32773;">&#182;</a></h2><p>针对 request 的监听者有：</p>
+<ul>
+<li><p>ServletRequestListener - ServletRequestEvent - 针对请求时间的监视（用于日志记录等）</p>
+</li>
+<li><p>ServletRequestAttributeListener - ServletRequestAttributeEvent - 针对请求属性的增删改的监视</p>
+</li>
+</ul>
+<p>针对 session 的监听者分为两类，在session确认前的统计和跨JVM激活事件以及在session确定后的触发和属性更改事件。</p>
+<ul>
+<li><p>HttpSessionListener - HttpSessionEvent - 针对活动会话建立的统计管理（并发）</p>
+</li>
+<li><p>HttpSessionBindingListener - HttpSessionBindingEvent - 针对会话被绑定或者删除时的通知（用于属性类的失效）</p>
+</li>
+<li><p>HttpSessionActivationListener - HttpSessionEvent - 针对会话在JVM上迁移的通知</p>
+</li>
+<li><p>HttpSessionAttributeListener - HttpSessionBindingEvent - 针对会话属性增删改的监视</p>
+</li>
+</ul>
+<p>针对 context 的监听者有：</p>
+<ul>
+<li><p>ServletContextListener - ServletContextEvent - 针对上下文建立和销毁时的通知</p>
+</li>
+<li><p>ServletContextAttributeListener - ServletContextAttribute - 针对上下文属性增删改时的通知</p>
+</li>
+</ul>
+<h2 id="&#32447;&#31243;&#23433;&#20840;&#30340;&#23646;&#24615;&#22788;&#29702;">&#32447;&#31243;&#23433;&#20840;&#30340;&#23646;&#24615;&#22788;&#29702;<a class="anchor-link" href="#&#32447;&#31243;&#23433;&#20840;&#30340;&#23646;&#24615;&#22788;&#29702;">&#182;</a></h2><p>对于  context 的属性，其可以进行添加和删除，作用域存在于 APP 初始化到 APP 终结为止。 对于 Session 的属性，其也可以进行添加和删除，作用域存在于用户的hui'hu</p>
 
 </div>
 </div>
