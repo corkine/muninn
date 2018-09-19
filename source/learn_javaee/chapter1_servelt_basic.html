@@ -11792,6 +11792,7 @@ div#notebook {
 <p>HTTP的端口是一个16位数，其中1-1023被保留用作它用。一般而言，用于特定用途的服务会默认使用特定的端口，这是一种约定俗成的标准，比如SSH的22端口，HTTP的80和8080端口，HTTPS的443端口和FTP的21端口。</p>
 <h2 id="HTTP-GET/POST">HTTP GET/POST<a class="anchor-link" href="#HTTP-GET/POST">&#182;</a></h2><p>对于一个地址，可以使用GET和POST方法，其中GET多用于超链接点击，其可以传送少量参数，并且会显示在地址栏中，容易暴露，比如：<code>http://www.mazhangjing.com/weather?location=wuhan&amp;time=now</code>，当对于 <code>http://www.mazhangjing.com/weather</code> 发送GET方法时，如果传递了参数，会显示在URL上，这里明显看出参数有两个，location是wuhan，time是now，各个参数用&amp;分隔，参数和文档用？分隔。</p>
 <p>POST方法则不会暴露这些信息，并且可以传送大量的数据到服务器，比如文件上传等，因此多用于登录，提交信息等。POST传递参数和GET一样，除了不会直接显示之外，使用F12开发者工具（Chrome/FireFox）可以查看POST发送的数据，注意其没有被显示在地址栏中。</p>
+<p>GET和POST的区别不仅仅在于传递的参数可见/不可见，或者POST能传递大量的数据，而GET只能传递少量并且裸露的数据。区别在于，GET方法是原子性的，不论GET多少次，只要参数不变，那么GET的内容不变。而POST则更倾向于是非原子性的，它被看作需要修改数据库上的一些信息，当多次POST时，浏览器一般会弹出警告，对于设计不良的WEB程序，多次POST会导致数据被重复更改。POST是HTTP方法中唯一非幂等的方法。</p>
 <h2 id="HTTP-RESPONSE">HTTP RESPONSE<a class="anchor-link" href="#HTTP-RESPONSE">&#182;</a></h2><p>当我们发送GET/POST请求时，会收到来自服务器返回的响应，称之为 HTTP RESPONSE,其中重要的信息是响应代码和类型以及返回的文件格式以及文件内容本身。比如：<code>HTTP1.1 200 OK</code>，代码200，正常响应请求。<code>Content-Type：text/html</code>，表示返回的是一个HTML文档。</p>
 <h1 id="HTML-Standard">HTML Standard<a class="anchor-link" href="#HTML-Standard">&#182;</a></h1><p>不同于XML，HTML是一种已经预先定义好的格式标记语言，其中 <code>&lt;form&gt;</code> 域定义了输入单位-表单。<code>&lt;input&gt;</code> 域定义了输入框、提交按钮、单选按钮、下拉菜单等选项，一般被包含在 form 域中。form 域可以有一些其余 html 元素用于提供辅助信息。下面展示了一个用于登陆的 html 文档：</p>
 <div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
@@ -12007,9 +12008,49 @@ div#notebook {
 <span class="o">}</span>
 </pre></div>
 <p>这个Servlet程序对response对象设置了类型，然后对于输出流添加了HTML文档，当容器检测到对于这个Servlet调用时，会进入 doGet 进行处理，返回 response 的文档格式和文档内容。URL到Servlet的映射可以通过注解和XML标记文件指定。</p>
-<h2 id="Servlet-&#23545;&#35937;&#30340;&#22788;&#29702;&#27969;&#31243;">Servlet &#23545;&#35937;&#30340;&#22788;&#29702;&#27969;&#31243;<a class="anchor-link" href="#Servlet-&#23545;&#35937;&#30340;&#22788;&#29702;&#27969;&#31243;">&#182;</a></h2><p>对于一个请求，TOMCAT容器的处理步骤为：容器首先创建一个 HttpServletRequest 和 HttpServletResponse 对象，然后调用 Servlet 的一个线程，调用 service() 方法，之后 service 方法根据POST还是GET调用 doPost() 和 doGet() 中的方法，并且传递 request 和 response 对象作为参数，方便我们进行处理，处理后，将其中的 response 方法的流返回，进行相应。此时，HttpServletRequest 和 Response 对象死掉，Servlet 的相关线程死掉。</p>
-<p>需要注意，在MVC设计模式中，HTML的GET or POST 请求，在 Servlet 中，我们会从 req 中提取 perminer</p>
-
+<h2 id="Servlet-&#21644;-JSP-&#30340;&#22788;&#29702;&#27969;&#31243;">Servlet &#21644; JSP &#30340;&#22788;&#29702;&#27969;&#31243;<a class="anchor-link" href="#Servlet-&#21644;-JSP-&#30340;&#22788;&#29702;&#27969;&#31243;">&#182;</a></h2><p>对于一个请求，TOMCAT容器的处理步骤为：容器首先创建一个 HttpServletRequest 和 HttpServletResponse 对象，然后调用 Servlet 的一个线程，调用 service() 方法，之后 service 方法根据POST还是GET调用 doPost() 和 doGet() 中的方法，并且传递 request 和 response 对象作为参数，方便我们进行处理，处理后，将其中的 response 方法的流返回，进行相应。此时，HttpServletRequest 和 Response 对象死掉，Servlet 的相关线程死掉。</p>
+<p>需要注意，在MVC设计模式中，HTML的GET or POST 请求，在 Servlet 中，我们会从 req 中提取 parameter 参数，然后交给 Model 进行处理，得到的结果再交给 req，set 到 attritube 上。注意，parameter 指的是从HTML到Servlet的参数传递，默认为 String，但是Attritube则不同，其一般为方便JSP进行后期处理的Java类型，attritube 多用于 Model 交付结果给 JSP 进行页面展示的。</p>
+<h2 id="Servlet-&#23545;&#35937;&#30340;&#29983;&#21629;&#21608;&#26399;">Servlet &#23545;&#35937;&#30340;&#29983;&#21629;&#21608;&#26399;<a class="anchor-link" href="#Servlet-&#23545;&#35937;&#30340;&#29983;&#21629;&#21608;&#26399;">&#182;</a></h2><p>在处理流程中，我们说到，servlet对象对于每个请求派发一个线程，而不是启动一个实例。对于一台电脑的多个请求会对应多个线程，对于分布式，则每个JVM包含一个实例，然后再分成多个线程。</p>
+<p>servlet对象的创建如下：</p>
+<ul>
+<li>首先找到.class类，容器使用classLoader进行加载</li>
+<li>实例化servlet对象，容器负责，你需要指定启动顺序</li>
+<li>servlet的init方法，像是数据库连接在此处进行</li>
+<li>servlet的serve方法，当得到请求，会调用此处以继续调用goPost/goGet进行委托处理。</li>
+<li>servlet的destory方法，销毁前的准备，比如关闭文件流或者数据库</li>
+</ul>
+<p>注意，init和destory只进行一次，对于多个请求，容器会多次在不同线程中调用serve方法进行处理。不要把任何代码放到servlet的构造器中去。因为这个时候很可能我们想要的数据还没有被初始化，比如上下文信息。</p>
+<h2 id="servletConfig-&#21644;-servletContext">servletConfig &#21644; servletContext<a class="anchor-link" href="#servletConfig-&#21644;-servletContext">&#182;</a></h2><p>每个 servlet 对象都有一个 servletConfig 对象，此对象用于向servlet传递部署时的信息，这些信息在xml文件中，可以方便的进行更改。此外，servletConfig对象还可以用于访问 servletContext 对象，后者其实应该叫做AppContext，因为每个Web APP只有一个servletContext对象，此对象用于访问服务器信息，API版本信息，Web应用的参数以及路径下的其他可访问文件等。换句话说，servletContext像是一个App的外在环境背景。此对象必须通过servletConfig对象获得，servletConfig对象针对单一的servlet进行配置，传递每个servlet独特的参数（而不是APP全局的参数），以及提供对于servletContext的访问。</p>
+<h2 id="HttpRequest">HttpRequest<a class="anchor-link" href="#HttpRequest">&#182;</a></h2><p>HttpRequest 对象由容器生成，并且在调用 service -&gt; doXXX() 方法时作为参数传入。当我们需要使用RequestDispicter时，一般会先 getParameter 交给 Model 处理后获得结果以Java类型 setAttritube 到 Request 对象上，由JSP负责解析。</p>
+<p>Request 常见方法一般为端口相关、内容相关、附带的参数和属性的获取</p>
+<ul>
+<li><p>getLocalPort/RemotePort/ServerPort 获取本地相应端口/客户端端口/监听端口</p>
+</li>
+<li><p>getContentLength 获取内容长度</p>
+</li>
+<li><p>getInputStream 获取输入流（POST方法用来获取大规模二进制数据）</p>
+</li>
+<li><p>getParameter/getParameterValues/getParameterNames 获取参数（指定名称，单一结果）/获取参数（指定名称，多个结果）/获取参数枚举</p>
+</li>
+<li><p>getAttribute 用于JSP或者派发的属性获取，区别于 Parameter，类型为 Object？</p>
+</li>
+</ul>
+<p>以上是 ServletRequest 的方法，以下是 HttpServletRequest 扩展的方法，主要包含了url、query、method、header的HTTP头部属性查询支持以及cookies和session的支持。</p>
+<ul>
+<li><p>getContextPath 获取相对地址</p>
+</li>
+<li><p>getQueryString 获取查询的参数信息</p>
+</li>
+<li><p>getCookies</p>
+</li>
+<li><p>getSession</p>
+</li>
+<li><p>getHeader/getIntHeader 后者不过是str-&gt;int的语法糖罢了</p>
+</li>
+<li><p>getMethod POST/GET</p>
+</li>
+</ul>
+<h2 id="HttpResponse">HttpResponse<a class="anchor-link" href="#HttpResponse">&#182;</a></h2>
 </div>
 </div>
 </div>
