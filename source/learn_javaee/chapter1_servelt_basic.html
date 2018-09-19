@@ -11808,11 +11808,32 @@ div#notebook {
 <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </pre></div>
 <p>上述的HTML登录代码中，当按下 submit 时，浏览器会收集 form 中的两个 input 域中的信息，作为字符串，使用 method 属性规定的方法，发送到 form 的 action 属性定义的路径上。上述实际post的参数为 <code>name=string1&amp;passwd=string2</code>。method 方法可以规定为 POST 或者 GET，不过对于登录这种需求，POST更为常用。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="WEB-&#26381;&#21153;&#22120;">WEB &#26381;&#21153;&#22120;<a class="anchor-link" href="#WEB-&#26381;&#21153;&#22120;">&#182;</a></h1><h2 id="HTTP-&#35831;&#27714;&#30340;&#21709;&#24212;&#27969;&#31243;">HTTP &#35831;&#27714;&#30340;&#21709;&#24212;&#27969;&#31243;<a class="anchor-link" href="#HTTP-&#35831;&#27714;&#30340;&#21709;&#24212;&#27969;&#31243;">&#182;</a></h2><p>当我们指定GET一个网址，客户端会使用HTTP协议发送这个请求，交给TCP到IP，然后经过物理层，找到URL中对应的主机，逆向从IP到TCP到服务端的HTTP，之后WEB服务器监听的端口监听到请求，找到URL路径上的文件，处理可能有的参数，并且返回一个响应，这个响应包含了响应的状态和状态码，以及返回的文档类型以及文档本身。返回的流程和获得的流程相反，从服务端的HTTP到IP到TCP，然后逆向到请求端的TCP到请求端的IP到请求端的HTTP，这样客户端就收到了服务器的文档。</p>
 <p>注意，服务端是如何知道客户端的地址的呢？这是通过IP协议规定的，当发送请求时，服务端会得到请求主体的信息，包括其请求的时间以及请求的内容，还有请求主体的IP地址，知道这个IP，就可以返回到那台发送请求的主机上了。</p>
-<h2 id="CGI-&#21644;-SERVLET">CGI &#21644; SERVLET<a class="anchor-link" href="#CGI-&#21644;-SERVLET">&#182;</a></h2><p>WEB 服务器，比如 Negix 和 Apache Web Server，擅长并发处理静态请求，但是对于动态请求就无能为力。这意味着，所有的客户从WEB服务器上获取到的都是相同的文档，这显然是难以接受的。因此，我们需要动态返回自定义的文档这一功能，这是通过应用服务器完成的。</p>
+<h1 id="&#24212;&#29992;&#26381;&#21153;&#22120;">&#24212;&#29992;&#26381;&#21153;&#22120;<a class="anchor-link" href="#&#24212;&#29992;&#26381;&#21153;&#22120;">&#182;</a></h1><p>WEB 服务器，比如 Negix 和 Apache Web Server，擅长并发处理静态请求，但是对于动态请求就无能为力。这意味着，所有的客户从WEB服务器上获取到的都是相同的文档，这显然是难以接受的。因此，我们需要动态返回自定义的文档这一功能，这是通过应用服务器完成的。</p>
 <p>WEB服务器决定将动态请求交给应用服务器，并且通过SOCKET进行通信，这样的话，其只用处理静态请求，而动态请求被应用服务器处理后交给WEB服务器，作为整体文档返回用户。</p>
-<p>常见的应用服务器有PERL/Python常用的CGI统一网关接口，也有JAVA标准的Servlet标准。Servlet不会对于每次请求启动一个进程，当第一次启动后，它就保持开启状态，并且多个指向同一Servlet的请求可以由同一个Servlet的单独线程来处理。如果这些请求是并发的，那么Servlet容器的线程池会保证资源消耗，并且进行并发控制。</p>
+<h2 id="&#24212;&#29992;&#26381;&#21153;&#22120;&#30340;&#21151;&#33021;">&#24212;&#29992;&#26381;&#21153;&#22120;&#30340;&#21151;&#33021;<a class="anchor-link" href="#&#24212;&#29992;&#26381;&#21153;&#22120;&#30340;&#21151;&#33021;">&#182;</a></h2><p>应用服务器主要提供五大功能：</p>
+<ul>
+<li><p>通信支持：Socket相关的网络处理、监听端口和创建流等</p>
+</li>
+<li><p>生命周期支持：Servlet的创建、调用和回收</p>
+</li>
+<li><p>多线程支持：一个用于管理Servlet连接的多线程池</p>
+</li>
+<li><p>声明方式安全：使用XML管理描述控制符并且简化开发流程，更加安全</p>
+</li>
+<li><p>JSP支持：JSP文档解析和Java代码翻译</p>
+</li>
+</ul>
+<h2 id="CGI-&#21644;-SERVLET">CGI &#21644; SERVLET<a class="anchor-link" href="#CGI-&#21644;-SERVLET">&#182;</a></h2><p>常见的应用服务器有PERL/Python常用的CGI统一网关接口，也有JAVA标准的Servlet标准。Servlet不会对于每次请求启动一个进程，当第一次启动后，它就保持开启状态，并且多个指向同一Servlet的请求可以由同一个Servlet的单独线程来处理。如果这些请求是并发的，那么Servlet容器的线程池会保证资源消耗，并且进行并发控制。</p>
 <p>Servlet 常用的类是 HTTPServlet，需要重载这个类，提供doGET, doPost方法来截获请求并且进行处理。举例如下：</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">javax.servlet.*</span><span class="o">;</span>
@@ -11837,21 +11858,8 @@ div#notebook {
 <span class="o">}</span>
 </pre></div>
 <p>这个Servlet程序对response对象设置了类型，然后对于输出流添加了HTML文档，当容器检测到对于这个Servlet调用时，会进入 doGet 进行处理，返回 response 的文档格式和文档内容。URL到Servlet的映射可以通过注解和XML标记文件指定。</p>
-<h2 id="&#24212;&#29992;&#26381;&#21153;&#22120;&#21151;&#33021;&#21450;&#27969;&#31243;">&#24212;&#29992;&#26381;&#21153;&#22120;&#21151;&#33021;&#21450;&#27969;&#31243;<a class="anchor-link" href="#&#24212;&#29992;&#26381;&#21153;&#22120;&#21151;&#33021;&#21450;&#27969;&#31243;">&#182;</a></h2><p>应用服务器也就是Servlet的容器，其主要提供五大功能：</p>
-<ul>
-<li><p>通信支持：Socket相关的网络处理、监听端口和创建流等</p>
-</li>
-<li><p>生命周期支持：Servlet的创建、调用和回收</p>
-</li>
-<li><p>多线程支持：一个用于管理Servlet连接的多线程池</p>
-</li>
-<li><p>声明方式安全：使用XML管理描述控制符并且简化开发流程，更加安全</p>
-</li>
-<li><p>JSP支持：JSP文档解析和Java代码翻译</p>
-</li>
-</ul>
 <p>对于一个请求，TOMCAT容器的处理步骤为：容器首先创建一个HttpServletRequest和HttpServletResponse对象，然后调用Servlet的一个线程，调用service()方法，之后service方法根据POST还是GET调用doPost()和doGet()中的方法，并且传递request和response对象作为参数，方便我们进行处理，处理后，将其中的response方法的流返回，进行相应。此时，HttpServletRequest和Response对象死掉，Servlet的相关线程死掉。</p>
-<h2 id="TOMCAT-WEB.XML">TOMCAT WEB.XML<a class="anchor-link" href="#TOMCAT-WEB.XML">&#182;</a></h2><p>一般而言，常见的Servlet和JSP容器是Tomcat。TOMCAT主要负责Servlet的生命周期管理，URL映射等，使用Servlet必须装配在一个容器中才可以使用。TOMCAT并非是一个完整的Java EE容器，而是一个完整的Servlet &amp; JSP 容器，tomcat的文件层次如下：</p>
+<h1 id="Servlet-and-JSP">Servlet and JSP<a class="anchor-link" href="#Servlet-and-JSP">&#182;</a></h1><h2 id="&#20351;&#29992;XML&#36827;&#34892;URL&#27966;&#21457;">&#20351;&#29992;XML&#36827;&#34892;URL&#27966;&#21457;<a class="anchor-link" href="#&#20351;&#29992;XML&#36827;&#34892;URL&#27966;&#21457;">&#182;</a></h2><p>一般而言，常见的Servlet和JSP容器是Tomcat。TOMCAT主要负责Servlet的生命周期管理，URL映射等，使用Servlet必须装配在一个容器中才可以使用。TOMCAT并非是一个完整的Java EE容器，而是一个完整的Servlet &amp; JSP 容器，tomcat的文件层次如下：</p>
 <ul>
 <li>WEB-INF 目录主要存放 web.xml 映射描述文件，classes 源代码文件，lib 共享的库文件。</li>
 </ul>
@@ -11920,9 +11928,9 @@ div#notebook {
 
 <span class="nt">&lt;/web-app&gt;</span>
 </pre></div>
-<h2 id="JSP">JSP<a class="anchor-link" href="#JSP">&#182;</a></h2><p>对于 JSP 而言，它类似于一个带壳的 Servlet，容器会有一个 JSP 的解析器用于对JSP文档进行解析，然后使用一个Servlet实例响应对于JSP的请求。JSP因为将Java代码嵌入到HTML中，因此使用更加方便。在早期，流行直接通过客户端URL对于JSP文件位置进行访问，JSP会生成Servlet实例并且进行响应，这避免了在Servlet中写HTML代码的转义问题。</p>
+<h2 id="&#35270;&#22270;&#25216;&#26415;-JSP">&#35270;&#22270;&#25216;&#26415; JSP<a class="anchor-link" href="#&#35270;&#22270;&#25216;&#26415;-JSP">&#182;</a></h2><p>对于 JSP 而言，它类似于一个带壳的 Servlet，容器会有一个 JSP 的解析器用于对JSP文档进行解析，然后使用一个Servlet实例响应对于JSP的请求。JSP因为将Java代码嵌入到HTML中，因此使用更加方便。在早期，流行直接通过客户端URL对于JSP文件位置进行访问，JSP会生成Servlet实例并且进行响应，这避免了在Servlet中写HTML代码的转义问题。</p>
 <p>但是，这样有安全风险，因此现代程序往往让JSP作为view层，客户端URL通过servlet处理并且转发到JSP文件（以及另一个servlet）进行其余工作后返回视图。JSP现在对于客户不可见。不过，要知道，不用在web.xml中配置映射，jsp文件可以直接被URL定位符解析并且定位到文件位置，自动进行初始化和响应。</p>
-<h2 id="MVC">MVC<a class="anchor-link" href="#MVC">&#182;</a></h2><p>基本的Java Servlet &amp; JSP 需要使用 MVC 设计模式，其中请求从容器的XML文件中找到对应的Servlet，之后Servlet进行Controller的角色处理，后通知模型改变状态，将请求转发给JSP，JSP改变视图并且进行相应。</p>
+<h2 id="&#24320;&#21457;&#26694;&#26550;-MVC">&#24320;&#21457;&#26694;&#26550; MVC<a class="anchor-link" href="#&#24320;&#21457;&#26694;&#26550;-MVC">&#182;</a></h2><p>基本的Java Servlet &amp; JSP 需要使用 MVC 设计模式，其中请求从容器的XML文件中找到对应的Servlet，之后Servlet进行Controller的角色处理，后通知模型改变状态，将请求转发给JSP，JSP改变视图并且进行相应。</p>
 
 </div>
 </div>
