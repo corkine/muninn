@@ -11775,7 +11775,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><span type="title">Servlet 和 JSP 概要</span> | <span type="update">2018-09-16</span> - Version <span type="version">1.0</span></p>
+<p><span type="title">Servlet 和 JSP 概要</span> | <span type="update">2018-09-16</span> - Version <span type="version">1.1</span></p>
 <p><span type="intro"><p class="card-text">本章主要对 Servlet 和 JSP 有一个概要性的介绍。此外，主要介绍了HTTP的URL、GET/POST方法、Response响应码、HTML的主要格式、Web服务器和应用服务器的工作流程（包括web.xml文件配置）。</p></span></p>
 
 </div>
@@ -11785,7 +11785,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="HTTP">HTTP<a class="anchor-link" href="#HTTP">&#182;</a></h1><p>互联网通信基于 请求 和 响应 这两大动作。HTTP是一种协议，其在 RFC2616 草稿中规范，大概包括三大重要部分：客户端发送请求时的地址行和发送方法POST,GET等，服务端返回请求时的状态200，400，404等、返回请求时的报文类型以及报文内容。其中报文内容由HTML语言进行标记。</p>
+<h1 id="HTTP-Protocol">HTTP Protocol<a class="anchor-link" href="#HTTP-Protocol">&#182;</a></h1><p>互联网通信基于 请求 和 响应 这两大动作。HTTP是一种协议，其在 RFC2616 草稿中规范，大概包括三大重要部分：客户端发送请求时的地址行和发送方法POST,GET等，服务端返回请求时的状态200，400，404等、返回请求时的报文类型以及报文内容。其中报文内容由HTML语言进行标记。</p>
 <p>WEB指的就是HTTP和HTML为主体的层的活动。其中互联网请求多对应HTTP的GET和POST方法，响应则多对应于200,300,400等相应类型以及text/html,text/gzip等返回类型和HTML格式或其他格式的文档。</p>
 <p>HTTP是一种应用层的协议，其建立在IP/TCP的基础上，IP负责规划和寻找客户端和服务端，TCP负责在线路上分批传送信息以及保证信息的准确性和完整性。HTTP得到的是由TCP生成的完整的报文，其只规定了在多台计算机间传送文档的格式（HTML）以及传送时的一些问题（各种传送状态、传送文档的地址、格式等）。</p>
 <h2 id="HTTP-URL">HTTP URL<a class="anchor-link" href="#HTTP-URL">&#182;</a></h2><p>HTTP定义了URI，其中包含URL和URN。URL的格式为：<code>协议名称:// 子级地址 + [.] 上一级地址 + [.] 主地址 + [.] + 域名后缀:[端口地址]/ 文档路径/ 文档</code>比如：<code>http://www.mazhangjing.com/index/hello.txt</code> 其中协议是 http，域名是 mazhangjing.com（包含主地址和其后缀）。主机名是 www，文档路径为 index 文件夹，文件为此文件夹中的hello.txt文档。其中子级地址可以省略：<code>http://mazhangjing.com</code> 文档路径和文档名称都可以省略，并且设置默认值。端口地址默认为80，可以另行指定。此外，URL还包含可选的查询字符串，当使用GET方法时可以少量的添加请求的信息。（见下文）</p>
@@ -11793,7 +11793,7 @@ div#notebook {
 <h2 id="HTTP-GET/POST">HTTP GET/POST<a class="anchor-link" href="#HTTP-GET/POST">&#182;</a></h2><p>对于一个地址，可以使用GET和POST方法，其中GET多用于超链接点击，其可以传送少量参数，并且会显示在地址栏中，容易暴露，比如：<code>http://www.mazhangjing.com/weather?location=wuhan&amp;time=now</code>，当对于 <code>http://www.mazhangjing.com/weather</code> 发送GET方法时，如果传递了参数，会显示在URL上，这里明显看出参数有两个，location是wuhan，time是now，各个参数用&amp;分隔，参数和文档用？分隔。</p>
 <p>POST方法则不会暴露这些信息，并且可以传送大量的数据到服务器，比如文件上传等，因此多用于登录，提交信息等。POST传递参数和GET一样，除了不会直接显示之外，使用F12开发者工具（Chrome/FireFox）可以查看POST发送的数据，注意其没有被显示在地址栏中。</p>
 <h2 id="HTTP-RESPONSE">HTTP RESPONSE<a class="anchor-link" href="#HTTP-RESPONSE">&#182;</a></h2><p>当我们发送GET/POST请求时，会收到来自服务器返回的响应，称之为 HTTP RESPONSE,其中重要的信息是响应代码和类型以及返回的文件格式以及文件内容本身。比如：<code>HTTP1.1 200 OK</code>，代码200，正常响应请求。<code>Content-Type：text/html</code>，表示返回的是一个HTML文档。</p>
-<h1 id="HTML">HTML<a class="anchor-link" href="#HTML">&#182;</a></h1><p>不同于XML，HTML是一种已经预先定义好的格式标记语言，其中 <code>&lt;form&gt;</code> 域定义了输入单位-表单。<code>&lt;input&gt;</code> 域定义了输入框、提交按钮、单选按钮、下拉菜单等选项，一般被包含在 form 域中。form 域可以有一些其余 html 元素用于提供辅助信息。下面展示了一个用于登陆的 html 文档：</p>
+<h1 id="HTML-Standard">HTML Standard<a class="anchor-link" href="#HTML-Standard">&#182;</a></h1><p>不同于XML，HTML是一种已经预先定义好的格式标记语言，其中 <code>&lt;form&gt;</code> 域定义了输入单位-表单。<code>&lt;input&gt;</code> 域定义了输入框、提交按钮、单选按钮、下拉菜单等选项，一般被包含在 form 域中。form 域可以有一些其余 html 元素用于提供辅助信息。下面展示了一个用于登陆的 html 文档：</p>
 <div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Login<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
@@ -11816,11 +11816,11 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="WEB-&#26381;&#21153;&#22120;">WEB &#26381;&#21153;&#22120;<a class="anchor-link" href="#WEB-&#26381;&#21153;&#22120;">&#182;</a></h1><h2 id="HTTP-&#35831;&#27714;&#30340;&#21709;&#24212;&#27969;&#31243;">HTTP &#35831;&#27714;&#30340;&#21709;&#24212;&#27969;&#31243;<a class="anchor-link" href="#HTTP-&#35831;&#27714;&#30340;&#21709;&#24212;&#27969;&#31243;">&#182;</a></h2><p>当我们指定GET一个网址，客户端会使用HTTP协议发送这个请求，交给TCP到IP，然后经过物理层，找到URL中对应的主机，逆向从IP到TCP到服务端的HTTP，之后WEB服务器监听的端口监听到请求，找到URL路径上的文件，处理可能有的参数，并且返回一个响应，这个响应包含了响应的状态和状态码，以及返回的文档类型以及文档本身。返回的流程和获得的流程相反，从服务端的HTTP到IP到TCP，然后逆向到请求端的TCP到请求端的IP到请求端的HTTP，这样客户端就收到了服务器的文档。</p>
+<h1 id="Web-Server">Web Server<a class="anchor-link" href="#Web-Server">&#182;</a></h1><h2 id="HTTP-&#35831;&#27714;&#30340;&#21709;&#24212;&#27969;&#31243;">HTTP &#35831;&#27714;&#30340;&#21709;&#24212;&#27969;&#31243;<a class="anchor-link" href="#HTTP-&#35831;&#27714;&#30340;&#21709;&#24212;&#27969;&#31243;">&#182;</a></h2><p>当我们指定GET一个网址，客户端会使用HTTP协议发送这个请求，交给TCP到IP，然后经过物理层，找到URL中对应的主机，逆向从IP到TCP到服务端的HTTP，之后WEB服务器监听的端口监听到请求，找到URL路径上的文件，处理可能有的参数，并且返回一个响应，这个响应包含了响应的状态和状态码，以及返回的文档类型以及文档本身。返回的流程和获得的流程相反，从服务端的HTTP到IP到TCP，然后逆向到请求端的TCP到请求端的IP到请求端的HTTP，这样客户端就收到了服务器的文档。</p>
 <p>注意，服务端是如何知道客户端的地址的呢？这是通过IP协议规定的，当发送请求时，服务端会得到请求主体的信息，包括其请求的时间以及请求的内容，还有请求主体的IP地址，知道这个IP，就可以返回到那台发送请求的主机上了。</p>
-<h1 id="&#24212;&#29992;&#26381;&#21153;&#22120;">&#24212;&#29992;&#26381;&#21153;&#22120;<a class="anchor-link" href="#&#24212;&#29992;&#26381;&#21153;&#22120;">&#182;</a></h1><p>WEB 服务器，比如 Negix 和 Apache Web Server，擅长并发处理静态请求，但是对于动态请求就无能为力。这意味着，所有的客户从WEB服务器上获取到的都是相同的文档，这显然是难以接受的。因此，我们需要动态返回自定义的文档这一功能，这是通过应用服务器完成的。</p>
+<p>WEB 服务器，比如 Negix 和 Apache Web Server，擅长并发处理静态请求，但是对于动态请求就无能为力。这意味着，所有的客户从WEB服务器上获取到的都是相同的文档，这显然是难以接受的。因此，我们需要动态返回自定义的文档这一功能，这是通过应用服务器完成的。</p>
 <p>WEB服务器决定将动态请求交给应用服务器，并且通过SOCKET进行通信，这样的话，其只用处理静态请求，而动态请求被应用服务器处理后交给WEB服务器，作为整体文档返回用户。</p>
-<h2 id="&#24212;&#29992;&#26381;&#21153;&#22120;&#30340;&#21151;&#33021;">&#24212;&#29992;&#26381;&#21153;&#22120;&#30340;&#21151;&#33021;<a class="anchor-link" href="#&#24212;&#29992;&#26381;&#21153;&#22120;&#30340;&#21151;&#33021;">&#182;</a></h2><p>应用服务器主要提供五大功能：</p>
+<h2 id="App-Server-&#20027;&#35201;&#21151;&#33021;">App Server &#20027;&#35201;&#21151;&#33021;<a class="anchor-link" href="#App-Server-&#20027;&#35201;&#21151;&#33021;">&#182;</a></h2><p>应用服务器主要提供五大功能：</p>
 <ul>
 <li><p>通信支持：Socket相关的网络处理、监听端口和创建流等</p>
 </li>
@@ -11833,33 +11833,17 @@ div#notebook {
 <li><p>JSP支持：JSP文档解析和Java代码翻译</p>
 </li>
 </ul>
-<h2 id="CGI-&#21644;-SERVLET">CGI &#21644; SERVLET<a class="anchor-link" href="#CGI-&#21644;-SERVLET">&#182;</a></h2><p>常见的应用服务器有PERL/Python常用的CGI统一网关接口，也有JAVA标准的Servlet标准。Servlet不会对于每次请求启动一个进程，当第一次启动后，它就保持开启状态，并且多个指向同一Servlet的请求可以由同一个Servlet的单独线程来处理。如果这些请求是并发的，那么Servlet容器的线程池会保证资源消耗，并且进行并发控制。</p>
-<p>Servlet 常用的类是 HTTPServlet，需要重载这个类，提供doGET, doPost方法来截获请求并且进行处理。举例如下：</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.servlet.*</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.servlet.http.*</span><span class="o">;</span>
+<h2 id="Servlet-&#21644;-JSP-&#25216;&#26415;">Servlet &#21644; JSP &#25216;&#26415;<a class="anchor-link" href="#Servlet-&#21644;-JSP-&#25216;&#26415;">&#182;</a></h2><p>常见的应用服务器有PERL/Python常用的CGI统一网关接口，也有JAVA标准的Servlet标准。Servlet不会对于每次请求启动一个进程，当第一次启动后，它就保持开启状态，并且多个指向同一Servlet的请求可以由同一个Servlet的单独线程来处理。如果这些请求是并发的，那么Servlet容器的线程池会保证资源消耗，并且进行并发控制。</p>
+<h2 id="MVC-&#35774;&#35745;&#27169;&#24335;">MVC &#35774;&#35745;&#27169;&#24335;<a class="anchor-link" href="#MVC-&#35774;&#35745;&#27169;&#24335;">&#182;</a></h2><p>基本的Java Servlet &amp; JSP 需要使用 MVC 设计模式，其中请求从容器的XML文件中找到对应的Servlet，之后Servlet进行Controller的角色处理，后通知模型改变状态，将请求转发给JSP，JSP改变视图并且进行相应。</p>
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="kd">extends</span> <span class="n">HttpServlet</span> <span class="o">{</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doGet</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span>
-    <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ServletException</span>
-    <span class="o">{</span>
-        <span class="n">response</span><span class="o">.</span><span class="na">setContentType</span><span class="o">(</span><span class="s">&quot;text/html&quot;</span><span class="o">);</span>
-        <span class="n">PrintWriter</span> <span class="n">out</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">getWriter</span><span class="o">();</span>
-        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;html&gt;&quot;</span><span class="o">);</span>
-        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;head&gt;&quot;</span><span class="o">);</span>
-        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;title&gt;Hello World!&lt;/title&gt;&quot;</span><span class="o">);</span>
-        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;/head&gt;&quot;</span><span class="o">);</span>
-        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;body&gt;&quot;</span><span class="o">);</span>
-        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;h1&gt;Hello World!&lt;/h1&gt;&quot;</span><span class="o">);</span>
-        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;/body&gt;&quot;</span><span class="o">);</span>
-        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;/html&gt;&quot;</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
-<p>这个Servlet程序对response对象设置了类型，然后对于输出流添加了HTML文档，当容器检测到对于这个Servlet调用时，会进入 doGet 进行处理，返回 response 的文档格式和文档内容。URL到Servlet的映射可以通过注解和XML标记文件指定。</p>
-<p>对于一个请求，TOMCAT容器的处理步骤为：容器首先创建一个HttpServletRequest和HttpServletResponse对象，然后调用Servlet的一个线程，调用service()方法，之后service方法根据POST还是GET调用doPost()和doGet()中的方法，并且传递request和response对象作为参数，方便我们进行处理，处理后，将其中的response方法的流返回，进行相应。此时，HttpServletRequest和Response对象死掉，Servlet的相关线程死掉。</p>
-<h1 id="Servlet-and-JSP">Servlet and JSP<a class="anchor-link" href="#Servlet-and-JSP">&#182;</a></h1><h2 id="&#20351;&#29992;XML&#36827;&#34892;URL&#27966;&#21457;">&#20351;&#29992;XML&#36827;&#34892;URL&#27966;&#21457;<a class="anchor-link" href="#&#20351;&#29992;XML&#36827;&#34892;URL&#27966;&#21457;">&#182;</a></h2><p>一般而言，常见的Servlet和JSP容器是Tomcat。TOMCAT主要负责Servlet的生命周期管理，URL映射等，使用Servlet必须装配在一个容器中才可以使用。TOMCAT并非是一个完整的Java EE容器，而是一个完整的Servlet &amp; JSP 容器，tomcat的文件层次如下：</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Container:-XML-Config">Container: XML Config<a class="anchor-link" href="#Container:-XML-Config">&#182;</a></h1><p>一般而言，常见的Servlet和JSP容器是Tomcat。TOMCAT主要负责Servlet的生命周期管理，URL映射等，使用Servlet必须装配在一个容器中才可以使用。TOMCAT并非是一个完整的Java EE容器，而是一个完整的Servlet &amp; JSP 容器，tomcat的文件层次如下：</p>
 <ul>
 <li>WEB-INF 目录主要存放 web.xml 映射描述文件，classes 源代码文件，lib 共享的库文件。</li>
 </ul>
@@ -11928,9 +11912,49 @@ div#notebook {
 
 <span class="nt">&lt;/web-app&gt;</span>
 </pre></div>
-<h2 id="&#35270;&#22270;&#25216;&#26415;-JSP">&#35270;&#22270;&#25216;&#26415; JSP<a class="anchor-link" href="#&#35270;&#22270;&#25216;&#26415;-JSP">&#182;</a></h2><p>对于 JSP 而言，它类似于一个带壳的 Servlet，容器会有一个 JSP 的解析器用于对JSP文档进行解析，然后使用一个Servlet实例响应对于JSP的请求。JSP因为将Java代码嵌入到HTML中，因此使用更加方便。在早期，流行直接通过客户端URL对于JSP文件位置进行访问，JSP会生成Servlet实例并且进行响应，这避免了在Servlet中写HTML代码的转义问题。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Controller:-Servlet">Controller: Servlet<a class="anchor-link" href="#Controller:-Servlet">&#182;</a></h1><p>Servlet 常用的类是 HTTPServlet，需要重载这个类，提供doGET, doPost方法来截获请求并且进行处理。举例如下：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.http.*</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="kd">extends</span> <span class="n">HttpServlet</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doGet</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span>
+    <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ServletException</span>
+    <span class="o">{</span>
+        <span class="n">response</span><span class="o">.</span><span class="na">setContentType</span><span class="o">(</span><span class="s">&quot;text/html&quot;</span><span class="o">);</span>
+        <span class="n">PrintWriter</span> <span class="n">out</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">getWriter</span><span class="o">();</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;html&gt;&quot;</span><span class="o">);</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;head&gt;&quot;</span><span class="o">);</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;title&gt;Hello World!&lt;/title&gt;&quot;</span><span class="o">);</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;/head&gt;&quot;</span><span class="o">);</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;body&gt;&quot;</span><span class="o">);</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;h1&gt;Hello World!&lt;/h1&gt;&quot;</span><span class="o">);</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;/body&gt;&quot;</span><span class="o">);</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;&lt;/html&gt;&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<p>这个Servlet程序对response对象设置了类型，然后对于输出流添加了HTML文档，当容器检测到对于这个Servlet调用时，会进入 doGet 进行处理，返回 response 的文档格式和文档内容。URL到Servlet的映射可以通过注解和XML标记文件指定。</p>
+<p>对于一个请求，TOMCAT容器的处理步骤为：容器首先创建一个HttpServletRequest和HttpServletResponse对象，然后调用Servlet的一个线程，调用service()方法，之后service方法根据POST还是GET调用doPost()和doGet()中的方法，并且传递request和response对象作为参数，方便我们进行处理，处理后，将其中的response方法的流返回，进行相应。此时，HttpServletRequest和Response对象死掉，Servlet的相关线程死掉。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Viewer:-JSP">Viewer: JSP<a class="anchor-link" href="#Viewer:-JSP">&#182;</a></h1><p>对于 JSP 而言，它类似于一个带壳的 Servlet，容器会有一个 JSP 的解析器用于对JSP文档进行解析，然后使用一个Servlet实例响应对于JSP的请求。JSP因为将Java代码嵌入到HTML中，因此使用更加方便。在早期，流行直接通过客户端URL对于JSP文件位置进行访问，JSP会生成Servlet实例并且进行响应，这避免了在Servlet中写HTML代码的转义问题。</p>
 <p>但是，这样有安全风险，因此现代程序往往让JSP作为view层，客户端URL通过servlet处理并且转发到JSP文件（以及另一个servlet）进行其余工作后返回视图。JSP现在对于客户不可见。不过，要知道，不用在web.xml中配置映射，jsp文件可以直接被URL定位符解析并且定位到文件位置，自动进行初始化和响应。</p>
-<h2 id="&#24320;&#21457;&#26694;&#26550;-MVC">&#24320;&#21457;&#26694;&#26550; MVC<a class="anchor-link" href="#&#24320;&#21457;&#26694;&#26550;-MVC">&#182;</a></h2><p>基本的Java Servlet &amp; JSP 需要使用 MVC 设计模式，其中请求从容器的XML文件中找到对应的Servlet，之后Servlet进行Controller的角色处理，后通知模型改变状态，将请求转发给JSP，JSP改变视图并且进行相应。</p>
 
 </div>
 </div>
