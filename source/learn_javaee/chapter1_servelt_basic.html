@@ -11833,8 +11833,71 @@ div#notebook {
 <li><p>JSP支持：JSP文档解析和Java代码翻译</p>
 </li>
 </ul>
-<h2 id="Servlet-&#21644;-JSP-&#25216;&#26415;">Servlet &#21644; JSP &#25216;&#26415;<a class="anchor-link" href="#Servlet-&#21644;-JSP-&#25216;&#26415;">&#182;</a></h2><p>常见的应用服务器有PERL/Python常用的CGI统一网关接口，也有JAVA标准的Servlet标准。Servlet不会对于每次请求启动一个进程，当第一次启动后，它就保持开启状态，并且多个指向同一Servlet的请求可以由同一个Servlet的单独线程来处理。如果这些请求是并发的，那么Servlet容器的线程池会保证资源消耗，并且进行并发控制。</p>
-<h2 id="MVC-&#35774;&#35745;&#27169;&#24335;">MVC &#35774;&#35745;&#27169;&#24335;<a class="anchor-link" href="#MVC-&#35774;&#35745;&#27169;&#24335;">&#182;</a></h2><p>基本的Java Servlet &amp; JSP 需要使用 MVC 设计模式，其中请求从容器的XML文件中找到对应的Servlet，之后Servlet进行Controller的角色处理，后通知模型改变状态，将请求转发给JSP，JSP改变视图并且进行相应。</p>
+<h2 id="Servlet-&#21644;-JSP-&#25216;&#26415;">Servlet &#21644; JSP &#25216;&#26415;<a class="anchor-link" href="#Servlet-&#21644;-JSP-&#25216;&#26415;">&#182;</a></h2><p>常见的应用服务器有PERL/Python常用的CGI统一网关接口，也有JAVA标准的Servlet标准。Servlet相比较CGI具有很多优点，比如：</p>
+<p>Servlet不会对于每次请求启动一个进程，当第一次启动后，它就保持开启状态，并且多个指向同一Servlet的请求可以由同一个Servlet的单独线程来处理。</p>
+<p>如果这些请求是并发的，那么Servlet容器的线程池会保证资源消耗，并且进行并发控制。</p>
+<h2 id="MVC-&#35774;&#35745;&#27169;&#24335;">MVC &#35774;&#35745;&#27169;&#24335;<a class="anchor-link" href="#MVC-&#35774;&#35745;&#27169;&#24335;">&#182;</a></h2><p>基本的Java Servlet &amp; JSP 需要使用 MVC 设计模式，其中请求从容器的XML文件中找到对应的Servlet，之后Servlet进行Controller的角色处理，后通知模型改变状态，将请求转发给JSP，JSP改变视图并且进行相应。下面是一个典型的MVC，其中当用户产生请求，此请求被容器派发到匹配的Servlet，这个Servlet充当Controller的角色，通过解析POST的参数，然后交给Model进行处理，并且将其结果附着在request的属性上，交给JSP去解析和展示。</p>
+<p>index.html</p>
+<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Beer Select Page<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;SelectBeer.do&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Select your favorate beer color<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+        Color: <span class="p">&lt;</span><span class="nt">select</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;color&quot;</span> <span class="na">size</span><span class="o">=</span><span class="s">&quot;1&quot;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">option</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;light&quot;</span><span class="p">&gt;</span>light<span class="p">&lt;/</span><span class="nt">option</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">option</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;amber&quot;</span><span class="p">&gt;</span>amber<span class="p">&lt;/</span><span class="nt">option</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">option</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;brown&quot;</span><span class="p">&gt;</span>brown<span class="p">&lt;/</span><span class="nt">option</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">option</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;dark&quot;</span><span class="p">&gt;</span>dark<span class="p">&lt;/</span><span class="nt">option</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">select</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span><span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</pre></div>
+<p>web.xml</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;servlet&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>select_beer<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;servlet-class&gt;</span>BeerSelect<span class="nt">&lt;/servlet-class&gt;</span>
+<span class="nt">&lt;/servlet&gt;</span>
+
+<span class="nt">&lt;servlet-mapping&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>select_beer<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;url-pattern&gt;</span>/SelectBeer.do<span class="nt">&lt;/url-pattern&gt;</span>
+<span class="nt">&lt;/servlet-mapping&gt;</span>
+</pre></div>
+<p>BeerSelect.class</p>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BeerSelect</span> <span class="kd">extends</span> <span class="n">HttpServlet</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">doPost</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">resp</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span><span class="o">,</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">req</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">&quot;color&quot;</span><span class="o">,</span>
+                <span class="k">new</span> <span class="n">BeerModel</span><span class="o">().</span><span class="na">getBeer</span><span class="o">(</span><span class="n">req</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">&quot;color&quot;</span><span class="o">)));</span>
+        <span class="n">RequestDispatcher</span> <span class="n">dispatcher</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">&quot;result.jsp&quot;</span><span class="o">);</span>
+        <span class="n">dispatcher</span><span class="o">.</span><span class="na">forward</span><span class="o">(</span><span class="n">req</span><span class="o">,</span><span class="n">resp</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<p>BeerModel.class</p>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BeerModel</span> <span class="o">{</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">getBeer</span><span class="o">(</span><span class="n">String</span> <span class="n">color</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">switch</span> <span class="o">(</span><span class="n">color</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">case</span> <span class="s">&quot;light&quot;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="s">&quot;amber&quot;</span><span class="o">:</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="s">&quot;Qingdao&quot;</span><span class="o">,</span><span class="s">&quot;ChunSheng&quot;</span><span class="o">));</span>
+            <span class="k">case</span> <span class="s">&quot;brown&quot;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="s">&quot;black&quot;</span><span class="o">:</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="s">&quot;Black-bear&quot;</span><span class="o">,</span><span class="s">&quot;HuangShan&quot;</span><span class="o">));</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<p>result.jsp</p>
+<div class="highlight"><pre><span></span><span class="k">&lt;%</span>
+    <span class="n">List</span> <span class="n">choose</span> <span class="o">=</span> <span class="o">(</span><span class="n">List</span><span class="o">)</span> <span class="n">request</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">&quot;color&quot;</span><span class="o">);</span>
+    <span class="n">Iterator</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">choose</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+    <span class="k">while</span> <span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&quot;&lt;br&gt;Try:&quot;</span> <span class="o">+</span><span class="n">iterator</span><span class="o">.</span><span class="na">next</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot;!&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="k">%&gt;</span>
+</pre></div>
 
 </div>
 </div>
@@ -11944,7 +12007,8 @@ div#notebook {
 <span class="o">}</span>
 </pre></div>
 <p>这个Servlet程序对response对象设置了类型，然后对于输出流添加了HTML文档，当容器检测到对于这个Servlet调用时，会进入 doGet 进行处理，返回 response 的文档格式和文档内容。URL到Servlet的映射可以通过注解和XML标记文件指定。</p>
-<p>对于一个请求，TOMCAT容器的处理步骤为：容器首先创建一个HttpServletRequest和HttpServletResponse对象，然后调用Servlet的一个线程，调用service()方法，之后service方法根据POST还是GET调用doPost()和doGet()中的方法，并且传递request和response对象作为参数，方便我们进行处理，处理后，将其中的response方法的流返回，进行相应。此时，HttpServletRequest和Response对象死掉，Servlet的相关线程死掉。</p>
+<h2 id="Servlet-&#23545;&#35937;&#30340;&#22788;&#29702;&#27969;&#31243;">Servlet &#23545;&#35937;&#30340;&#22788;&#29702;&#27969;&#31243;<a class="anchor-link" href="#Servlet-&#23545;&#35937;&#30340;&#22788;&#29702;&#27969;&#31243;">&#182;</a></h2><p>对于一个请求，TOMCAT容器的处理步骤为：容器首先创建一个 HttpServletRequest 和 HttpServletResponse 对象，然后调用 Servlet 的一个线程，调用 service() 方法，之后 service 方法根据POST还是GET调用 doPost() 和 doGet() 中的方法，并且传递 request 和 response 对象作为参数，方便我们进行处理，处理后，将其中的 response 方法的流返回，进行相应。此时，HttpServletRequest 和 Response 对象死掉，Servlet 的相关线程死掉。</p>
+<p>需要注意，在MVC设计模式中，HTML的GET or POST 请求，在 Servlet 中，我们会从 req 中提取 perminer</p>
 
 </div>
 </div>
