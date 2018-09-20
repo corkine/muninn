@@ -11775,7 +11775,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><span type="title">Servlet 和 JSP 概要</span> | <span type="update">2018-09-16</span> - Version <span type="version">1.7</span></p>
+<p><span type="title">Servlet 和 JSP 概要</span> | <span type="update">2018-09-16</span> - Version <span type="version">1.8</span></p>
 <p><span type="intro"><p class="card-text">本章主要对 Servlet 和 JSP 有一个概要性的介绍。在第一部分，介绍了HTTP的URL、GET/POST方法、Response响应码、HTML的主要格式、Web服务器和应用服务器的工作流程（包括web.xml文件配置、动态参数加载、属性监听和线程安全、Servlet生命周期、JSP派发等）。</p><p class="card-text">在第二部分，着重介绍了Session，包括Session本身的用法、URL重写、Cookies对象以及常见的HttpSessionListener、HttpSessionActivationListener、HttpSessionBindListener、HttpSessionAttributeListener及其使用方法。</p></span></p>
 
 </div>
@@ -12184,8 +12184,23 @@ com.mazj.dog.DogListener.class</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Session">Session<a class="anchor-link" href="#Session">&#182;</a></h1><p>当客户端向服务器发送请求，服务器无法认识客户端，因此需要使用凭证信息来标明是何者发送的请求，使用的技术叫做 HTTP Session。Session 可以基于 URL，或者是Cookie，或者是TCP。常用的方式是Cookie。基于URL安全性很差，容易暴露以及被劫持。</p>
-<h2 id="Session">Session<a class="anchor-link" href="#Session">&#182;</a></h2><p>基本的Session使用方法如下，对于一个 request 的请求，创建 Session/获取 Session 对象。</p>
+<h1 id="Session">Session<a class="anchor-link" href="#Session">&#182;</a></h1><p>当客户端向服务器发送请求，服务器无法认识客户端，因此需要使用凭证信息来标明是何者发送的请求，使用的技术叫做 HTTP Session。Session 可以基于 URL，或者是Cookie，或者是SSL。常用的方式是Cookie。基于URL安全性很差，容易暴露以及被劫持。</p>
+<h2 id="Cookie">Cookie<a class="anchor-link" href="#Cookie">&#182;</a></h2><p>cookie 是一种在 HTTP 协议中用来保存 key-value 字段值的一个参数，其存在于 Header 中。 cookie 只能保存有限的字符串信息，并且在每次 POST/GET 时都会添加到 header 中进行发送，用来标记客户端行为和状态信息。</p>
+<p>基于 cookie 的 session是一种特殊的 cookie，这个时候，我们将更多的客户端行为和状态保存在服务器上，给这个状态一个 session id 凭证信息。然后客户端的 cookie 中保存这样一个 session id信息。这样的话，每次 post/get 都可以从 cookie 中抽取 session id，然后找到服务器对应 id 的复杂客户端状态了。</p>
+<p>你可以看到设置过 session 后，cookie 字段会多出一个：Cookie: JSESSIONID =&gt; 8E66432316B23ACD89A2559C8D74E669 这样的字段，这是用来标记服务器上的Session对象的字段。其中客户端在每次请求时都会携带这样的字段，服务器借助这个字段来获取会话的属性信息以及识别用户。<strong>需要注意的是，Servlet规范规定Cookie必须使用JSESSIONID来设置Session，而不能使用其余字段。</strong></p>
+<p>我们可以直接使用 cookie，而不用容器自动管理的 session 对象。session 一般是会话相关，保存用户口令和之间的操作等。而cookie则可以是用户相关，这意味着cookie可以设置单独的过期时间，保存更加长久的用户信息，比如用户名之类。大部分的 session 是基于 cookie 实现的，cookie 能提供比 session 更长久的简单信息。</p>
+<p>cookie的使用方法如下：</p>
+<div class="highlight"><pre><span></span><span class="n">Cookie</span> <span class="n">color</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Cookie</span><span class="o">(</span><span class="s">&quot;color&quot;</span><span class="o">,</span><span class="n">req</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">&quot;color&quot;</span><span class="o">));</span>
+<span class="n">color</span><span class="o">.</span><span class="na">setMaxAge</span><span class="o">(</span><span class="mi">10</span><span class="o">*</span><span class="mi">6</span><span class="o">);</span>
+<span class="kt">boolean</span> <span class="n">find</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+<span class="k">for</span> <span class="o">(</span><span class="n">Cookie</span> <span class="n">cookie</span> <span class="o">:</span> <span class="n">req</span><span class="o">.</span><span class="na">getCookies</span><span class="o">())</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">cookie</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">color</span><span class="o">.</span><span class="na">getName</span><span class="o">()))</span> <span class="o">{</span>
+        <span class="n">cookie</span><span class="o">.</span><span class="na">setValue</span><span class="o">(</span><span class="n">color</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span> <span class="n">find</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span> <span class="k">if</span> <span class="o">(!</span><span class="n">find</span><span class="o">)</span> <span class="n">resp</span><span class="o">.</span><span class="na">addCookie</span><span class="o">(</span><span class="n">color</span><span class="o">);</span>
+</pre></div>
+<p>Cookie可以由 req 对象的 getCookies 获得，是一个数组，需要注意，必须遍历这个数组来匹配。此外，没有 setCookies 方法，如果需要添加一个新的 Cookies，那么对于 resp 对象，使用 addCookies 来添加一个 Cookie。 Cookies 可以使用 getName、getValue 访问键值对。使用 setValue 来设置其新值。此外，其可以单独设置过期时间。</p>
+<h2 id="&#22522;&#20110;-Cookie-&#30340;-Session">&#22522;&#20110; Cookie &#30340; Session<a class="anchor-link" href="#&#22522;&#20110;-Cookie-&#30340;-Session">&#182;</a></h2><p>Serlvet API 简化了基于 cookie 的 session的使用，我们只用操纵 Session 对象即可，其余工作：设置 cookie 交给容器去做。基本的Session使用方法如下，对于一个 request 的请求，创建 Session/获取 Session 对象。</p>
 <div class="highlight"><pre><span></span><span class="n">HttpSession</span> <span class="n">session</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="na">getSession</span><span class="o">();</span>
 <span class="c1">//req.getSession(false); 这种方法不会自动新建session，只会得到null或者存在的session</span>
 <span class="k">if</span> <span class="o">(</span><span class="n">session</span><span class="o">.</span><span class="na">isNew</span><span class="o">())</span> <span class="o">{</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&quot;Session is new&quot;</span><span class="o">);</span> <span class="o">}</span>
@@ -12215,21 +12230,7 @@ com.mazj.dog.DogListener.class</p>
     <span class="nt">&lt;session-timeout&gt;</span>10<span class="nt">&lt;/session-timeout&gt;</span>
 <span class="nt">&lt;/session-config&gt;</span>
 </pre></div>
-<h2 id="Cookie">Cookie<a class="anchor-link" href="#Cookie">&#182;</a></h2><p>session 是一种特殊的 cookie，你可以看到设置过 session 后，cookie 字段会多出一个：Cookie: JSESSIONID =&gt; 8E66432316B23ACD89A2559C8D74E669 这样的字段，这是用来标记服务器上的Session对象的字段。其中客户端在每次请求时都会携带这样的字段，服务器借助这个字段来获取会话的属性信息以及识别用户。</p>
-<p><strong>需要注意，Servlet规范规定Cookie必须使用JSESSIONID来设置Session，而不能使用其余字段。</strong></p>
-<p>我们可以直接使用 cookie，而不用容器自动管理的 session 对象。session 一般是会话相关，保存用户口令和之间的操作等。而cookie则可以是用户相关，这意味着cookie可以设置单独的过期时间，保存更加长久的用户信息，比如用户名之类。</p>
-<p>cookie的使用方法如下：</p>
-<div class="highlight"><pre><span></span><span class="n">Cookie</span> <span class="n">color</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Cookie</span><span class="o">(</span><span class="s">&quot;color&quot;</span><span class="o">,</span><span class="n">req</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">&quot;color&quot;</span><span class="o">));</span>
-<span class="n">color</span><span class="o">.</span><span class="na">setMaxAge</span><span class="o">(</span><span class="mi">10</span><span class="o">*</span><span class="mi">6</span><span class="o">);</span>
-<span class="kt">boolean</span> <span class="n">find</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-<span class="k">for</span> <span class="o">(</span><span class="n">Cookie</span> <span class="n">cookie</span> <span class="o">:</span> <span class="n">req</span><span class="o">.</span><span class="na">getCookies</span><span class="o">())</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">cookie</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">color</span><span class="o">.</span><span class="na">getName</span><span class="o">()))</span> <span class="o">{</span>
-        <span class="n">cookie</span><span class="o">.</span><span class="na">setValue</span><span class="o">(</span><span class="n">color</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span> <span class="n">find</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span> <span class="k">if</span> <span class="o">(!</span><span class="n">find</span><span class="o">)</span> <span class="n">resp</span><span class="o">.</span><span class="na">addCookie</span><span class="o">(</span><span class="n">color</span><span class="o">);</span>
-</pre></div>
-<p>Cookie可以由 req 对象的 getCookies 获得，是一个数组，需要注意，必须遍历这个数组来匹配。此外，没有 setCookies 方法，如果需要添加一个新的 Cookies，那么对于 resp 对象，使用 addCookies 来添加一个 Cookie。 Cookies 可以使用 getName、getValue 访问键值对。使用 setValue 来设置其新值。此外，其可以单独设置过期时间。</p>
-<h2 id="URL">URL<a class="anchor-link" href="#URL">&#182;</a></h2><p>Session 除了使用 cookies，还可以使用 URL，一般情况下，不推荐这样使用，但是对于拒绝 Cookie 的用户，则必须这样来进行识别。</p>
+<h2 id="&#22522;&#20110;-URL-&#30340;-Session">&#22522;&#20110; URL &#30340; Session<a class="anchor-link" href="#&#22522;&#20110;-URL-&#30340;-Session">&#182;</a></h2><p>Session 除了使用 cookies，还可以使用 URL，一般情况下，不推荐这样使用，但是对于拒绝 Cookie 的用户，则必须这样来进行识别。</p>
 <p>req.encodeURL() 和 req.encodeRedirectURL() 方法可以用来添加JSESSION凭证字符串，区别是，前者会自动将相对URL变成绝对URL，并且添加凭证，而后者用于重定向，只是单纯的添加凭证。这两个方法返回String字符串，需要动态编码到HTML/JSP中。</p>
 <p>在JSP视图中，获得Cookies、URL、Session 的信息：</p>
 <div class="highlight"><pre><span></span><span class="n">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&quot;\nSession id: %s\nAttribute name: %s\nAttribute dog: %s\n&quot;</span><span class="o">,</span>
