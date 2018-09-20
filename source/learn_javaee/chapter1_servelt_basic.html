@@ -11775,8 +11775,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><span type="title">Servlet 和 JSP 概要</span> | <span type="update">2018-09-16</span> - Version <span type="version">1.6</span></p>
-<p><span type="intro"><p class="card-text">本章主要对 Servlet 和 JSP 有一个概要性的介绍。简要来说，介绍了HTTP的URL、GET/POST方法、Response响应码、HTML的主要格式、Web服务器和应用服务器的工作流程（包括web.xml文件配置、动态参数加载、属性监听和线程安全、Servlet生命周期、JSP派发等）。</p></span></p>
+<p><span type="title">Servlet 和 JSP 概要</span> | <span type="update">2018-09-16</span> - Version <span type="version">1.7</span></p>
+<p><span type="intro"><p class="card-text">本章主要对 Servlet 和 JSP 有一个概要性的介绍。在第一部分，介绍了HTTP的URL、GET/POST方法、Response响应码、HTML的主要格式、Web服务器和应用服务器的工作流程（包括web.xml文件配置、动态参数加载、属性监听和线程安全、Servlet生命周期、JSP派发等）。</p><p class="card-text">在第二部分，着重介绍了Session，包括Session本身的用法、URL重写、Cookies对象以及常见的HttpSessionListener、HttpSessionActivationListener、HttpSessionBindListener、HttpSessionAttributeListener及其使用方法。</p></span></p>
 
 </div>
 </div>
@@ -12210,12 +12210,13 @@ com.mazj.dog.DogListener.class</p>
 </pre></div>
 <p>注意到，使用 getSession 如果不存在 Session，则自动会创建，为了避免这种行为，使用 getSession(false)。使用 session.isNew() 判断是否刚创建的 Session 对象。session 可以被设置过期时间，单位为s，可以添加key-value的属性，可以为POJO类型格式，反正是在服务端存储。客户端只会携带 session 的 id 字段，用来作为识别凭证。</p>
 <p>Session 可以获取下列属性：id、creationtime、lastaccessedtime、maxinativeinterval。其中创建和最后访问事件单位为ms。</p>
-<p>Session 的过期时间，以及 url、cookies、tcp的选择，可以在 DD 中定义，注意，这里定义的是min分钟！！！</p>
+<p>Session 的过期时间，以及 url、cookies、tcp的选择，可以在 DD 中定义，注意，这里定义的是min分钟！！！ 任何情况下，设置-1表示永不过期。</p>
 <div class="highlight"><pre><span></span><span class="nt">&lt;session-config&gt;</span>
     <span class="nt">&lt;session-timeout&gt;</span>10<span class="nt">&lt;/session-timeout&gt;</span>
 <span class="nt">&lt;/session-config&gt;</span>
 </pre></div>
 <h2 id="Cookie">Cookie<a class="anchor-link" href="#Cookie">&#182;</a></h2><p>session 是一种特殊的 cookie，你可以看到设置过 session 后，cookie 字段会多出一个：Cookie: JSESSIONID =&gt; 8E66432316B23ACD89A2559C8D74E669 这样的字段，这是用来标记服务器上的Session对象的字段。其中客户端在每次请求时都会携带这样的字段，服务器借助这个字段来获取会话的属性信息以及识别用户。</p>
+<p><strong>需要注意，Servlet规范规定Cookie必须使用JSESSIONID来设置Session，而不能使用其余字段。</strong></p>
 <p>我们可以直接使用 cookie，而不用容器自动管理的 session 对象。session 一般是会话相关，保存用户口令和之间的操作等。而cookie则可以是用户相关，这意味着cookie可以设置单独的过期时间，保存更加长久的用户信息，比如用户名之类。</p>
 <p>cookie的使用方法如下：</p>
 <div class="highlight"><pre><span></span><span class="n">Cookie</span> <span class="n">color</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Cookie</span><span class="o">(</span><span class="s">&quot;color&quot;</span><span class="o">,</span><span class="n">req</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">&quot;color&quot;</span><span class="o">));</span>
@@ -12315,7 +12316,8 @@ Cookie: JSESSIONID =&gt; 8E66432316B23ACD89A2559C8D74E669</code></pre>
 </pre></div>
 <p>需要注意，这个监听器不需要向DD注册，当取消绑定时，会自动通知。</p>
 <p>对于 HttpSessionActivationListener 适用于多个 JVM 会话迁移的情况，当服务器1创建了一个会话，但是这个会话现在由服务器2来服务，那么服务器2会从1上序列化传送会话的各个属性，当发生这种情况时，监听器可以进行冻结前和恢复后的操作。一般较少使用。</p>
-<p>以下是控制台输出信息：</p>
+<p>当且仅当属性能够序列化或者被ActivationListener通知后进行序列化，否则属性会丢失。</p>
+<p>以下是上述Listener的控制台输出信息：</p>
 
 <pre><code>new Session Add! Listener report: B4AC8DD468586C97326D18351E0F777A
 Session is new
