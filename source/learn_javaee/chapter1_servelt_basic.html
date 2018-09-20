@@ -12180,6 +12180,163 @@ com.mazj.dog.DogListener.class</p>
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Session">Session<a class="anchor-link" href="#Session">&#182;</a></h1><p>当客户端向服务器发送请求，服务器无法认识客户端，因此需要使用凭证信息来标明是何者发送的请求，使用的技术叫做 HTTP Session。Session 可以基于 URL，或者是Cookie，或者是TCP。常用的方式是Cookie。基于URL安全性很差，容易暴露以及被劫持。</p>
+<h2 id="Session">Session<a class="anchor-link" href="#Session">&#182;</a></h2><p>基本的Session使用方法如下，对于一个 request 的请求，创建 Session/获取 Session 对象。</p>
+<div class="highlight"><pre><span></span><span class="n">HttpSession</span> <span class="n">session</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="na">getSession</span><span class="o">();</span>
+<span class="c1">//req.getSession(false); 这种方法不会自动新建session，只会得到null或者存在的session</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">session</span><span class="o">.</span><span class="na">isNew</span><span class="o">())</span> <span class="o">{</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&quot;Session is new&quot;</span><span class="o">);</span> <span class="o">}</span>
+
+<span class="n">session</span><span class="o">.</span><span class="na">setMaxInactiveInterval</span><span class="o">(</span><span class="mi">10</span> <span class="o">*</span> <span class="mi">60</span><span class="o">);</span>
+<span class="n">session</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">,</span><span class="s">&quot;User&quot;</span><span class="o">);</span>
+<span class="n">session</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">&quot;dog&quot;</span><span class="o">,</span><span class="k">new</span> <span class="n">Dog</span><span class="o">(</span><span class="s">&quot;wooo&quot;</span><span class="o">));</span>
+
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span>
+        <span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span>
+                <span class="s">&quot;\n++++++++ Session info +++++\n&quot;</span> <span class="o">+</span>
+                        <span class="s">&quot;Session id: %s\n&quot;</span> <span class="o">+</span>
+                        <span class="s">&quot;Create time: %s\n&quot;</span> <span class="o">+</span>
+                        <span class="s">&quot;Last access time: %s\n&quot;</span> <span class="o">+</span>
+                        <span class="s">&quot;Interval time: %s s\n&quot;</span> <span class="o">+</span> <span class="s">&quot;+++++++++++++++++++++++\n&quot;</span>
+                <span class="o">,</span> <span class="n">session</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span> <span class="n">session</span><span class="o">.</span><span class="na">getCreationTime</span><span class="o">(),</span>
+                <span class="n">session</span><span class="o">.</span><span class="na">getLastAccessedTime</span><span class="o">(),</span> <span class="n">session</span><span class="o">.</span><span class="na">getMaxInactiveInterval</span><span class="o">())</span>
+        <span class="c1">//也可以在DD中设置 session-config 不过，那里的时间单位是min。</span>
+<span class="o">);</span>
+
+<span class="c1">//session.invalidate();</span>
+</pre></div>
+<p>注意到，使用 getSession 如果不存在 Session，则自动会创建，为了避免这种行为，使用 getSession(false)。使用 session.isNew() 判断是否刚创建的 Session 对象。session 可以被设置过期时间，单位为s，可以添加key-value的属性，可以为POJO类型格式，反正是在服务端存储。客户端只会携带 session 的 id 字段，用来作为识别凭证。</p>
+<p>Session 可以获取下列属性：id、creationtime、lastaccessedtime、maxinativeinterval。其中创建和最后访问事件单位为ms。</p>
+<p>Session 的过期时间，以及 url、cookies、tcp的选择，可以在 DD 中定义，注意，这里定义的是min分钟！！！</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;session-config&gt;</span>
+    <span class="nt">&lt;session-timeout&gt;</span>10<span class="nt">&lt;/session-timeout&gt;</span>
+<span class="nt">&lt;/session-config&gt;</span>
+</pre></div>
+<h2 id="Cookie">Cookie<a class="anchor-link" href="#Cookie">&#182;</a></h2><p>session 是一种特殊的 cookie，你可以看到设置过 session 后，cookie 字段会多出一个：Cookie: JSESSIONID =&gt; 8E66432316B23ACD89A2559C8D74E669 这样的字段，这是用来标记服务器上的Session对象的字段。其中客户端在每次请求时都会携带这样的字段，服务器借助这个字段来获取会话的属性信息以及识别用户。</p>
+<p>我们可以直接使用 cookie，而不用容器自动管理的 session 对象。session 一般是会话相关，保存用户口令和之间的操作等。而cookie则可以是用户相关，这意味着cookie可以设置单独的过期时间，保存更加长久的用户信息，比如用户名之类。</p>
+<p>cookie的使用方法如下：</p>
+<div class="highlight"><pre><span></span><span class="n">Cookie</span> <span class="n">color</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Cookie</span><span class="o">(</span><span class="s">&quot;color&quot;</span><span class="o">,</span><span class="n">req</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">&quot;color&quot;</span><span class="o">));</span>
+<span class="n">color</span><span class="o">.</span><span class="na">setMaxAge</span><span class="o">(</span><span class="mi">10</span><span class="o">*</span><span class="mi">6</span><span class="o">);</span>
+<span class="kt">boolean</span> <span class="n">find</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+<span class="k">for</span> <span class="o">(</span><span class="n">Cookie</span> <span class="n">cookie</span> <span class="o">:</span> <span class="n">req</span><span class="o">.</span><span class="na">getCookies</span><span class="o">())</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">cookie</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">color</span><span class="o">.</span><span class="na">getName</span><span class="o">()))</span> <span class="o">{</span>
+        <span class="n">cookie</span><span class="o">.</span><span class="na">setValue</span><span class="o">(</span><span class="n">color</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span> <span class="n">find</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span> <span class="k">if</span> <span class="o">(!</span><span class="n">find</span><span class="o">)</span> <span class="n">resp</span><span class="o">.</span><span class="na">addCookie</span><span class="o">(</span><span class="n">color</span><span class="o">);</span>
+</pre></div>
+<p>Cookie可以由 req 对象的 getCookies 获得，是一个数组，需要注意，必须遍历这个数组来匹配。此外，没有 setCookies 方法，如果需要添加一个新的 Cookies，那么对于 resp 对象，使用 addCookies 来添加一个 Cookie。 Cookies 可以使用 getName、getValue 访问键值对。使用 setValue 来设置其新值。此外，其可以单独设置过期时间。</p>
+<h2 id="URL">URL<a class="anchor-link" href="#URL">&#182;</a></h2><p>Session 除了使用 cookies，还可以使用 URL，一般情况下，不推荐这样使用，但是对于拒绝 Cookie 的用户，则必须这样来进行识别。</p>
+<p>req.encodeURL() 和 req.encodeRedirectURL() 方法可以用来添加JSESSION凭证字符串，区别是，前者会自动将相对URL变成绝对URL，并且添加凭证，而后者用于重定向，只是单纯的添加凭证。这两个方法返回String字符串，需要动态编码到HTML/JSP中。</p>
+<p>在JSP视图中，获得Cookies、URL、Session 的信息：</p>
+<div class="highlight"><pre><span></span><span class="n">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&quot;\nSession id: %s\nAttribute name: %s\nAttribute dog: %s\n&quot;</span><span class="o">,</span>
+        <span class="n">session</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span><span class="n">session</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">),</span>
+        <span class="o">((</span><span class="n">Dog</span><span class="o">)</span><span class="n">session</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">&quot;dog&quot;</span><span class="o">)).</span><span class="na">getBreed</span><span class="o">()));</span>
+
+<span class="n">session</span><span class="o">.</span><span class="na">invalidate</span><span class="o">();</span>
+<span class="n">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">response</span><span class="o">.</span><span class="na">encodeURL</span><span class="o">(</span><span class="s">&quot;/go&quot;</span><span class="o">));</span>
+
+<span class="k">for</span> <span class="o">(</span><span class="n">Cookie</span> <span class="n">cookie</span> <span class="o">:</span> <span class="n">request</span><span class="o">.</span><span class="na">getCookies</span><span class="o">())</span> <span class="o">{</span>
+    <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span>
+            <span class="s">&quot;\nCookie: %s =&gt; %s\n&quot;</span><span class="o">,</span><span class="n">cookie</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span><span class="n">cookie</span><span class="o">.</span><span class="na">getValue</span><span class="o">()));</span>
+<span class="o">}</span>
+</pre></div>
+
+<pre><code>Session id: B4AC8DD468586C97326D18351E0F777A 
+Attribute name: User 
+Attribute dog: bound!!!! 
+/go 
+Cookie: color =&gt; light
+Cookie: JSESSIONID =&gt; 8E66432316B23ACD89A2559C8D74E669</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="SessionListener">SessionListener<a class="anchor-link" href="#SessionListener">&#182;</a></h2><p>Session 可以添加很多的监听器，比如新建或者销毁 Session 时，可以使用 SessionListener 和 SessionEvent 对象，下面展示了如何使用此事件来计数当前在线人数。</p>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Counter</span> <span class="kd">implements</span> <span class="n">HttpSessionListener</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="n">count</span><span class="o">;</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sessionCreated</span><span class="o">(</span><span class="n">HttpSessionEvent</span> <span class="n">se</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;\nnew Session Add! Listener report: &quot;</span> <span class="o">+</span> <span class="n">se</span><span class="o">.</span><span class="na">getSession</span><span class="o">().</span><span class="na">getId</span><span class="o">());</span>
+        <span class="n">count</span><span class="o">++;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">getCount</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">count</span><span class="o">;</span> <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sessionDestroyed</span><span class="o">(</span><span class="n">HttpSessionEvent</span> <span class="n">se</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">count</span><span class="o">--;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<h2 id="SessionAttributeListener">SessionAttributeListener<a class="anchor-link" href="#SessionAttributeListener">&#182;</a></h2><p>这个监听器可以监听属性改变时的变化，使用 SessionBindingEvent 来监测属性被绑定、删除和替换的事件。</p>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">AttributeListener</span> <span class="kd">implements</span> <span class="n">HttpSessionAttributeListener</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">attributeAdded</span><span class="o">(</span><span class="n">HttpSessionBindingEvent</span> <span class="n">se</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;\n&quot;</span> <span class="o">+</span> <span class="n">se</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; has be added&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">attributeReplaced</span><span class="o">(</span><span class="n">HttpSessionBindingEvent</span> <span class="n">se</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;\n&quot;</span> <span class="o">+</span> <span class="n">se</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; has be replaced&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">attributeRemoved</span><span class="o">(</span><span class="n">HttpSessionBindingEvent</span> <span class="n">se</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;\n&quot;</span> <span class="o">+</span> <span class="n">se</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; has be removed&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<h2 id="SessionBindingListener">SessionBindingListener<a class="anchor-link" href="#SessionBindingListener">&#182;</a></h2><h2 id="SessionActivationListener">SessionActivationListener<a class="anchor-link" href="#SessionActivationListener">&#182;</a></h2><p>这个监听器可以监听一个属性对象被绑定和取消绑定时的消息，使用 SessionBindingEvent 来监测。</p>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Dog</span> <span class="kd">implements</span> <span class="n">HttpSessionBindingListener</span><span class="o">,</span> <span class="n">HttpSessionActivationListener</span> <span class="o">{</span>
+    <span class="n">String</span> <span class="n">breed</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Dog</span><span class="o">(</span><span class="n">String</span> <span class="n">breed</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">breed</span> <span class="o">=</span> <span class="n">breed</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getBreed</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">breed</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setBreed</span><span class="o">(</span><span class="n">String</span> <span class="n">breed</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">breed</span> <span class="o">=</span> <span class="n">breed</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">valueUnbound</span><span class="o">(</span><span class="n">HttpSessionBindingEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Value unbound! by session : &quot;</span> <span class="o">+</span> <span class="n">event</span><span class="o">.</span><span class="na">getSession</span><span class="o">());</span>
+        <span class="n">setBreed</span><span class="o">(</span><span class="s">&quot;unbound!!!!&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">valueBound</span><span class="o">(</span><span class="n">HttpSessionBindingEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Value bound! by session : &quot;</span> <span class="o">+</span> <span class="n">event</span><span class="o">.</span><span class="na">getSession</span><span class="o">());</span>
+        <span class="n">setBreed</span><span class="o">(</span><span class="s">&quot;bound!!!!&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<p>需要注意，这个监听器不需要向DD注册，当取消绑定时，会自动通知。</p>
+<p>对于 HttpSessionActivationListener 适用于多个 JVM 会话迁移的情况，当服务器1创建了一个会话，但是这个会话现在由服务器2来服务，那么服务器2会从1上序列化传送会话的各个属性，当发生这种情况时，监听器可以进行冻结前和恢复后的操作。一般较少使用。</p>
+<p>以下是控制台输出信息：</p>
+
+<pre><code>new Session Add! Listener report: B4AC8DD468586C97326D18351E0F777A
+Session is new
+name has be added
+Value bound! by session : org.apache.catalina.session.StandardSessionFacade@456c64f
+dog has be added
+
+++++++++ Session info +++++
+Session id: B4AC8DD468586C97326D18351E0F777A
+Create time: 1537417936005
+Last access time: 1537417936005
+Interval time: 600 s
++++++++++++++++++++++++
+
+name has be removed
+Value unbound! by session : org.apache.catalina.session.StandardSessionFacade@456c64f
+dog has be removed</code></pre>
+
+</div>
+</div>
+</div>
     </div>
   </div>
 </body>
