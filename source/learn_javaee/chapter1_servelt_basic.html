@@ -12174,16 +12174,6 @@ com.mazj.dog.DogListener.class</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Viewer:-JSP">Viewer: JSP<a class="anchor-link" href="#Viewer:-JSP">&#182;</a></h1><p>对于 JSP 而言，它类似于一个带壳的 Servlet，容器会有一个 JSP 的解析器用于对JSP文档进行解析，然后使用一个Servlet实例响应对于JSP的请求。JSP因为将Java代码嵌入到HTML中，因此使用更加方便。在早期，流行直接通过客户端URL对于JSP文件位置进行访问，JSP会生成Servlet实例并且进行响应，这避免了在Servlet中写HTML代码的转义问题。</p>
-<p>但是，这样有安全风险，因此现代程序往往让JSP作为view层，客户端URL通过servlet处理并且转发到JSP文件（以及另一个servlet）进行其余工作后返回视图。JSP现在对于客户不可见。不过，要知道，不用在web.xml中配置映射，jsp文件可以直接被URL定位符解析并且定位到文件位置，自动进行初始化和响应。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Session">Session<a class="anchor-link" href="#Session">&#182;</a></h1><p>当客户端向服务器发送请求，服务器无法认识客户端，因此需要使用凭证信息来标明是何者发送的请求，使用的技术叫做 HTTP Session。Session 可以基于 URL，或者是Cookie，或者是SSL。常用的方式是Cookie。基于URL安全性很差，容易暴露以及被劫持。</p>
 <h2 id="Cookie">Cookie<a class="anchor-link" href="#Cookie">&#182;</a></h2><p>cookie 是一种在 HTTP 协议中用来保存 key-value 字段值的一个参数，其存在于 Header 中。 cookie 只能保存有限的字符串信息，并且在每次 POST/GET 时都会添加到 header 中进行发送，用来标记客户端行为和状态信息。</p>
 <p>基于 cookie 的 session是一种特殊的 cookie，这个时候，我们将更多的客户端行为和状态保存在服务器上，给这个状态一个 session id 凭证信息。然后客户端的 cookie 中保存这样一个 session id信息。这样的话，每次 post/get 都可以从 cookie 中抽取 session id，然后找到服务器对应 id 的复杂客户端状态了。</p>
@@ -12336,6 +12326,17 @@ Interval time: 600 s
 name has be removed
 Value unbound! by session : org.apache.catalina.session.StandardSessionFacade@456c64f
 dog has be removed</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Viewer:-JSP">Viewer: JSP<a class="anchor-link" href="#Viewer:-JSP">&#182;</a></h1><p>对于 JSP 而言，它类似于一个带壳的 Servlet，容器会有一个 JSP 的解析器用于对JSP文档进行解析，然后使用一个Servlet实例响应对于JSP的请求。JSP因为将Java代码嵌入到HTML中，因此使用更加方便。在早期，流行直接通过客户端URL对于JSP文件位置进行访问，JSP会生成Servlet实例并且进行响应，这避免了在Servlet中写HTML代码的转义问题。</p>
+<p>但是，这样有安全风险，因此现代程序往往让JSP作为view层，客户端URL通过servlet处理并且转发到JSP文件（以及另一个servlet）进行其余工作后返回视图。JSP现在对于客户不可见。不过，要知道，不用在web.xml中配置映射，jsp文件可以直接被URL定位符解析并且定位到文件位置，自动进行初始化和响应。</p>
+<p>JSP 文件本质上是一种“默认URL映射和物理地址映射对应” 的 Servlet。当我们请求一个 JSP 文件的时候，JSP 文件首先被在 DD 中定位和找到，然后使用容器的 JSP 加载器进行转换，转换成为 Servlet.java -&gt; Servlet.class。之后像正常 Servlet 一样，这个类被初始化构造器、调用init方法、被多个线程调用service方法提供服务，最后调用destroy方法终止服务。</p>
 
 </div>
 </div>
