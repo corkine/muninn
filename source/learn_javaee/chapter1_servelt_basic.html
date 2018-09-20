@@ -11775,8 +11775,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><span type="title">Servlet 和 JSP 概要</span> | <span type="update">2018-09-16</span> - Version <span type="version">1.8</span></p>
-<p><span type="intro"><p class="card-text">本章主要对 Servlet 和 JSP 有一个概要性的介绍。在第一部分，介绍了HTTP的URL、GET/POST方法、Response响应码、HTML的主要格式、Web服务器和应用服务器的工作流程（包括web.xml文件配置、动态参数加载、属性监听和线程安全、Servlet生命周期、JSP派发等）。</p><p class="card-text">在第二部分，着重介绍了Session，包括Session本身的用法、URL重写、Cookies对象以及常见的HttpSessionListener、HttpSessionActivationListener、HttpSessionBindListener、HttpSessionAttributeListener及其使用方法。</p></span></p>
+<p><span type="title">Servlet 和 JSP 概要</span> | <span type="update">2018-09-16</span> - Version <span type="version">1.9</span></p>
+<p><span type="intro"><p class="card-text">本章主要对 Servlet 和 JSP 有一个概要性的介绍。在第一部分，介绍了HTTP的URL、GET/POST方法、Response响应码、HTML的主要格式、Web服务器和应用服务器的工作流程（包括web.xml文件配置、动态参数加载、属性监听和线程安全、Servlet生命周期、JSP派发等）。</p><p class="card-text">在第二部分，着重介绍了Session，包括Session本身的用法、URL重写、Cookies对象以及常见的HttpSessionListener、HttpSessionActivationListener、HttpSessionBindListener、HttpSessionAttributeListener及其使用方法。</p><p class="card-text">在第三部分，着重介绍了JSP以及基本语法和工作原理、流程，包括表达式、声明、scriplet、指令的使用，以及 URL和属性的配置、jspInit的重载、内置对象的使用。</p></span></p>
 
 </div>
 </div>
@@ -12336,7 +12336,7 @@ dog has be removed</code></pre>
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Viewer:-JSP">Viewer: JSP<a class="anchor-link" href="#Viewer:-JSP">&#182;</a></h1><p>对于 JSP 而言，它类似于一个带壳的 Servlet，容器会有一个 JSP 的解析器用于对JSP文档进行解析，然后使用一个Servlet实例响应对于JSP的请求。JSP因为将Java代码嵌入到HTML中，因此使用更加方便。在早期，流行直接通过客户端URL对于JSP文件位置进行访问，JSP会生成Servlet实例并且进行响应，这避免了在Servlet中写HTML代码的转义问题。</p>
 <p>但是，这样有安全风险，因此现代程序往往让JSP作为view层，客户端URL通过servlet处理并且转发到JSP文件（以及另一个servlet）进行其余工作后返回视图。JSP现在对于客户不可见。不过，要知道，不用在web.xml中配置映射，jsp文件可以直接被URL定位符解析并且定位到文件位置，自动进行初始化和响应。</p>
-<h2 id="HttpJspBase">HttpJspBase<a class="anchor-link" href="#HttpJspBase">&#182;</a></h2><p>JSP 文件本质上是一种“默认URL映射和物理地址映射对应” 的 Servlet。当我们请求一个 JSP 文件的时候，JSP 文件首先被在 DD 中定位和找到，然后使用容器的 JSP 加载器进行转换，转换成为 Servlet.java -&gt; Servlet.class。之后像正常 Servlet 一样，这个类被初始化构造器、调用init方法、被多个线程调用service方法提供服务，最后调用destroy方法终止服务。JSP 文件只经过一次转换，之后不再使用，一直调用转换后的 Servlet 对象。对于 TOMCAT 而言，此 Servlet 的位置一般在： <code>C:\Tomcat(TOMCATFolder)\work\Catalina\localhost(HostFolder)\ROOT(APPFolder)\org\apache\jsp</code> 下。</p>
+<h2 id="HttpJspBase-&#23545;&#35937;">HttpJspBase &#23545;&#35937;<a class="anchor-link" href="#HttpJspBase-&#23545;&#35937;">&#182;</a></h2><p>JSP 文件本质上是一种“默认URL映射和物理地址映射对应” 的 Servlet。当我们请求一个 JSP 文件的时候，JSP 文件首先被在 DD 中定位和找到，然后使用容器的 JSP 加载器进行转换，转换成为 Servlet.java -&gt; Servlet.class。之后像正常 Servlet 一样，这个类被初始化构造器、调用init方法、被多个线程调用service方法提供服务，最后调用destroy方法终止服务。JSP 文件只经过一次转换，之后不再使用，一直调用转换后的 Servlet 对象。对于 TOMCAT 而言，此 Servlet 的位置一般在： <code>C:\Tomcat(TOMCATFolder)\work\Catalina\localhost(HostFolder)\ROOT(APPFolder)\org\apache\jsp</code> 下。</p>
 <p>这个 Servlet 被命名为 原始jsp文件名_jsp.class。比如说：</p>
 <div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">index_jsp</span> <span class="kd">extends</span> <span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">jasper</span><span class="o">.</span><span class="na">runtime</span><span class="o">.</span><span class="na">HttpJspBase</span>
     <span class="kd">implements</span> <span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">jasper</span><span class="o">.</span><span class="na">runtime</span><span class="o">.</span><span class="na">JspSourceDependent</span><span class="o">,</span> <span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">jasper</span><span class="o">.</span><span class="na">runtime</span><span class="o">.</span><span class="na">JspSourceImports</span>
@@ -12379,7 +12379,7 @@ dog has be removed</code></pre>
 <pre><code>&lt;!-- --&gt; HTML注释，最后会被显示在HTML中，作为注释存在。此外，可以动态生成HTML注释： &lt;!-- &lt;%= 20*30 %&gt;--&gt; = &lt;!--600--&gt;
 &lt;%-- --%&gt; JSP注释，可以用在任意位置，不会显示在HTML中。
 // Java注释，只能用于声明和scriptlet中。</code></pre>
-<h2 id="DD&#37197;&#32622;&#21644;&#21442;&#25968;&#33719;&#21462;">DD&#37197;&#32622;&#21644;&#21442;&#25968;&#33719;&#21462;<a class="anchor-link" href="#DD&#37197;&#32622;&#21644;&#21442;&#25968;&#33719;&#21462;">&#182;</a></h2><p>因为JSP默认物理地址和URL映射对应，因此可以直接访问JSP文件物理路径即可获取服务。但是最好还是要写成这样：</p>
+<h2 id="URL&#37197;&#32622;&#21644;&#21442;&#25968;&#33719;&#21462;">URL&#37197;&#32622;&#21644;&#21442;&#25968;&#33719;&#21462;<a class="anchor-link" href="#URL&#37197;&#32622;&#21644;&#21442;&#25968;&#33719;&#21462;">&#182;</a></h2><p>因为JSP默认物理地址和URL映射对应，因此可以直接访问JSP文件物理路径即可获取服务。但是最好还是要写成这样：</p>
 <div class="highlight"><pre><span></span><span class="nt">&lt;servlet&gt;</span>
     <span class="nt">&lt;servlet-name&gt;</span>Hello<span class="nt">&lt;/servlet-name&gt;</span>
     <span class="nt">&lt;jsp-file&gt;</span>/hello.jsp<span class="nt">&lt;/jsp-file&gt;</span>
@@ -12395,17 +12395,21 @@ dog has be removed</code></pre>
 <span class="nt">&lt;/servlet-mapping&gt;</span>
 </pre></div>
 <p>注意到这里和之前Servlet不同之处在于Servlet提供servlet-class字段，而jsp提供jsp-file字段。当然，如果不这么写，直接访问/hello.jsp也可以，不过我们还是要避免直接对于jsp文件URL映射的访问，这样安全性较差。此外，使用DD的好处在于，可以访问初始的参数等其余信息，而单纯的jsp页面则不可以。</p>
-<h2 id="&#35774;&#32622;-page-&#25351;&#20196;&#65292;&#20351;&#29992;&#34920;&#36798;&#24335;">&#35774;&#32622; page &#25351;&#20196;&#65292;&#20351;&#29992;&#34920;&#36798;&#24335;<a class="anchor-link" href="#&#35774;&#32622;-page-&#25351;&#20196;&#65292;&#20351;&#29992;&#34920;&#36798;&#24335;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="c">&lt;!-- 这是一个HTML的注释，这句话会被write到out里。--&gt;</span>
-<span class="k">&lt;%-</span><span class="o">-</span> <span class="n">这是JSP的注释</span><span class="err">，</span><span class="n">不会被当作HTML注释生成页面</span><span class="err">。</span><span class="n">注意page指令中</span><span class="err">，</span><span class="n">我们添加了常见的部分</span><span class="err">，</span><span class="n">包导入</span><span class="err">、</span><span class="n">EL语言解析</span><span class="err">、</span><span class="n">页面编码</span><span class="err">、</span><span class="n">错误设置</span>
-<span class="n">以及会话管理</span><span class="o">--</span><span class="k">%&gt;</span>
-<span class="k">&lt;%@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&quot;BeerSelect&quot;</span>  <span class="n">isELIgnored</span><span class="o">=</span><span class="s">&quot;false&quot;</span>
-         <span class="n">contentType</span><span class="o">=</span><span class="s">&quot;text/html;charset=UTF-8&quot;</span> <span class="n">language</span><span class="o">=</span><span class="s">&quot;java&quot;</span>
-         <span class="n">session</span><span class="o">=</span><span class="s">&quot;true&quot;</span> <span class="n">isErrorPage</span><span class="o">=</span><span class="s">&quot;false&quot;</span> <span class="n">errorPage</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="k">%&gt;</span>
-<span class="nt">&lt;html&gt;</span>
-<span class="nt">&lt;head&gt;&lt;title&gt;</span>Hello <span class="k">&lt;%=</span> <span class="s">&quot;Corkine&quot;</span><span class="k">%&gt;</span> <span class="k">&lt;%-</span><span class="o">-</span><span class="n">这是一个表达式</span><span class="o">--</span><span class="k">%&gt;</span><span class="nt">&lt;/title&gt;&lt;/head&gt;</span>
-<span class="nt">&lt;body&gt;</span>
+<h2 id="JSP-&#23646;&#24615;&#32452;&#30340;-DD-&#37197;&#32622;">JSP &#23646;&#24615;&#32452;&#30340; DD &#37197;&#32622;<a class="anchor-link" href="#JSP-&#23646;&#24615;&#32452;&#30340;-DD-&#37197;&#32622;">&#182;</a></h2><p>此外，我们可以额外的配置 jsp 属性组：</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;jsp-config&gt;</span>
+    <span class="nt">&lt;jsp-property-group&gt;</span>
+        <span class="nt">&lt;description&gt;</span>All jsp page use this property group<span class="nt">&lt;/description&gt;</span>
+        <span class="nt">&lt;display-name&gt;</span>all_jsp<span class="nt">&lt;/display-name&gt;</span>
+        <span class="nt">&lt;url-pattern&gt;</span>*.jsp<span class="nt">&lt;/url-pattern&gt;</span>
+        <span class="nt">&lt;el-ignored&gt;</span>false<span class="nt">&lt;/el-ignored&gt;</span>
+        <span class="nt">&lt;scripting-invalid&gt;</span>false<span class="nt">&lt;/scripting-invalid&gt;</span>
+        <span class="nt">&lt;include-prelude&gt;</span>tail.jspf<span class="nt">&lt;/include-prelude&gt;</span>
+        <span class="nt">&lt;trim-directive-whitespaces&gt;</span>true<span class="nt">&lt;/trim-directive-whitespaces&gt;</span>
+    <span class="nt">&lt;/jsp-property-group&gt;</span>
+<span class="nt">&lt;/jsp-config&gt;</span>
 </pre></div>
-<h2 id="&#35206;&#30422;-jspInit-&#26041;&#27861;&#20197;&#21021;&#22987;&#21270;JSP">&#35206;&#30422; jspInit &#26041;&#27861;&#20197;&#21021;&#22987;&#21270;JSP<a class="anchor-link" href="#&#35206;&#30422;-jspInit-&#26041;&#27861;&#20197;&#21021;&#22987;&#21270;JSP">&#182;</a></h2><div class="highlight"><pre><span></span><span class="k">&lt;%!</span> <span class="c1">//这是一个声明</span>
+<p>上面的属性组定义了起作用的jsp文件，其包含的片段-tail.jspf，以及去除空白行、一些关于EL和Scriplet的设置。注意，忽略EL表达式后，其会被原样打印。</p>
+<h2 id="&#35206;&#30422;-jspInit-&#26041;&#27861;&#20197;&#21021;&#22987;&#21270;&#31867;">&#35206;&#30422; jspInit &#26041;&#27861;&#20197;&#21021;&#22987;&#21270;&#31867;<a class="anchor-link" href="#&#35206;&#30422;-jspInit-&#26041;&#27861;&#20197;&#21021;&#22987;&#21270;&#31867;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="k">&lt;%!</span> <span class="c1">//这是一个声明</span>
     <span class="c1">//////用来展示JSP初始化覆盖的方法//////</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">jspInit</span><span class="o">()</span> <span class="o">{</span>
         <span class="c1">//这里还是传统的Servlet地盘，因此可以用这些传统Servlet的方法</span>
@@ -12416,8 +12420,18 @@ dog has be removed</code></pre>
     <span class="o">}</span>
 <span class="k">%&gt;</span>
 </pre></div>
-<h2 id="&#33258;&#23450;&#20041;-jspService-&#20197;&#25552;&#20379;&#26381;&#21153;">&#33258;&#23450;&#20041; jspService &#20197;&#25552;&#20379;&#26381;&#21153;<a class="anchor-link" href="#&#33258;&#23450;&#20041;-jspService-&#20197;&#25552;&#20379;&#26381;&#21153;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="k">&lt;%</span>  <span class="c1">//这是一个Scriptlet</span>
-<span class="c1">//////用来展示JSP的隐藏对象及其使用方法//////</span>
+<h2 id="&#35774;&#32622;-page-&#25351;&#20196;&#19982;&#20351;&#29992;&#34920;&#36798;&#24335;">&#35774;&#32622; page &#25351;&#20196;&#19982;&#20351;&#29992;&#34920;&#36798;&#24335;<a class="anchor-link" href="#&#35774;&#32622;-page-&#25351;&#20196;&#19982;&#20351;&#29992;&#34920;&#36798;&#24335;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="c">&lt;!-- 这是一个HTML的注释，这句话会被write到out里。--&gt;</span>
+<span class="k">&lt;%-</span><span class="o">-</span> <span class="n">这是JSP的注释</span><span class="err">，</span><span class="n">不会被当作HTML注释生成页面</span><span class="err">。</span><span class="n">注意page指令中</span><span class="err">，</span><span class="n">我们添加了常见的部分</span><span class="err">，</span><span class="n">包导入</span><span class="err">、</span><span class="n">EL语言解析</span><span class="err">、</span><span class="n">页面编码</span><span class="err">、</span><span class="n">错误设置</span>
+<span class="n">以及会话管理</span><span class="o">--</span><span class="k">%&gt;</span>
+<span class="k">&lt;%@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&quot;java.util.*&quot;</span>  <span class="n">isELIgnored</span><span class="o">=</span><span class="s">&quot;false&quot;</span>
+         <span class="n">contentType</span><span class="o">=</span><span class="s">&quot;text/html;charset=UTF-8&quot;</span> <span class="n">language</span><span class="o">=</span><span class="s">&quot;java&quot;</span>
+         <span class="n">session</span><span class="o">=</span><span class="s">&quot;true&quot;</span> <span class="n">isErrorPage</span><span class="o">=</span><span class="s">&quot;false&quot;</span> <span class="n">errorPage</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="k">%&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;&lt;title&gt;</span>Hello <span class="k">&lt;%=</span> <span class="s">&quot;Corkine&quot;</span><span class="k">%&gt;</span> <span class="k">&lt;%-</span><span class="o">-</span><span class="n">这是一个表达式</span><span class="o">--</span><span class="k">%&gt;</span><span class="nt">&lt;/title&gt;&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+</pre></div>
+<h2 id="&#33258;&#23450;&#20041;-jspService-&#20197;&#25552;&#20379;&#26381;&#21153;">&#33258;&#23450;&#20041; jspService &#20197;&#25552;&#20379;&#26381;&#21153;<a class="anchor-link" href="#&#33258;&#23450;&#20041;-jspService-&#20197;&#25552;&#20379;&#26381;&#21153;">&#182;</a></h2><p>下列代码用来展示JSP的隐藏对象及其使用方法，包括 request、response、config、application、session、out 以及 page 和 pageContext。</p>
+<div class="highlight"><pre><span></span><span class="k">&lt;%</span>  <span class="c1">//这是一个Scriptlet</span>
 
 <span class="n">request</span><span class="o">.</span><span class="na">getRequestURI</span><span class="o">();</span>
 <span class="n">response</span><span class="o">.</span><span class="na">addHeader</span><span class="o">(</span><span class="s">&quot;jsp&quot;</span><span class="o">,</span><span class="s">&quot;jsp!!!&quot;</span><span class="o">);</span>
@@ -12427,8 +12441,8 @@ dog has be removed</code></pre>
 <span class="c1">//application 指的是 ServletContext对象，对于Servlet使用 getServletConfig().getServletContext() 获取</span>
 <span class="n">session</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">&quot;a&quot;</span><span class="o">,</span><span class="s">&quot;value_of_a&quot;</span><span class="o">);</span>
 <span class="c1">//session 指的是 request.getSession() 获取的 HttpSession 对象</span>
-<span class="n">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">application</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">&quot;Database&quot;</span><span class="o">));</span> <span class="c1">//out自然是 response.getWriter() 得到的 Writer。</span>
-<span class="c1">//记得没错的话，我们从servletconfig中获取了这个字段，然后设置到context上了，现在自然可以用app.getXXX来获取</span>
+<span class="n">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">application</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">&quot;Database&quot;</span><span class="o">));</span> <span class="c1">//out不是 response.getWriter() 得到的 Writer。而是 jsp.JspWriter</span>
+<span class="c1">//它的大部分方法和PrintWriter相同，不过添加了一些缓冲功能</span>
 
 <span class="c1">//除了这些不同，JSP有一个很强大的pageContext，这是继承自JspContext的类</span>
 <span class="n">pageContext</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">&quot;a&quot;</span><span class="o">);</span> <span class="c1">//页面作用域，等同于 request.getAttribute(&quot;a&quot;)</span>
@@ -12439,6 +12453,18 @@ dog has be removed</code></pre>
 <span class="c1">//set等同，这里不再展示</span>
 <span class="k">%&gt;</span>
 </pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>更新记录：</p>
+<p>2018年9月16日 开始撰写本文，添加 MVC 和 HTTP 部分</p>
+<p>2018年9月19日 Servlet部分 和 Listener部分</p>
+<p>2018年9月20日 Session部分 和 JSP部分</p>
 
 </div>
 </div>
