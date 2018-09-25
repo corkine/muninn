@@ -198,7 +198,9 @@ COURSE_INFO = {
         "id":"js",
         "chapter_list":[
             ("serlvet_jsp_basic","0","chapter1_servelt_basic.html","c1"),
-            ("action_el_jstl","0","chapter2_el.html","c2")
+            ("action_el","0","chapter2_el.html","c2"),
+            ("jstl","0","chapter3_jstl.html","c3"),
+            ("taglib","0","chapter4_taglib.html","c4"),
         ],
     },
     "database":
