@@ -201,6 +201,7 @@ COURSE_INFO = {
             ("action_el","0","chapter2_el.html","c2"),
             ("jstl","0","chapter3_jstl.html","c3"),
             ("taglib","0","chapter4_taglib.html","c4"),
+            ("deploy_secret","0","chapter5_deploy_and_secret.html","c5"),
         ],
     },
     "database":
