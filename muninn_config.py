@@ -202,6 +202,7 @@ COURSE_INFO = {
             ("jstl","0","chapter3_jstl.html","c3"),
             ("taglib","0","chapter4_taglib.html","c4"),
             ("deploy_secret","0","chapter5_deploy_and_secret.html","c5"),
+            ("filter_and_wrapper","0","chapter6_filter.html","c6"),
         ],
     },
     "database":
