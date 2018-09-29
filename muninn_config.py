@@ -261,6 +261,7 @@ COURSE_INFO = {
         "id":"neuro",
         "chapter_list":[
             ("导论","0","chapter1_intro.html","c1"),
+            ("静息态神经元膜和动作电位","0","chapter2_how_neuro_works_1.html","c2"),
         ],
     },
     "ml1":
