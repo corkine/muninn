@@ -204,6 +204,7 @@ COURSE_INFO = {
             ("deploy_secret","0","chapter5_deploy_and_secret.html","c5"),
             ("filter_and_wrapper","0","chapter6_filter.html","c6"),
             ("design_pattern_in_ee","0","chapter7_design_pattern_ee.html","c7"),
+            ("spring_ioc","0","chapter8_spring_ioc.html","c8"),
         ],
     },
     "database":
