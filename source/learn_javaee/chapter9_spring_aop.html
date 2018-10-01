@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>chapter10_other_design_patterns</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>chapter9_spring_aop</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <style type="text/css">
@@ -11775,8 +11775,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><span type="title">特定领域设计模式</span> | <span type="update">2018-09-11</span> - Version <span type="version">2.0</span></p>
-<p><span type="intro"><p class="card-text">本章介绍其余设计模式。这些设计模式不太常用，但是却都十分有效，在特殊情况下，使用起来非常方便。这些模式有：用来改变抽象的桥接模式，用来构造产品对象并且允许多步进行的生成器模式，用来将一个请求依次转发给多个对象进行服务的责任链模式，用来统一管理类状态以模拟虚拟实例的蝇量模式，用来创造和解释语言的解释器模式，用来协调和管理多个对象状态并且进行指挥的中介者模式，不使用构造，使用克隆来获得对象的原型模式，用来保存和恢复当前状态的备忘录模式，用来动态获取不同对象状态的访问者模式。</p></span></p>
+<p><span type="title">Spring AOP 基础（基于AspectJ）</span> | <span type="update">2018-10-01</span> - Version <span type="version">1.0</span></p>
+<p><span type="intro"><p class="card-text">本章主要介绍 Spring AOP 面向切面编程的原理和操作。AOP 是一种开发理念，面向切面指的是将横切关注点和业务逻辑相分离这一思想。其中横切关注点指的是那些散布于应用中多出的功能，这些功能往往具有被动属性，不需要应用对象主动实现，比如日志记录、安全检查和过滤等等。散布在多处的属于同个被动功能很难去进行集中开发和管理。</p><p class="card-text">使用继承过于脆弱（单继承，难以应对变化），使用委托则繁复（切点需要传入上下文，委托需要提供一个服务执行方法，实现需要根据上下文判断是否需要在此处执行逻辑）。动态代理用于截获对象，添加功能，自然就是此问题的解决办法。同时就像 IOC 本质上是一个超大的抽象工厂，AOP其实是一个超级动态代理。不过，基于注解的AOP比JavaSE提供的动态代理更加方便和好用，并且配合IOC，使用更加方便。</p></span></p>
 
 </div>
 </div>
@@ -11785,84 +11785,64 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#26725;&#25509;&#27169;&#24335;">&#26725;&#25509;&#27169;&#24335;<a class="anchor-link" href="#&#26725;&#25509;&#27169;&#24335;">&#182;</a></h1><h2 id="&#26725;&#25509;&#27169;&#24335;&#30340;&#24517;&#35201;&#24615;">&#26725;&#25509;&#27169;&#24335;&#30340;&#24517;&#35201;&#24615;<a class="anchor-link" href="#&#26725;&#25509;&#27169;&#24335;&#30340;&#24517;&#35201;&#24615;">&#182;</a></h2><p>桥接模式是程序设计者在解决<strong>实现和抽像分离</strong>的问题时被发现的。比如，当我们需要为不同品牌的电视机做遥控器，现在有一个遥控器的接口，因此，最容易想到的方式就是实现这个接口，然后，使用策略模式对各个不同实现的遥控器传入被遥控的对象，重写这些子类遥控器的接口以实现对对象的控制。但这样的问题在于，我们“面向实现”编程，而非面向抽像。因此进行如下设计：</p>
-<p>① 使用策略模式，将实现分离出抽像</p>
-<p>为了使用策略模式，实现一个AbstractController类来实现遥控器接口，然后让各个TV实现TV类来作为参数传入并且被遥控器类保存成为实例变量。通过对实例变量方法调用，遥控器类可以提供其接口的服务。</p>
-<p>但是，策略模式的问题在于，我们可以对实现进行分离，因为我们总是有不同的实现，作为参数传递到主类的实例变量中。但是，我们确定好的接口标准则完全无法改变，也就是，<strong>我们一旦确定策略模式所提供的接口，就不能够再去修改这个接口</strong>，这导致了不灵活的设计。</p>
-<p>② 策略模式的修改</p>
-<p>为了对标准进行灵活性的修改，我们使用继承扩展策略模式的遥控器类，而对于新的类自然要提供新的方法，这些新的方法可以保证对于实现的弹性扩张以应对需求的变化。这里需要注意，新的遥控器子类提供的任何方法都必须是面向抽像的，也就是，它只能够调用AbstractController类中的方法来组合提供其新的服务。由于这个子类继承了父类的方法，因此可以作为标准遥控器使用，当然，也可以作为加强版的遥控器使用。</p>
-<p>这样，我们就完成了实现和抽象的分离，并且保证了实现和抽像都能够通过继承/实现来进行扩张以应对变化。</p>
-<h2 id="&#23450;&#20041;&#26725;&#25509;&#27169;&#24335;">&#23450;&#20041;&#26725;&#25509;&#27169;&#24335;<a class="anchor-link" href="#&#23450;&#20041;&#26725;&#25509;&#27169;&#24335;">&#182;</a></h2><p><strong>桥接模式指的是：不仅改变实现，也改变抽象的设计模式</strong></p>
-<p>桥接模式混合使用了“继承”和“组合”思想，属于“提供服务”类别的设计模式。</p>
-<p>经典的桥接模式的“实现”部分通过一个AbstractTV类实现需要被组合的接口，而各种新的TV来继承AbstractTV来达到的。这区别于使用策略模式进行“实现”，这里的原因是，桥接模式需要解决的问题是变化幅度小、且较为固定的情况，比如平台适配。</p>
-<p>经典的桥接模式的“抽像”部分采用组合来调用实现的服务。并且通过继承来扩展服务。这做到了有弹性的设计。桥接模式的抽像部分和策略模式很像，但是要注意，其实现部分则完全没有采用策略模式，而是采用了交给子类的继承模式。在区别两个模式时需要注意。</p>
-<p>一句话概括，桥接模式指的就是这样一种<strong>在一个抽象类中保存另一个抽像类实例对象，并且这个抽象类调用其实例对象提供服务，同时这个抽像类的子类可以通过组合其父类的方法，来提供新的服务，被保存成实例对象的抽象类可以由各个子类重载其方法来提供服务从而隐藏差异性的设计模式。</strong></p>
-<p>在桥接模式中，唯一不能更改的就是实例类的接口，因为主类的服务通过这个接口方法实现。主类附加服务通过子类调用主类服务和实例类的接口实现。实例类的实现子类多用于隐藏平台相关差异性这种需求。</p>
-<p>桥接模式的类图如下：</p>
-<p><img src="c10p1.png" alt=""></p>
-<p>可以看到，桥接模式很好的实现了“变化和不变相分离”和“面对修改闭合，面对扩展开放”的OOP理念。</p>
-<h2 id="&#26725;&#25509;&#27169;&#24335;&#21644;&#31574;&#30053;&#27169;&#24335;&#21306;&#20998;">&#26725;&#25509;&#27169;&#24335;&#21644;&#31574;&#30053;&#27169;&#24335;&#21306;&#20998;<a class="anchor-link" href="#&#26725;&#25509;&#27169;&#24335;&#21644;&#31574;&#30053;&#27169;&#24335;&#21306;&#20998;">&#182;</a></h2><p>桥接模式和策略模式很像，但是还是有一定的区别。策略模式的策略通常是接口，以及对接口的实现。而桥接模式的“策略”多采用类或者抽像类，通过对类的继承来提供“策略”。此外，桥接模式的“抽象”更强调在子类中组合使用抽像方法来面对抽像来扩展服务。而策略模式则不太强调这一点。</p>
-<p>此外，两者的目的不同，策略模式目的在于区分变化和不变，封装不变的部分。桥接模式目的在于统合接口的不同实现，同时对服务进行扩展（前半句两者不同之处在于：桥接模式的变化性更侧重于实例对象的某个很小部分（通过继承），而不像策略模式，实例对象整个代表了策略（通过实现接口）；后半句策略模式则毫不关心）。</p>
-<p>虽然从表面看来，桥接模式和策略模式很像，但是其实，桥接模式综合了“提供服务”类别的“交给子类”和“使用组合”两种思路和流派。其中交给子类更适合Is-A情况，使用组合则更适合变化较大或者Has-A关系的情况。TV和遥控器的关系是 has-A，因此使用组合，但是不同平台的整合则是is-a，Sony TV is a TV，Samsung TV is a TV，因此使用交给子类的模式。</p>
-<h2 id="&#20309;&#26102;&#20351;&#29992;&#26725;&#25509;&#27169;&#24335;">&#20309;&#26102;&#20351;&#29992;&#26725;&#25509;&#27169;&#24335;<a class="anchor-link" href="#&#20309;&#26102;&#20351;&#29992;&#26725;&#25509;&#27169;&#24335;">&#182;</a></h2><p><strong>在需要分离变化和不变的情况下，且变化的部分较小且固定，大部分代码可以复用，并且需要对抽象做出弹性设计时</strong>。</p>
-<p>前半句决定了使用“交给子类”的继承而不是直接实现接口来达到“实现”。后半句决定了让实现作为实例变量被主类调用，并且通过继承扩展服务。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#29983;&#25104;&#22120;&#27169;&#24335;">&#29983;&#25104;&#22120;&#27169;&#24335;<a class="anchor-link" href="#&#29983;&#25104;&#22120;&#27169;&#24335;">&#182;</a></h1><h2 id="&#29983;&#25104;&#22120;&#27169;&#24335;&#30340;&#23450;&#20041;">&#29983;&#25104;&#22120;&#27169;&#24335;&#30340;&#23450;&#20041;<a class="anchor-link" href="#&#29983;&#25104;&#22120;&#27169;&#24335;&#30340;&#23450;&#20041;">&#182;</a></h2><p><strong>生成器模式指的是：封装一个产品的构造过程，并且允许分步调用的设计模式。</strong></p>
-<p>生成器模式将一个复杂对象的创建过程封装起来，进行简化。其常用来通过多个步骤创建组合结构。由于生成器是一个接口，因此其实现可以被替换，这意味着我们可以用不同的生成器生成不同的复杂对象。</p>
-<p>生成器模式和迭代器模式类似，都是通过分离类的责任来提供一个更加清晰的设计图景。生成器主要用于生成实例组合结构，迭代器主要用于容器迭代。</p>
-<p>生成器的类图如下：</p>
-<p><img src="c10p2.png" alt=""></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="&#31034;&#20363;&#20195;&#30721;">&#31034;&#20363;&#20195;&#30721;<a class="anchor-link" href="#&#31034;&#20363;&#20195;&#30721;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">Visitor</span> <span class="o">{</span>
-    <span class="n">Plan</span> <span class="n">plan</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Plan</span><span class="o">();</span>
-    <span class="kt">void</span> <span class="nf">setPlan</span><span class="o">(</span><span class="n">Plan</span> <span class="n">plan</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">plan</span> <span class="o">=</span> <span class="n">plan</span><span class="o">;</span> <span class="o">}</span>
+<h1 id="AOP-&#29702;&#24565;&#21644;&#32536;&#36215;">AOP &#29702;&#24565;&#21644;&#32536;&#36215;<a class="anchor-link" href="#AOP-&#29702;&#24565;&#21644;&#32536;&#36215;">&#182;</a></h1><p>假设现在我们有一个计算器的接口以及一个实现类：</p>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Calculator</span> <span class="o">{</span>
+    <span class="kt">double</span> <span class="nf">add</span><span class="o">(</span><span class="kt">double</span> <span class="n">a</span><span class="o">,</span> <span class="kt">double</span> <span class="n">b</span><span class="o">);</span>
+    <span class="kt">double</span> <span class="nf">sub</span><span class="o">(</span><span class="kt">double</span> <span class="n">a</span><span class="o">,</span> <span class="kt">double</span> <span class="n">b</span><span class="o">);</span>
+    <span class="kt">double</span> <span class="nf">mul</span><span class="o">(</span><span class="kt">double</span> <span class="n">a</span><span class="o">,</span> <span class="kt">double</span> <span class="n">b</span><span class="o">);</span>
+    <span class="kt">double</span> <span class="nf">div</span><span class="o">(</span><span class="kt">double</span> <span class="n">a</span><span class="o">,</span> <span class="kt">double</span> <span class="n">b</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CalculatorImpl</span> <span class="kd">implements</span> <span class="n">Calculator</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">add</span><span class="o">(</span><span class="kt">double</span> <span class="n">a</span><span class="o">,</span> <span class="kt">double</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">sub</span><span class="o">(</span><span class="kt">double</span> <span class="n">a</span><span class="o">,</span> <span class="kt">double</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">mul</span><span class="o">(</span><span class="kt">double</span> <span class="n">a</span><span class="o">,</span> <span class="kt">double</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">div</span><span class="o">(</span><span class="kt">double</span> <span class="n">a</span><span class="o">,</span> <span class="kt">double</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span><span class="o">;</span>
+    <span class="o">}</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">Visitor</span> <span class="n">visitor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Visitor</span><span class="o">();</span>
-        <span class="n">Plan</span> <span class="n">plan</span> <span class="o">=</span> <span class="n">Plan</span><span class="o">.</span><span class="na">getBuilder</span><span class="o">()</span>
-                <span class="o">.</span><span class="na">addHotel</span><span class="o">(</span><span class="k">new</span> <span class="n">Hotel</span><span class="o">(</span><span class="s">&quot;RJ&quot;</span><span class="o">))</span>
-                <span class="o">.</span><span class="na">addTicket</span><span class="o">(</span><span class="k">new</span> <span class="n">Ticket</span><span class="o">(</span><span class="s">&quot;WUH -&gt; GZ&quot;</span><span class="o">))</span>
-                <span class="o">.</span><span class="na">addTicket</span><span class="o">(</span><span class="k">new</span> <span class="n">Ticket</span><span class="o">(</span><span class="s">&quot;GZ -&gt; WUH&quot;</span><span class="o">))</span>
-                <span class="o">.</span><span class="na">addHotel</span><span class="o">(</span><span class="k">new</span> <span class="n">Hotel</span><span class="o">(</span><span class="s">&quot;RA&quot;</span><span class="o">)).</span><span class="na">getPlan</span><span class="o">();</span>
-        <span class="n">visitor</span><span class="o">.</span><span class="na">setPlan</span><span class="o">(</span><span class="n">plan</span><span class="o">);</span>                
+        <span class="n">Calculator</span> <span class="n">calculator</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CalculatorImpl</span><span class="o">();</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">calculator</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">));</span>
     <span class="o">}</span>
 <span class="o">}</span>
-<span class="kd">class</span> <span class="nc">Plan</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="n">Hotel</span> <span class="n">hotel</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Ticket</span><span class="o">&gt;</span> <span class="n">ticket</span><span class="o">;</span>
-    <span class="kd">public</span> <span class="n">Hotel</span> <span class="nf">getHotel</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">hotel</span><span class="o">;</span> <span class="o">}</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setHotel</span><span class="o">(</span><span class="n">Hotel</span> <span class="n">hotel</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">hotel</span> <span class="o">=</span> <span class="n">hotel</span><span class="o">;}</span>
-    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Ticket</span><span class="o">&gt;</span> <span class="nf">getTicket</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">ticket</span><span class="o">;</span> <span class="o">}</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setTicket</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Ticket</span><span class="o">&gt;</span> <span class="n">ticket</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">ticket</span> <span class="o">=</span> <span class="n">ticket</span><span class="o">;</span> <span class="o">}</span>
-    <span class="kd">static</span> <span class="n">PlanBuilder</span> <span class="nf">getBuilder</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="k">new</span> <span class="n">PlanBuilder</span><span class="o">();</span> <span class="o">}</span>
-<span class="o">}</span>
-<span class="kd">class</span> <span class="nc">PlanBuilder</span> <span class="o">{</span>
-    <span class="n">Plan</span> <span class="n">plan</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Plan</span><span class="o">();</span>
-    <span class="n">Plan</span> <span class="nf">getPlan</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">plan</span><span class="o">;</span> <span class="o">}</span>
-    <span class="n">PlanBuilder</span> <span class="nf">addHotel</span><span class="o">(</span><span class="n">Hotel</span> <span class="n">hotel</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">plan</span><span class="o">.</span><span class="na">setHotel</span><span class="o">(</span><span class="n">hotel</span><span class="o">);</span> <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
-    <span class="o">}</span>
-    <span class="n">PlanBuilder</span> <span class="nf">addTicket</span><span class="o">(</span><span class="n">Ticket</span> <span class="n">ticket</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">plan</span><span class="o">.</span><span class="na">getTicket</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">ticket</span><span class="o">);</span> <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="kd">class</span> <span class="nc">Hotel</span> <span class="o">{</span><span class="n">Hotel</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{}}</span>
-<span class="kd">class</span> <span class="nc">Ticket</span> <span class="o">{</span><span class="n">Ticket</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{}}</span>
 </pre></div>
-<p>注意到，这里并没有直接调用POJO的getXXX方法来设置Plan对象，而是使用了Plan内置的静态方法返回一个Builder对象，让这个Builder对象来设置Plan，添加一些控制逻辑，比如机票和住宿的时间冲突检测等等，最后帮助我们得到Plan。这个Builder可以在Plan中作为策略传递，这里为了方便我们没有展示。可以看到，Builder这种通过分离实例化对象的方式，把实例化多个对象的责任从主类中分离出去，避免了代码混乱，并且提供了创建实例化对象的灵活性。</p>
+<p>为了在使用这个计算器类之前，对计算的数据进行日志记录和验证，在计算之后，对于返回值进行格式化，没有使用设计模式的思路是：对于每个实现类添加一对的横切关注点。自然，我们可以创建一个用于记录和验证的接口，然后再各个计算方法上放置这些代码，这是一种优化。此外，你可能想过，我们可以使用一个统一的服务接口类，委托给实现类，然后在这个接口中提供服务，这些服务的语句添加到各个计算方法上，这其实就是策略模式。</p>
+<p>你可能还设想，通过 Spring 的 IOC 提供这个策略，并且自动进行注入，这样就没有问题了。这的确很好，是一种很理想的方案。但问题是，如果我们现在需要更多的服务，而之前的接口写死了两个子服务方法，那么我们就不得不在这些方法中通过参数判断当前的类是否为需要的类，然后用条件语句选择执行。这会导致越来越复杂的代码。</p>
+<p>除去这种思路，我们其实可以在不更改任何POJO代码的前提下达到目的，通过代理。代理的缺点是，我们需要手动实现所有的服务接口，但是Java提供的动态代理依托于RTTI，简化了这一步骤:</p>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CalculatorLoggingProxy</span><span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Calculator</span> <span class="n">calculator</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">CalculatorLoggingProxy</span><span class="o">(</span><span class="n">Calculator</span> <span class="n">calculator</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">calculator</span> <span class="o">=</span> <span class="n">calculator</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">Calculator</span> <span class="nf">getProxy</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">Calculator</span><span class="o">)</span> <span class="n">Proxy</span><span class="o">.</span><span class="na">newProxyInstance</span><span class="o">(</span>
+                <span class="n">calculator</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getClassLoader</span><span class="o">(),</span>
+                <span class="k">new</span> <span class="n">Class</span><span class="o">[]{</span><span class="n">Calculator</span><span class="o">.</span><span class="na">class</span><span class="o">},</span>
+                <span class="o">(</span><span class="n">proxy</span><span class="o">,</span> <span class="n">method</span><span class="o">,</span> <span class="n">args</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="n">method</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">calculator</span><span class="o">,</span><span class="n">args</span><span class="o">);</span>
+                <span class="o">}</span>
+        <span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Calculator</span> <span class="n">calculator</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CalculatorLoggingProxy</span><span class="o">(</span><span class="k">new</span> <span class="n">CalculatorImpl</span><span class="o">()).</span><span class="na">getProxy</span><span class="o">();</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">calculator</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mf">1.0</span><span class="o">,</span><span class="mf">2.0</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<p>这个代理在对象被使用之前截获了对象，然后添加了代理服务，通过代理内部的委托，在代理中使用 method.invoke(Object,args) 方法实现了动态的调用。我们现在可以在 getProxy 方法中添加一些调用前和调用后的处理。</p>
+<p>这里的问题是，这种方法依然不能在一个地方管理所有相同范畴的服务，解决方案很简单，通过 Spring 的 IOC 进行自动 bean 的代理包装，通过在一个类中提供被动服务，而将这些服务的方法自动插入代理类的相关语句中间，这样，我们就可以“面向切面”编程了。而建立切面类和代理类之间关系的最好方式，莫过于注解。Spring 提供了注解和XML配置两种方式，代理类会在创建的时候自动先创建切面类，然后将需要注入的切面的代码注入invoke方法前后，代理类内部的依赖会根据XM或者注解自动注入，然后代理会替代原来的类在 IOC 容器中充当 beans。</p>
+<p>这看起来挺复杂，但是我们实际需要做的，仅仅是创建切面类的注解、指定需要插入的位点、启用自动代理即可。</p>
+<p>AOP 是 OOP 的一个非常强大的补充，换句话说，AOP 降低了程序员编程的工程难度：通过在一个地方管理切面、自动进行代理和织入，我们可以无侵入的为现有代码添加功能。虽然对于计算机而言，或者反编译而言，AOP 是难寻踪迹的。</p>
+<p>以下将分注解+Java配置文件自动代理、注解+XML配置文件自动代理、纯XML手动配置切面三种方式进行介绍。</p>
 
 </div>
 </div>
@@ -11871,74 +11851,145 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#36131;&#20219;&#38142;&#27169;&#24335;">&#36131;&#20219;&#38142;&#27169;&#24335;<a class="anchor-link" href="#&#36131;&#20219;&#38142;&#27169;&#24335;">&#182;</a></h1><p>责任链模式指的是：<strong>当你想要一个以上对象来处理某个请求时，使用责任链模式</strong>。</p>
-<p>这种模式就好像专家会诊，每个人都添加了一些责任，然后将其转交给下一个人，下面的示例代码展示了它如何工作的。</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Collections</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<h1 id="AOP-&#22522;&#26412;&#27010;&#24565;">AOP &#22522;&#26412;&#27010;&#24565;<a class="anchor-link" href="#AOP-&#22522;&#26412;&#27010;&#24565;">&#182;</a></h1><h2 id="AOP-&#19987;&#29992;&#21517;&#35789;">AOP &#19987;&#29992;&#21517;&#35789;<a class="anchor-link" href="#AOP-&#19987;&#29992;&#21517;&#35789;">&#182;</a></h2><p>AOP 的基本概念包括：</p>
+<p>通知 Advice，通知指的是那些切面所提供的服务，比如日志和参数检查，这些服务称之为通知。通知有几种类型，分别是前置、后置、返回、异常和环绕，其分别对应在插入的业务逻辑之前、之后、返回值的时候、出错的时候。环绕通知包裹了业务逻辑，可以在其前、返回值、出错、后各处进行自定义行为。</p>
+<p>连接点 Joint point：被插入的业务逻辑位置</p>
+<p>切点 pointcut：匹配通知的一个或者多个连接点</p>
+<p>切面 aspect: 通知 和 切点 的组合。切面是一个 Java 类，其提供一组方法，用来在指定切点执行各种通知。</p>
+<h2 id="AspectJ-&#34920;&#36798;&#24335;&#35821;&#35328;">AspectJ &#34920;&#36798;&#24335;&#35821;&#35328;<a class="anchor-link" href="#AspectJ-&#34920;&#36798;&#24335;&#35821;&#35328;">&#182;</a></h2><p>Spring 经典的 AOP 是基于 Java 动态代理的，其采用 Java 类的方式实现了切面编程。而 AspectJ 包的 AOP 是基于 Java 语言扩展的，其功能和粒度更加细致。因此之后介绍的 AOP 是基于 AspectJ 的。</p>
+<p>Spring 支持的 AspectJ 是局部的，但是足够使用。ApsectJ 定义了一套切点表达式语言，Spring 用的最多的是：<code>execution(), arg(), within(), bean()</code>。其中，<code>execution(public int package.class.method(arg1,arg2...)) || arg(number) &amp;&amp; within(package.*) &amp;&amp; !bean('bean_id')</code> 这个表达式大概能说明问题。</p>
+<p>表达式使用双引号，放在注解中：<code>@PointCut("execution(public ...)")</code> 这样。</p>
+<p>可以使用 Java 的异或非运算符，注意，在XML中使用 and，or，not。</p>
+<p>其中 execution 标明符合此条件的方法，可以过滤描述词、返回值、类、方法、参数个数、参数类型。</p>
+<p>其中 args 表明此切点允许传入参数，number 表示，任何使用此注解的方法，应该提供此引用名称的传入参数。</p>
+<p>其中 within 表明其对于切点范围有限制，当包下的所有类的方法被调用，均会触发切面。</p>
+<p>其中 bean 限制了此切面只对于指定名称的 bean 有效，注意，此处需要使用单引号！！！！</p>
+<p>args 使用举例如下：</p>
+<div class="highlight"><pre><span></span><span class="nd">@Pointcut</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;execution(* *.*(..)) || args(number,info)&quot;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">count</span><span class="o">(</span><span class="kt">int</span> <span class="n">number</span><span class="o">,</span> <span class="n">String</span> <span class="n">info</span><span class="o">)</span> <span class="o">{}</span>
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HandlerDemo</span> <span class="o">{</span>
+<span class="nd">@Before</span><span class="o">(</span><span class="s">&quot;count(number,info)&quot;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">countA</span><span class="o">(</span><span class="kt">int</span> <span class="n">number</span><span class="o">,</span> <span class="n">String</span> <span class="n">info</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</pre></div>
+<p>注意，args 适用于被代理的方法提供了和切点个数和类型匹配的参数情况，其中类型和名称通过 PointCut 注解的方法的传入参数提供，在过滤时需要将引用名称放置在 args 的括号中，在使用时，需要在注解上提供带有参数名称的切点、在通知传入括号中提供传入参数名称和类型以进行调用，当然，也可以不传递参数到通知方法。但是，只要在切点定义args，那么就必将过滤方法的参数类型和数量，对这部分过滤后的方法进行切面通知。</p>
+<p>你可以假象通过 count 方法 -&gt; pointcut -&gt; before -&gt; countA 方法进行的调用，除了头尾需要提供类型和引用，中间只需要提供引用即可。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="&#20351;&#29992;&#27880;&#35299;-+-Java-&#33258;&#21160;&#20195;&#29702;">&#20351;&#29992;&#27880;&#35299; + Java &#33258;&#21160;&#20195;&#29702;<a class="anchor-link" href="#&#20351;&#29992;&#27880;&#35299;-+-Java-&#33258;&#21160;&#20195;&#29702;">&#182;</a></h1><h2 id="&#20351;&#29992;&#27010;&#35272;">&#20351;&#29992;&#27010;&#35272;<a class="anchor-link" href="#&#20351;&#29992;&#27010;&#35272;">&#182;</a></h2><p>这是最为推荐的一种方式。首先需要将实现类声明为组件：</p>
+<div class="highlight"><pre><span></span><span class="nd">@Component</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;calculator&quot;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CalculatorImpl</span> <span class="kd">implements</span> <span class="n">Calculator</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</pre></div>
+<p>接着新建一个 Java 的配置文件，这个文件启用自动bean注解扫描，我们顺便提供了一个测试用的方法。</p>
+<div class="highlight"><pre><span></span><span class="nd">@Configuration</span>
+<span class="nd">@ComponentScan</span><span class="o">(</span><span class="n">basePackages</span> <span class="o">=</span> <span class="s">&quot;com.mazhangjing.aop&quot;</span><span class="o">)</span>
+<span class="nd">@EnableAspectJAutoProxy</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Config</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">List</span><span class="o">&lt;</span><span class="n">Email</span><span class="o">&gt;</span> <span class="n">emails</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Email</span><span class="o">&gt;(</span>
-                <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">Email</span><span class="o">(</span><span class="s">&quot;rubbish me&quot;</span><span class="o">),</span><span class="k">new</span> <span class="n">Email</span><span class="o">(</span><span class="s">&quot;fun&quot;</span><span class="o">),</span><span class="k">new</span> <span class="n">Email</span><span class="o">(</span><span class="s">&quot;i have fun&quot;</span><span class="o">)));</span>
+        <span class="n">ApplicationContext</span> <span class="n">ctx</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AnnotationConfigApplicationContext</span><span class="o">(</span><span class="n">com</span><span class="o">.</span><span class="na">mazhangjing</span><span class="o">.</span><span class="na">aop</span><span class="o">.</span><span class="na">Config</span><span class="o">.</span><span class="na">Config</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">Calculator</span> <span class="n">calculator</span> <span class="o">=</span> <span class="o">(</span><span class="n">Calculator</span><span class="o">)</span><span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&quot;calculator&quot;</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">calculator</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<p>注意，到这里和传统的 IOC 没什么区别，仅仅是自动装配了一个 beans。注意，我们使用 <code>@EnableAspectJAutoProxy</code> 启用了代理自动创建，启用之后，所有需要被代理的类都会自动进行代理。</p>
+<p>下面新建一个切面，提供被代理者类、代理方法、代理位置信息：</p>
+<div class="highlight"><pre><span></span><span class="nd">@Component</span>
+<span class="nd">@Aspect</span>
+<span class="kd">public</span> <span class="kd">class</span>  <span class="nc">LoggingAspect</span> <span class="o">{</span>
 
-        <span class="n">List</span><span class="o">&lt;</span><span class="n">Email</span><span class="o">&gt;</span> <span class="n">funMail</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
-        <span class="n">List</span><span class="o">&lt;</span><span class="n">Email</span><span class="o">&gt;</span> <span class="n">rubbishMail</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
-        <span class="n">FunHandler</span> <span class="n">funHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FunHandler</span><span class="o">(</span><span class="n">funMail</span><span class="o">,</span><span class="kc">null</span><span class="o">);</span>
-        <span class="n">RubbishHandler</span> <span class="n">rubbishHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RubbishHandler</span><span class="o">(</span><span class="n">rubbishMail</span><span class="o">,</span><span class="n">funHandler</span><span class="o">);</span>
-        <span class="n">RubbishHandler</span> <span class="n">startHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RubbishHandler</span><span class="o">(</span><span class="n">rubbishMail</span><span class="o">,</span><span class="n">rubbishHandler</span><span class="o">);</span>
+    <span class="nd">@Order</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+    <span class="nd">@Pointcut</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;execution(public double com.mazhangjing.aop.Calculator.*(double,double))&quot;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">calculator</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
 
-        <span class="k">for</span> <span class="o">(</span><span class="n">Email</span> <span class="n">email</span> <span class="o">:</span> <span class="n">emails</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">startHandler</span><span class="o">.</span><span class="na">handleRequest</span><span class="o">(</span><span class="n">email</span><span class="o">);</span>
+    <span class="nd">@Before</span><span class="o">(</span><span class="s">&quot;calculator()&quot;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">before</span><span class="o">(</span><span class="n">JoinPoint</span> <span class="n">point</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Method &quot;</span> <span class="o">+</span> <span class="n">point</span><span class="o">.</span><span class="na">getSignature</span><span class="o">().</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; calling with args: &quot;</span> <span class="o">+</span>
+                <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">point</span><span class="o">.</span><span class="na">getArgs</span><span class="o">()));</span>
+    <span class="o">}</span>
+
+    <span class="nd">@After</span><span class="o">(</span><span class="s">&quot;calculator()&quot;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">after</span><span class="o">(</span><span class="n">JoinPoint</span> <span class="n">point</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Method &quot;</span> <span class="o">+</span> <span class="n">point</span><span class="o">.</span><span class="na">getSignature</span><span class="o">().</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; calling end.&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@AfterReturning</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;calculator()&quot;</span><span class="o">,</span> <span class="n">returning</span> <span class="o">=</span> <span class="s">&quot;result&quot;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">end</span><span class="o">(</span><span class="n">JoinPoint</span> <span class="n">point</span><span class="o">,</span><span class="n">Object</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Method &quot;</span> <span class="o">+</span> <span class="n">point</span><span class="o">.</span><span class="na">getSignature</span><span class="o">().</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; calling end. result is &quot;</span> <span class="o">+</span> <span class="n">result</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@AfterThrowing</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;calculator()&quot;</span> <span class="o">,</span><span class="n">throwing</span> <span class="o">=</span> <span class="s">&quot;e&quot;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">error</span><span class="o">(</span><span class="n">JoinPoint</span> <span class="n">point</span><span class="o">,</span> <span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Error happens&quot;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Around</span><span class="o">(</span><span class="s">&quot;calculator()&quot;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">around</span><span class="o">(</span><span class="n">ProceedingJoinPoint</span> <span class="n">joinPoint</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Object</span> <span class="n">result</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">//Before</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">joinPoint</span><span class="o">.</span><span class="na">proceed</span><span class="o">();</span>
+            <span class="c1">//AfterReturning</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+           <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+           <span class="c1">//AfterThrowing</span>
         <span class="o">}</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">funMail</span><span class="o">);</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">rubbishMail</span><span class="o">);</span>
+        <span class="c1">//After</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-<span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">Handler</span> <span class="o">{</span>
-    <span class="n">List</span><span class="o">&lt;</span><span class="n">Email</span><span class="o">&gt;</span> <span class="n">mails</span><span class="o">;</span>
-    <span class="n">Handler</span> <span class="n">successor</span><span class="o">;</span>
-    <span class="n">Handler</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Email</span><span class="o">&gt;</span> <span class="n">emails</span><span class="o">,</span> <span class="n">Handler</span> <span class="n">successor</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">successor</span> <span class="o">=</span> <span class="n">successor</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">mails</span> <span class="o">=</span> <span class="n">emails</span><span class="o">;</span>
-    <span class="o">}</span>
-    <span class="n">List</span><span class="o">&lt;</span><span class="n">Email</span><span class="o">&gt;</span> <span class="nf">handleRequest</span><span class="o">(</span><span class="n">Email</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">needHandle</span><span class="o">(</span><span class="n">email</span><span class="o">))</span> <span class="o">{</span> <span class="n">mails</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">email</span><span class="o">);</span> <span class="k">return</span> <span class="n">mails</span><span class="o">;</span> <span class="o">}</span>
-        <span class="k">else</span> <span class="k">return</span> <span class="n">successor</span><span class="o">.</span><span class="na">handleRequest</span><span class="o">(</span><span class="n">email</span><span class="o">);</span>
-    <span class="o">}</span>
-    <span class="kd">abstract</span> <span class="kt">boolean</span> <span class="nf">needHandle</span><span class="o">(</span><span class="n">Email</span> <span class="n">email</span><span class="o">);</span>
-<span class="o">}</span>
-<span class="kd">class</span> <span class="nc">RubbishHandler</span> <span class="kd">extends</span> <span class="n">Handler</span> <span class="o">{</span>
-    <span class="n">RubbishHandler</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Email</span><span class="o">&gt;</span> <span class="n">emails</span><span class="o">,</span><span class="n">Handler</span> <span class="n">handler</span><span class="o">)</span> <span class="o">{</span> <span class="kd">super</span><span class="o">(</span><span class="n">emails</span><span class="o">,</span><span class="n">handler</span><span class="o">);</span> <span class="o">}</span>
-    <span class="nd">@Override</span>
-    <span class="kt">boolean</span> <span class="nf">needHandle</span><span class="o">(</span><span class="n">Email</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">email</span><span class="o">.</span><span class="na">getBody</span><span class="o">().</span><span class="na">contains</span><span class="o">(</span><span class="s">&quot;rubbish&quot;</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="kd">class</span> <span class="nc">FunHandler</span> <span class="kd">extends</span> <span class="n">Handler</span> <span class="o">{</span>
-    <span class="n">FunHandler</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Email</span><span class="o">&gt;</span> <span class="n">emails</span><span class="o">,</span><span class="n">Handler</span> <span class="n">handler</span><span class="o">)</span> <span class="o">{</span> <span class="kd">super</span><span class="o">(</span><span class="n">emails</span><span class="o">,</span><span class="n">handler</span><span class="o">);}</span>
-    <span class="nd">@Override</span>
-    <span class="kt">boolean</span> <span class="nf">needHandle</span><span class="o">(</span><span class="n">Email</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">email</span><span class="o">.</span><span class="na">getBody</span><span class="o">().</span><span class="na">contains</span><span class="o">(</span><span class="s">&quot;fun&quot;</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="kd">class</span> <span class="nc">Email</span> <span class="o">{</span>
-    <span class="n">String</span> <span class="n">body</span><span class="o">;</span>
-    <span class="n">Email</span><span class="o">(</span><span class="n">String</span> <span class="n">body</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">body</span> <span class="o">=</span> <span class="n">body</span><span class="o">;</span> <span class="o">}</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getBody</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">body</span><span class="o">;</span> <span class="o">}</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">body</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="c1">//Result:</span>
-<span class="o">[</span><span class="n">fun</span><span class="o">,</span> <span class="n">i</span> <span class="n">have</span> <span class="n">fun</span><span class="o">][</span><span class="n">rubbish</span> <span class="n">me</span><span class="o">]</span>
 </pre></div>
-<p>责任链的类图如下所示：</p>
-<p><img src="c10p3.png" alt=""></p>
-<p>首先要有一个抽象类，其中保存了处理的结果，并且定义了处理的接口 handleRequest，并且规定了自己处理完后交给的继任者 successor。这样的话，当在一个 Handler 对象进行处理后，handleRequest 会自动转交给下一个 Handler 进行处理，最后结束。</p>
-<p>这种模式非常适合用于GUI的键盘或者鼠标事件监听。</p>
+<p>注意到，这个切面类首先被配置为 bean，然后使用 @Aspect 作为了切面。也就是说，AOP 是后置的，需要首先将原始的被代理者初始化为 bean后，将切面类也初始化为 bean后，才开始进行的代理：当我们有这两个 bean 后，AOP通过寻找 @Aspect 注解，根据连接点信息，将切面的服务分配的正在创建的代理对象中去，然后将原始的被代理 bean替换为代理后的代理对象。这样的话，通过在 IOC 寻找原来创建的 bean id，即可获取代理后的对象。</p>
+<p>注意到这一切是如何的无侵入，并且简单。被代理者仅仅是一个 POJO，没有添加任何 AspectJ 的代码，当我们启用自动代理后，从 IOC 调用这个 POJO，竟然神奇的返回了代理后的对象。我们唯一需要做的就是在一个切面类中定义连接点以及需要插入的服务，然后将其声明为 @Aspect 即可。</p>
+<p><strong>总之，AOP的自动扫描使用方法操作如下：对于切面使用 @Component @Aspect 注解，对于 @Configuration 使用 @ComponentScan 和 @EnableAspectJAutoProxy 注解。在切面类中对于需要代理的方法前添加 @Before 和 @After 以及 @AfterReturning 注解。在方法中可以传入 JointPoint 参数获取切点的方法签名、参数等信息。可以使用 @Order 指定切面优先级。可以使用 @PointCut 指定切面切点，简化注解。在切点指定过程中，可以使用多个通配符来过滤限定、类、方法、参数信息，以代理特定的POJO对象。</strong></p>
+<h2 id="&#30830;&#23450;&#27880;&#35299;&#25554;&#20837;&#28857;&#30340;&#20301;&#32622;">&#30830;&#23450;&#27880;&#35299;&#25554;&#20837;&#28857;&#30340;&#20301;&#32622;<a class="anchor-link" href="#&#30830;&#23450;&#27880;&#35299;&#25554;&#20837;&#28857;&#30340;&#20301;&#32622;">&#182;</a></h2><ul>
+<li><p>Before 前置通知，在连接点之前执行。</p>
+</li>
+<li><p>AfterReturning 返回通知，可以获得返回值，后置通知不能获取返回值。</p>
+</li>
+<li><p>After 后置通知，在连接点之后执行。不论调用的方法是否存在异常、返回什么，不能获取目标方法执行结果。</p>
+</li>
+<li><p>AfterThrowing 异常代理，当出现异常的时候进行通知。</p>
+</li>
+<li><p>Around 环绕通知，即重现Java动态代理的整个步骤，可以手动实现前置、返回、后置和异常通知。环绕通知最接近动态搭理，如果你希望一次处理多个位点信息，使用环绕通知。</p>
+</li>
+</ul>
+<p>需要注意，对于 AfterReturning，需要在注解提供返回值签名和切点两个参数。对于 Around 需要传入特殊的 JointPoint 参数，对于 AfterThrowing，需要提供异常值和切点两个参数。</p>
+<p>各个位置对应动态代理如下：</p>
+<div class="highlight"><pre><span></span><span class="o">(</span><span class="n">proxy</span><span class="o">,</span> <span class="n">method</span><span class="o">,</span> <span class="n">args</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="c1">//前置通知</span>
+    <span class="n">Object</span> <span class="n">o</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">o</span> <span class="o">=</span>  <span class="n">method</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">calculator</span><span class="o">,</span><span class="n">args</span><span class="o">);</span>
+        <span class="c1">//返回通知</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//异常通知</span>
+    <span class="o">}</span>
+    <span class="c1">//后置通知</span>
+    <span class="k">return</span> <span class="n">o</span><span class="o">;</span>
+<span class="o">}</span>
+</pre></div>
+<h2 id="&#20351;&#29992;&#27880;&#35299;&#34920;&#36798;&#24335;&#21305;&#37197;&#26041;&#27861;">&#20351;&#29992;&#27880;&#35299;&#34920;&#36798;&#24335;&#21305;&#37197;&#26041;&#27861;<a class="anchor-link" href="#&#20351;&#29992;&#27880;&#35299;&#34920;&#36798;&#24335;&#21305;&#37197;&#26041;&#27861;">&#182;</a></h2><p>声明限定词、返回值、包名、类名、方法名、传入参数类型。</p>
+<p>其中限定词和返回值可用一个星号代替，也可以只写一个，另一个用星号代替。包名和类名可用星号代替，方法名可用星号代替，参数长度可用..代替，此外，参数可指定数个类型，之后用..代替。</p>
+<ul>
+<li>比如：<code>public double com.a.calculator.add(int,int)</code></li>
+<li>比如：<code>* double com.a.calculator.add(int,int)</code></li>
+<li>比如：<code>public * com.a.calculator.add(int,int)</code></li>
+<li>比如：<code>* com.a.calculator.add(int,int)</code></li>
+<li>比如：<code>public double *.add(int,int)</code></li>
+<li>比如：<code>public double com.a.calculator.*(int,int)</code></li>
+<li>比如：<code>public double com.a.calculator.add(..)</code></li>
+<li>比如：<code>public double com.a.calculator.add(double,..)</code></li>
+<li>比如：<code>* *.*(..)</code></li>
+</ul>
+<p>表达式同样支持 <code>|| &amp;&amp; 以及 !</code> 添加逻辑判断：<code>@Before(value="execution(* *.a(..)) || execution(* *.b(..))")</code></p>
+<h2 id="&#28155;&#21152;&#20999;&#38754;&#26381;&#21153;&#20248;&#20808;&#32423;">&#28155;&#21152;&#20999;&#38754;&#26381;&#21153;&#20248;&#20808;&#32423;<a class="anchor-link" href="#&#28155;&#21152;&#20999;&#38754;&#26381;&#21153;&#20248;&#20808;&#32423;">&#182;</a></h2><p>对于单个切面，有固定顺序。对于不同切面，使用Order注解指定：<code>@Order(0)</code> 数字越小越优先。</p>
+<h2 id="&#20351;&#29992;&#20999;&#20837;&#28857;&#34920;&#36798;&#24335;">&#20351;&#29992;&#20999;&#20837;&#28857;&#34920;&#36798;&#24335;<a class="anchor-link" href="#&#20351;&#29992;&#20999;&#20837;&#28857;&#34920;&#36798;&#24335;">&#182;</a></h2><p>在 @Before 和 @After 后加入 execution 过于复杂，可以在本包下新建一个空方法，然后使用 @PointCut 注解，在此注解中写入 execution 即可，在@After 等切面注解上，使用此方法的签名即可，如果跨包，则需要添加包名。</p>
 
 </div>
 </div>
@@ -11947,39 +11998,15 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#34631;&#37327;&#27169;&#24335;">&#34631;&#37327;&#27169;&#24335;<a class="anchor-link" href="#&#34631;&#37327;&#27169;&#24335;">&#182;</a></h1><p>蝇量模式的定义是：<strong>通过一个实例用来提供众多类似的“虚拟实例”以减少内存占用的设计模式</strong>。其实现方法是：这个实例不提供状态，仅提供方法，在其余类中使用数组等统一管理状态。</p>
-<p>如果我们有10000颗树，那么要创建10000个对象显然会占用大量内存，并且速度很慢，因为树的属性包含x和y轴坐标，树的大小和年两这四个信息，因此，考虑使用一个实例来共享和常见这些“虚拟实例”，以减小开销。</p>
-<p>具体的做法是，将所有Tree对象的状态保存在TreeManager中，而不是每个Tree对象中，共享一个Tree对象的display()方法。</p>
-<p>其类图如下：</p>
-<p><img src="c10p4.png" alt=""></p>
-<p>代码如下：</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.util.Random</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TreeManager</span> <span class="o">{</span>
-    <span class="kt">int</span><span class="o">[][]</span> <span class="n">trees</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">10</span><span class="o">][</span><span class="mi">2</span><span class="o">];</span>
-    <span class="o">{</span> <span class="n">Random</span> <span class="n">random</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
-      <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">trees</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="n">trees</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span>  <span class="n">random</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">50</span><span class="o">);</span>
-            <span class="n">trees</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span>  <span class="n">random</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">50</span><span class="o">);</span> 
-    <span class="o">}</span> <span class="o">}</span>
-
-    <span class="kt">void</span> <span class="nf">displayAll</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">trees</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> 
-            <span class="n">Tree</span><span class="o">.</span><span class="na">display</span><span class="o">(</span><span class="n">trees</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">0</span><span class="o">],</span><span class="n">trees</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">1</span><span class="o">],</span><span class="n">age</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span> <span class="k">new</span> <span class="n">TreeManager</span><span class="o">().</span><span class="na">displayAll</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span> <span class="o">}</span>
-<span class="o">}</span>
-<span class="kd">class</span> <span class="nc">Tree</span> <span class="o">{</span>
-    <span class="kd">final</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">display</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">,</span><span class="kt">int</span> <span class="n">y</span><span class="o">,</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">&quot;Tree @(%s, %s) %s years old.\n&quot;</span><span class="o">,</span><span class="n">x</span><span class="o">,</span><span class="n">y</span><span class="o">,</span><span class="n">age</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="c1">//Result：</span>
-<span class="n">Tree</span> <span class="err">@</span><span class="o">(</span><span class="mi">37</span><span class="o">,</span> <span class="mi">19</span><span class="o">)</span> <span class="mi">10</span> <span class="n">years</span> <span class="n">old</span><span class="o">.</span>
-<span class="n">Tree</span> <span class="err">@</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span> <span class="mi">10</span> <span class="n">years</span> <span class="n">old</span><span class="o">.</span>
-<span class="n">Tree</span> <span class="err">@</span><span class="o">(</span><span class="mi">28</span><span class="o">,</span> <span class="mi">43</span><span class="o">)</span> <span class="mi">10</span> <span class="n">years</span> <span class="n">old</span><span class="o">.</span>
-<span class="o">...</span>
+<h1 id="&#20351;&#29992;&#27880;&#35299;-+-XML-&#33258;&#21160;&#20195;&#29702;">&#20351;&#29992;&#27880;&#35299; + XML &#33258;&#21160;&#20195;&#29702;<a class="anchor-link" href="#&#20351;&#29992;&#27880;&#35299;-+-XML-&#33258;&#21160;&#20195;&#29702;">&#182;</a></h1><p>和上面类似，区别在于，XML 作为 Spring 的 IOC 最终位点，自动扫描和自动代理需要在 XML 设置。</p>
+<div class="highlight"><pre><span></span>xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
+<span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">&quot;com.mazhangjing.aop&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;aop:aspectj-autoproxy</span> <span class="nt">/&gt;</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="n">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">&quot;aopContext.xml&quot;</span><span class="o">);</span>
+<span class="n">Calculator</span> <span class="n">calculator</span> <span class="o">=</span> <span class="o">(</span><span class="n">Calculator</span><span class="o">)</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&quot;calculator&quot;</span><span class="o">);</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">calculator</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">));</span>
 </pre></div>
 
 </div>
@@ -11989,54 +12016,22 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#35299;&#37322;&#22120;&#27169;&#24335;">&#35299;&#37322;&#22120;&#27169;&#24335;<a class="anchor-link" href="#&#35299;&#37322;&#22120;&#27169;&#24335;">&#182;</a></h1><p>解释器模式定义了一门语言的语法，然后通过责任链等方式解析语法，获得指令后提供服务。</p>
-<p>解释器模式可以用于简化程序表述，也可以用于创建脚本语言，这样的话，无需编译即可执行我们的命令。</p>
-<p>一个类图简要说明：</p>
-<p><img src="c10p5.png" alt=""></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#20013;&#20171;&#32773;&#27169;&#24335;">&#20013;&#20171;&#32773;&#27169;&#24335;<a class="anchor-link" href="#&#20013;&#20171;&#32773;&#27169;&#24335;">&#182;</a></h1><p>中介者模式的定义是：<strong>集中相关对象之间复杂的沟通和控制方式</strong>。中介者类似于MVC中的Viewer和Controller，其中多个对象的多个状态即多个Viewer的不同展示界面，Viewer提供了一组用于切换的方法，但是并没有动态进行切换。Controller用于保存这些Viewer的实例，当某个Viewer状态改变的时候，通知Controller，进行相关其他对象的状态改变和协调。</p>
-<p><img src="c10p6.png" alt=""></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#22791;&#24536;&#24405;&#27169;&#24335;">&#22791;&#24536;&#24405;&#27169;&#24335;<a class="anchor-link" href="#&#22791;&#24536;&#24405;&#27169;&#24335;">&#182;</a></h1><p>备忘录模式的定义：<strong>当需要让某个类的状态恢复到之前时刻，需要使用备忘录。</strong></p>
-<p>使用备忘录需要注意不要暴露内部代码，一般提供save/restoreState方法接口，然后自己选择需要保存的状态即可。备忘录可能恢复起来耗时很多，因为涉及对象的新建和状态的映射。对于Java而言，使用带有保护的序列化也可以完成状态恢复。</p>
-<p>注意，这里的备忘录一般作为一个类实例，可以为操作的数组/容器之类，可以在某个时刻逆序恢复。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#21407;&#22411;&#27169;&#24335;">&#21407;&#22411;&#27169;&#24335;<a class="anchor-link" href="#&#21407;&#22411;&#27169;&#24335;">&#182;</a></h1><p>原型指的是使用 clone 方法复制一份对象来得到对象的行为，适用于创建复杂或者耗时的对象（难以直接使用构造器）。在某些情况下，复制对象比创建新对象更有效，比如游戏中的一大群怪兽之类。</p>
-<h1 id="&#35775;&#38382;&#32773;&#27169;&#24335;">&#35775;&#38382;&#32773;&#27169;&#24335;<a class="anchor-link" href="#&#35775;&#38382;&#32773;&#27169;&#24335;">&#182;</a></h1><p>当你需要为一个对象增加新的能力时，而不在乎封装，则使用访问者模式。</p>
-<p>访问者模式需要创建一个短命的导游，其中包含了很多访问者对象实例。这些访问者被添加到导游中。这些访问者本身不进行封装，而是随用随建，每个访问者可以在其内部实现对于一个结构上的某些对象的状态访问。这样的话，我们通过改变访问者，就可以对我们想要的对象进行访问。</p>
-<p>一般而言，对于被访问的对象，提供一个统一的接口 getState 会比较好，这样方便访问者的访问。</p>
-<p><img src="c10p7.png" alt=""></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>————————</p>
-<p><span type="related_note" mold="explain" update="2018-09-16">蝇量模式比较适合于像“短网址”这样的服务，对象的状态属性比较固定，同时对于速度有一定要求，蝇量可以避免新建对象导致的耗时。</span></p>
+<h1 id="&#20351;&#29992;-XML-&#25163;&#21160;&#21019;&#24314;&#20999;&#38754;&#20195;&#29702;">&#20351;&#29992; XML &#25163;&#21160;&#21019;&#24314;&#20999;&#38754;&#20195;&#29702;<a class="anchor-link" href="#&#20351;&#29992;-XML-&#25163;&#21160;&#21019;&#24314;&#20999;&#38754;&#20195;&#29702;">&#182;</a></h1><p>这种方法的配置和之前类似，不过，我们现在并不是让 Spring IOC 自动装载 Bean，也不是让 AspectJ 自动创建代理，我们需要手动指定切面类以及切点和服务，还有手动创建原始POJO、切面类的 beans。</p>
+<p>这种情况下，不需要使用任何注解，对于Java代码侵入性最小。（通过RTTI实现）</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;calculator&quot;</span> <span class="na">class=</span><span class="s">&quot;com.mazhangjing.aop.CalculatorImpl&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;aspect&quot;</span> <span class="na">class=</span><span class="s">&quot;com.mazhangjing.aop.Aspect.LoggingAspect&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;aop:config&gt;</span>
+    <span class="nt">&lt;aop:pointcut</span> <span class="na">id=</span><span class="s">&quot;pointcut&quot;</span> <span class="na">expression=</span><span class="s">&quot;execution(public double com.mazhangjing.aop.Calculator.*(double,double))&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;aop:aspect</span> <span class="na">ref=</span><span class="s">&quot;aspect&quot;</span> <span class="na">order=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;aop:before</span> <span class="na">method=</span><span class="s">&quot;before&quot;</span> <span class="na">pointcut-ref=</span><span class="s">&quot;pointcut&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;aop:after</span> <span class="na">method=</span><span class="s">&quot;after&quot;</span> <span class="na">pointcut-ref=</span><span class="s">&quot;pointcut&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;aop:after-returning</span> <span class="na">method=</span><span class="s">&quot;end&quot;</span> <span class="na">returning=</span><span class="s">&quot;result&quot;</span> <span class="na">pointcut-ref=</span><span class="s">&quot;pointcut&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;aop:after-throwing</span> <span class="na">method=</span><span class="s">&quot;error&quot;</span> <span class="na">throwing=</span><span class="s">&quot;e&quot;</span> <span class="na">pointcut-ref=</span><span class="s">&quot;pointcut&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;aop:around</span> <span class="na">method=</span><span class="s">&quot;around&quot;</span> <span class="na">pointcut-ref=</span><span class="s">&quot;pointcut&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/aop:aspect&gt;</span>
+<span class="nt">&lt;/aop:config&gt;</span>
+</pre></div>
+<p>注意，我们依然要创建 POJO 和切面的 bean，然后在 aop:config 中新建 pointcut，匹配POJO的方法，定义连接点。同时在 aop:aspect 中配置切面类的切入方法和其切入的位点，可选 aop:before, aop:after, aop:after-retruning, aop-after-throwing, aop-around。每个切面要使用一个 aop-aspect 标签，放置在 aop:config 中。</p>
 
 </div>
 </div>

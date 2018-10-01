@@ -184,7 +184,7 @@ COURSE_INFO = {
             ("代理模式","0","chapter7_proxy.html","w7"),
             ("复合模式","0","chapter8_combination.html","w8"),
             ("MVC模式","0","chapter9_mvc.html","w9"),
-            ("领域设计模式","0","chapter10_other_design_patterns.html","w10"),
+            ("特定领域设计模式","0","chapter10_other_design_patterns.html","w10"),
             
         ],
     },
@@ -205,6 +205,7 @@ COURSE_INFO = {
             ("filter_and_wrapper","0","chapter6_filter.html","c6"),
             ("design_pattern_in_ee","0","chapter7_design_pattern_ee.html","c7"),
             ("spring_ioc","0","chapter8_spring_ioc.html","c8"),
+            ("spring_aop","0","chapter9_spring_aop.html","c9"),
         ],
     },
     "database":
