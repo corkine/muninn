@@ -11792,7 +11792,7 @@ div#notebook {
 </pre></div>
 <p>不难看出，C:OUT更加复杂，相比较直接使用EL而言。但是，这样有额外的好处，比如，我们可以使用 default 参数填充默认值，使用 excapeXml 参数来将XML解析为HTML，避免双引号、单引号、尖括号和and号的转义问题（默认开启）。</p>
 <p>更为有用的是，c:out 避免了用户输入指令的攻击，防止程序产生预期以外的错误。因此，对于任何可能来自用户输入的地方，都需要强制使用 c:out，而不能直接使用 EL 打印值。c:out 的必选参数是 value，其可以接受运行时参数传入（可以计算得到一个值）。</p>
-<h1 id="1.2-c:forEach">1.2 c:forEach<a class="anchor-link" href="#1.2-c:forEach">&#182;</a></h1><p>这个标签是c库唯一用来遍历容器元素的标签，其可以接受一个iterable的对象，放置在 items 参数中。当标签被执行时，其会在标签作用域创建一个 var 定义好的本地变量，使用指定的 step、start和 end属性来对于 items 的内容进行遍历，每次遍历的值都放在 var 中。注意，此标签还接受一个 varStatus 的指定，这个标签作用域内的本地变量可以在每次遍历时提供当前的指针位置、指针指向的对象。</p>
+<h2 id="1.2-c:forEach">1.2 c:forEach<a class="anchor-link" href="#1.2-c:forEach">&#182;</a></h2><p>这个标签是c库唯一用来遍历容器元素的标签，其可以接受一个iterable的对象，放置在 items 参数中。当标签被执行时，其会在标签作用域创建一个 var 定义好的本地变量，使用指定的 step、start和 end属性来对于 items 的内容进行遍历，每次遍历的值都放在 var 中。注意，此标签还接受一个 varStatus 的指定，这个标签作用域内的本地变量可以在每次遍历时提供当前的指针位置、指针指向的对象。</p>
 <div class="highlight"><pre><span></span><span class="nt">&lt;c:forEach</span> <span class="na">var=</span><span class="s">&quot;word&quot;</span> <span class="na">items=</span><span class="s">&quot;${pageScope.words}&quot;</span> <span class="na">step=</span><span class="s">&quot;1&quot;</span> <span class="na">begin=</span><span class="s">&quot;0&quot;</span> <span class="na">end=</span><span class="s">&quot;3&quot;</span> <span class="na">varStatus=</span><span class="s">&quot;status&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;p&gt;</span>${status.count} - ${word}<span class="nt">&lt;/p&gt;</span>
 <span class="nt">&lt;/c:forEach&gt;</span>
