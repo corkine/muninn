@@ -203,7 +203,8 @@ COURSE_INFO = {
             ("deploy_secret_filter_wrapper","0","chapter4_deploy_security_filter_wrapper.html","c4"),
             ("spring_ioc","0","chapter5_spring_ioc.html","c5"),
             ("spring_aop","0","chapter6_spring_aop.html","c6"),
-            ("jstl","0","chapter7_jdbc.html","c7"),
+            ("jdbc","0","chapter7_jdbc.html","c7"),
+            ("jdbc_transaction","0","chapter8_spring_jdbc_transaction.html","c8"),
         ],
     },
     "database":
