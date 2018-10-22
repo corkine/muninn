@@ -162,6 +162,7 @@ COURSE_INFO = {
             ("泛型","0","chapter11_generics.html","w11"),
             ("数组","0","chapter12_array.html","w12"),
             ("IO","0","chapter13_io.html","w13"),
+            ("Java8","0","chapter14_java8.html","w14"),
             
             
         ],
