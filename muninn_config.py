@@ -204,6 +204,7 @@ COURSE_INFO = {
             ("spring_aop","0","chapter6_spring_aop.html","c6"),
             ("jdbc","0","chapter7_jdbc.html","c7"),
             ("jdbc_transaction","0","chapter8_spring_jdbc_transaction.html","c8"),
+            ("hibernate_without_jpa","0","chapter9_hibernate_basic.html","c9"),
         ],
     },
     "database":
