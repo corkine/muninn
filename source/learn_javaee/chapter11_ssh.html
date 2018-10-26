@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>chapter10_spring_mvc</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>chapter11_ssh</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <style type="text/css">
@@ -11775,8 +11775,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><span type="title">Spring MVC</span> | <span type="update">2018-10-25</span> - Version <span type="version">1.1</span></p>
-<p><span type="intro"><p class="card-text">本章主要介绍了 Spring MVC 的基本使用。首先介绍了 Spring MVC 的使用概览，包括 MVC 文件配置、RequestMapping 注解的使用、ModelAndView 对象的处理、基本的 Model 绑定、视图和视图解析器。</p><p class="card-text">在第二部分，介绍了基于 Spring MVC 的 Restful 风格的 CRUD，重点介绍了 PUT 和 DELETE 的实现。</p><p class="card-text">在第三部分，讲解了高级的 Spring MVC 数据绑定，包括格式转换服务、数据格式化、数据校验。之后介绍了对于 HttpMessageConverter 的使用：处理 JSON，实现简单的上传下载，在这部分结尾介绍了基于 MultipartResolver 的文件上传。</p><p class="card-text">在第四部分，介绍了 Spring MVC 的拦截器以及拦截顺序、四种常见的异常处理器，包括异常映射处理、简单Mapping处理、自定义页面跳转处理和 HTTP 状态错误跳转处理。</p><p class="card-text">在第五部分，介绍了 Spring MVC 的整体运行流程，包括 HandlerMapping 和 HandlerAdapter，ViewResolver 和 View，拦截器在整个生命周期的调用情况。在本文的最后，对 Spring 整合 Sping MVC 提出了建议，将 MVC 看作 Spring IOC 的一个子容器，通过 web.xml 的监听器来加载 Spring IOC bean。尤其重要的是，注意包扫描的问题，不要因为重复扫描浪费资源。</p></span></p>
+<p><span type="title">SSH Integration</span> | <span type="update">2018-10-26</span> - Version <span type="version">1.0</span></p>
+<p><span type="intro"><p class="card-text">本章主要介绍 Spring、Spring MVC、Hibernate 的整合。</p><p class="card-text">在整合  Spring 和 Hibernate 的时候，尤其需要注意：① 数据源：数据源涉及认证信息，应当采用 properties 动态加载。应当至少提供数据源的用户名、密码、地址（数据库名）以及基本增长策略和限制。② Spring 托管的 Session 对象：尤其注意，不能使用 thread 方式，应当使用 Spring 提供的 SpringSessionContext，使用 getCurrentSession API 获取线程绑定的 Session。③ 持久化层（DAO和持久化类）应当和 Spring 完全解耦，服务层应当和 Hibernate 完全解耦，即所有服务都要经过 Service 操纵 DAO 的 API 来进行。</p><p class="card-text">在整合 Spring 和 Spring MVC 的时候，需要进行 Spring IOC 的监听和自动绑定，还需要注意： ① Spring 自动注解扫描一定要排除 MVC 子 IOC 容器的路径，否则容易造成配置复写和资源浪费（一般情况下过滤掉Controller和 ControllerAdvice注解即可）。② 配置文件路径需要注意 classpath 和物理路径的问题，尤其是之前在 Spring 中配置的 Hibernate 映射文件路径问题，看清楚是类路径还是根目录。</p></span></p>
 
 </div>
 </div>
@@ -11785,10 +11785,223 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Spring-MVC-&#27010;&#36848;">Spring MVC &#27010;&#36848;<a class="anchor-link" href="#Spring-MVC-&#27010;&#36848;">&#182;</a></h1><p>Spring MVC 是一套用来代替 Struts 的 Servlet 框架。相比较传统的 Servlet 技术，基于 Struts 的框架设计模式采用一个 Super Servlet 对所有的 URL 请求进行转发和分派，然后再交给子 Servlet 进行请求，之后由 JSP 等模板技术完成渲染工作。这套框架很好的避免了大工程需要繁琐的配置 web.xml 文件、同时能够对于 URL 请求进行更轻松的解析和处理。Spring MVC 基于 Spring IOC 容器，是 Struts 的替代产品，主要用来进行 Controller 层的控制，完成 View 层和 Model 层之间的交互。</p>
-<p>其基本作用原理是：使用 Spring 内置的 Servlet 拦截所有请求，交给自家的 Handler 完成处理，之后再委托 JSP 等模板引擎进行渲染。需要配置 web.xml 文件完成拦截和监听，配置 spring-mvc.xml 等配置文件来具体定义 Handler 的查找路径、模板引擎的处理器等等。</p>
-<p>Spring MVC 相比较 Struts 的优点在于：天生和 Spring 框架集成，支持 Restful 风格的开发，从 URL 到映射的处理十分方便，数据验证、格式化和绑定功能强大、好用，对于异常的处理支持较好，对于静态资源文件提供了支持。</p>
-<p>下面将会从基本配置（使用概览）、Controller 类方法的方法注解（负责URL映射）、方法入参（获取 URL 参数，Param 参数，Servlet API 对象，数据绑定对象，ModelAndView 的 ModelMap 对象）、方法返回值（ModelAndView、String 的各种 ViewResolver：InternalResourceViewResolver、BeanNamedViewResolver 和 View：InternalResourceView，JSTLView，自定义View，RedirectView）三个层面进行详细介绍。</p>
+<p>在经典的 Hibernate 程序中，采用 hibernate.cfg.xml 配置文件配置数据库、数据源、域模型相关策略（显示 SQL 语句、格式化 SQL 语句，开启二级缓存、查询缓存、启用数据库方言等等）。整合 Hibernate 的目的在于，让 WEB 程序能够快速的通过 Hibernate 的 SessionFactory 获得 Session，并且进行数据交互操作。在 Hibernate 的章节，我们介绍了基于 thread 的线程绑定获取 Session 的方式。这常被直接写入 Data Access Object 中，作为类实例变量，进行数据交互使用。</p>
+<p>因此，我们面临的唯一问题就是在何时获得 SessionFactory 对象，一般而言，我们使用 Spring IOC 容器来管理 Hibernate 的 SessionFactory。很显然的，IOC 中创建 Bean 的方式创建 SF，可选两种方案，其一，将所有原本 Hibernate 配置信息作为参数传递进去，其二，将原本 Hibernate 配置文件保留，让 SessionFactory 对象自动寻找 Hibernate 配置文件，并且进行加载。</p>
+<p>SSH 整体概要如下：</p>
+
+<pre><code>                                |--------------------- Spring IOC ---------------------------|
+                                |                      |-- Spring AOP --|-- Spring MVC IOC --|
+   |-- database.properties      |                      |                |                    |
+Database ------ Entities ------ Data Access Object ------ Service ------ Controller ------ Servlet ------ View
+   |             |--entities.hbm.xml        |                |               |               |-- web.xml    |
+  JDBC           |------hibernate.cfg.xml   |             Exception          |-- spring-mvc.xml             |     
+   |----------------Hibernate---------------|                                |-----------Spring MVC --------|</code></pre>
+<h1 id="&#22312;-IOC-&#20013;&#37197;&#32622;&#25345;&#20037;&#21270;&#23618;">&#22312; IOC &#20013;&#37197;&#32622;&#25345;&#20037;&#21270;&#23618;<a class="anchor-link" href="#&#22312;-IOC-&#20013;&#37197;&#32622;&#25345;&#20037;&#21270;&#23618;">&#182;</a></h1><p>一个整合 Spring 的 Hiberante 项目文件配置如下：</p>
+
+<pre><code>resources
+|--- hbm
+|     |---entities.hbm.xml
+|--- spring.cfg.xml
+|--- hibernate.cfg.xml
+|--- spring-mvc.cfg.xml
+|--- database.properties</code></pre>
+<h2 id="DataSource-&#21644;-SessionFactory-&#30340;&#37197;&#32622;">DataSource &#21644; SessionFactory &#30340;&#37197;&#32622;<a class="anchor-link" href="#DataSource-&#21644;-SessionFactory-&#30340;&#37197;&#32622;">&#182;</a></h2><p>其 Hibernate.cfg.xml 如下：</p>
+<div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&#39;1.0&#39; encoding=&#39;utf-8&#39;?&gt;</span>
+<span class="cp">&lt;!DOCTYPE hibernate-configuration PUBLIC &quot;-//Hibernate/Hibernate Configuration DTD//EN&quot;</span>
+<span class="cp">        &quot;http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd&quot;&gt;</span>
+<span class="nt">&lt;hibernate-configuration&gt;</span>
+    <span class="nt">&lt;session-factory&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;hibernate.dialect&quot;</span><span class="nt">&gt;</span>org.hibernate.dialect.MySQL8Dialect<span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;hibernate.show_sql&quot;</span><span class="nt">&gt;</span>true<span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;hibernate.hbm2ddl.auto&quot;</span><span class="nt">&gt;</span>update<span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;hibernate.current_session_context_class&quot;</span><span class="nt">&gt;</span>
+        org.springframework.orm.hibernate5.SpringSessionContext<span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;/session-factory&gt;</span>
+<span class="nt">&lt;/hibernate-configuration&gt;</span>
+</pre></div>
+<p>其中 DataSource 数据源可能除了 Hibernate，还有别的用途，因此需要配置到 IOC 容器中，然后作为参数传递给 Session Factory 的 bean 对象。因此，整合后的 Hibernate 配置文件仅仅配置：方言、SQL 显示、格式化、生成数据表的策略和二级缓存策略。</p>
+<p>一个整合了 Hibernate 的 Spring.cfg.xml 文件如下所示，注意，这里需要配置数据源、SessionFactory 以及配置交给 Spring 管理的 Hibernate 的事务。</p>
+<p>对于数据源而言，一般提供一个 properties 文件，放置数据敏感信息，然后使用占位符来加载信息，之后向 beans 中写入信息。数据源需要注意的是，<u>忘记写数据库地址会报找不到数据库</u>错误。</p>
+<p>对于 SessionFacotry 而言，我们需要提供数据源 bean 引用，配置文件路径，映射模型文件路径，除了使用配置文件以外，还可以直接在 hibernateProperties 属性中提供 props 的标签，写入各个原本 Hibernate 配置的字段，作为 key - value 传入，如果同时加载了配置，则以此处为准。<u>配置此处需要注意，路径需要区分 classpath 和物理目录。对于 maven 工程，一般放置在 resource 目录下，也就是作为 classpath 路径下的目录。当进行 web 整合的时候，如果放置在此文件夹下的目录不添加 classpath 前缀，则容易发生找不到文件的异常。</u></p>
+<p>对于数据库方言，需要注意，如果默认使用了 MySQL5Dialect，则使用的引擎 MyISDM 不支持事务。</p>
+<p>其 spring.cfg.xml 如下：</p>
+<div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.springframework.org/schema/beans&quot;</span>
+       <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span> <span class="na">xmlns:beans=</span><span class="s">&quot;http://www.springframework.org/schema/beans&quot;</span>
+       <span class="na">xmlns:context=</span><span class="s">&quot;http://www.springframework.org/schema/context&quot;</span> <span class="na">xmlns:p=</span><span class="s">&quot;http://www.springframework.org/schema/p&quot;</span>
+       <span class="na">xmlns:tx=</span><span class="s">&quot;http://www.springframework.org/schema/tx&quot;</span> <span class="na">xmlns:aop=</span><span class="s">&quot;http://www.springframework.org/schema/aop&quot;</span>
+       <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.springframework.org/schema/beans</span>
+<span class="s">       http://www.springframework.org/schema/beans/spring-beans.xsd</span>
+<span class="s">       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd</span>
+<span class="s">       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd</span>
+<span class="s">       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd</span>
+<span class="s">&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!--在此处导入 DataSource 而不是 Hibernate 中, 使用 Java Class 而不是 C3P0.xml 配置--&gt;</span>
+    <span class="nt">&lt;context:property-placeholder</span> <span class="na">location=</span><span class="s">&quot;classpath:database.properties&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;</span> <span class="na">id=</span><span class="s">&quot;dataSource&quot;</span>
+          <span class="na">p:user=</span><span class="s">&quot;${jdbc.user}&quot;</span> <span class="na">p:password=</span><span class="s">&quot;${jdbc.password}&quot;</span> <span class="na">p:driverClass=</span><span class="s">&quot;${jdbc.driverClass}&quot;</span>
+          <span class="na">p:initialPoolSize=</span><span class="s">&quot;${jdbc.initPoolSize}&quot;</span> <span class="na">p:maxPoolSize=</span><span class="s">&quot;${jdbc.maxPoolSize}&quot;</span>
+          <span class="na">p:jdbcUrl=</span><span class="s">&quot;${jdbc.jdbcUrl}&quot;</span>
+    <span class="nt">/&gt;</span>
+    <span class="c">&lt;!--在此处配置 Hibernate 的 SessionFactory， 同时提供其配置文件和映射文件--&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.orm.hibernate5.LocalSessionFactoryBean&quot;</span> <span class="na">id=</span><span class="s">&quot;sessionFactory&quot;</span>
+          <span class="na">p:dataSource-ref=</span><span class="s">&quot;dataSource&quot;</span>
+          <span class="na">p:configLocation=</span><span class="s">&quot;classpath:hibernate.cfg.xml&quot;</span>
+          <span class="na">p:mappingLocations=</span><span class="s">&quot;classpath:hbm/*.hbm.xml&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;hibernateProperties&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;props&gt;</span>
+                <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;hibernate.dialect&quot;</span><span class="nt">&gt;</span>org.hibernate.dialect.MySQL8Dialect<span class="nt">&lt;/prop&gt;</span>
+                <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;hibernate.show_sql&quot;</span><span class="nt">&gt;</span>true<span class="nt">&lt;/prop&gt;</span>
+                <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;hibernate.format_sql&quot;</span><span class="nt">&gt;</span>false<span class="nt">&lt;/prop&gt;</span>
+                <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;hibernate.hbm2ddl.auto&quot;</span><span class="nt">&gt;</span>update<span class="nt">&lt;/prop&gt;</span>
+            <span class="nt">&lt;/props&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+    <span class="c">&lt;!--配置 Spring 声明式事务：事务管理器、事务属性、事务切点--&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.orm.hibernate5.HibernateTransactionManager&quot;</span> <span class="na">id=</span><span class="s">&quot;transactionManager&quot;</span>
+          <span class="na">p:sessionFactory-ref=</span><span class="s">&quot;sessionFactory&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;tx:advice</span> <span class="na">id=</span><span class="s">&quot;txAdvice&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;tx:attributes&gt;</span>
+            <span class="nt">&lt;tx:method</span> <span class="na">name=</span><span class="s">&quot;get*&quot;</span> <span class="na">read-only=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;tx:method</span> <span class="na">name=</span><span class="s">&quot;purchase&quot;</span> <span class="na">propagation=</span><span class="s">&quot;REQUIRES_NEW&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;tx:method</span> <span class="na">name=</span><span class="s">&quot;*&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/tx:attributes&gt;</span>
+    <span class="nt">&lt;/tx:advice&gt;</span>
+    <span class="nt">&lt;aop:config&gt;</span>
+        <span class="nt">&lt;aop:pointcut</span> <span class="na">id=</span><span class="s">&quot;txPointcut&quot;</span> <span class="na">expression=</span><span class="s">&quot;execution(* com.mazhangjing.learn.temp.service.*.*(..))&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;aop:advisor</span> <span class="na">advice-ref=</span><span class="s">&quot;txAdvice&quot;</span> <span class="na">pointcut-ref=</span><span class="s">&quot;txPointcut&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/aop:config&gt;</span>
+
+    <span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">&quot;com.mazhangjing.learn.temp&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;context:exclude-filter</span> <span class="na">type=</span><span class="s">&quot;annotation&quot;</span> <span class="na">expression=</span><span class="s">&quot;org.springframework.stereotype.Controller&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;context:exclude-filter</span> <span class="na">type=</span><span class="s">&quot;annotation&quot;</span> <span class="na">expression=</span><span class="s">&quot;org.springframework.web.bind.annotation.ControllerAdvice&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/context:component-scan&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</pre></div>
+<p>尤其需要注意，结合了 Spring 的 Hibernate 配置 key 的前缀必须以 hibernate 开头，而不能只写原本在 hibernate 中的 key 名称。</p>
+<h2 id="Spring-&#22768;&#26126;&#24335;&#20107;&#21153;&#30340;&#37197;&#32622;">Spring &#22768;&#26126;&#24335;&#20107;&#21153;&#30340;&#37197;&#32622;<a class="anchor-link" href="#Spring-&#22768;&#26126;&#24335;&#20107;&#21153;&#30340;&#37197;&#32622;">&#182;</a></h2><p>除了配置数据源、提供数据源、映射文件、配置文件以配置 SessionFactory，还需要配置声明式事务支持。因为主要采用了 XML 方式进行配置，因此，这里直接使用手动的方式，而不是基于注解，来配置事务。</p>
+<p>事务需要提供事务管理器，此管理器实现了对于事务管理在 Spring 的实现，此外，需要提供 tx:advice 标签来定义此管理器的策略组。在此组中，需要配置 tx:method 来指定方法的事务的策略，常见的 get*, 一般选择只读来优化查询性能。对于特殊的服务层方法，则直接定义 tx:method 方法，比如指定事务合并级别：开新事务，而不是默认的合并入他人的事务中。此外，使用星号对于其余的事务进行默认的配置。</p>
+<p>当我们有了事务管理器，并且配置好事务策略后，需要通过 aop:config 标签定义事务切入的位点：一般需要作用于 service 层，使用 <code>* xxx.service.*.*(..)</code> 来作用于 service 包下所有类的所有方法。使用 aop:pointcut 来定义切点，使用 aop:advisor 来应用事务策略组。</p>
+<h2 id="Spring-&#21551;&#29992;&#33258;&#21160;&#27880;&#35299;&#25195;&#25551;">Spring &#21551;&#29992;&#33258;&#21160;&#27880;&#35299;&#25195;&#25551;<a class="anchor-link" href="#Spring-&#21551;&#29992;&#33258;&#21160;&#27880;&#35299;&#25195;&#25551;">&#182;</a></h2><p>一般而言，我们直接对所有的包以及子包启用注解扫描，以将其添加到 IOC 中。但是，整合的 Spring 框架需要小心避免 MVC 和 Spring IOC 框架冲突问题，对于 Spring IOC 而言，其是作为父容器存在的，因此自动扫描注解较为宽松，开启默认过滤器，允许全部包，然后排除 Cotroller 和 ControllerAdvice 注解即可，因为这两个注解分别用于控制层的 URL 映射以及映射错误处理，需要让 MVC 在其子 IOC 容器中实现。</p>
+<h2 id="Hibernate-&#31867;&#27169;&#22411;&#25991;&#20214;&#30340;&#37197;&#32622;">Hibernate &#31867;&#27169;&#22411;&#25991;&#20214;&#30340;&#37197;&#32622;<a class="anchor-link" href="#Hibernate-&#31867;&#27169;&#22411;&#25991;&#20214;&#30340;&#37197;&#32622;">&#182;</a></h2><p>其 entities.hbm.xml 映射文件配置如下：</p>
+<div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&#39;1.0&#39; encoding=&#39;utf-8&#39;?&gt;</span>
+<span class="cp">&lt;!DOCTYPE hibernate-mapping PUBLIC</span>
+<span class="cp">        &quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;</span>
+<span class="cp">        &quot;http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd&quot;&gt;</span>
+<span class="nt">&lt;hibernate-mapping</span> <span class="na">package=</span><span class="s">&quot;com.mazhangjing.learn.temp.entities&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;Account&quot;</span> <span class="na">table=</span><span class="s">&quot;ACCOUNT&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;id</span> <span class="na">name=</span><span class="s">&quot;id&quot;</span> <span class="na">type=</span><span class="s">&quot;integer&quot;</span> <span class="na">column=</span><span class="s">&quot;ID&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generator</span> <span class="na">class=</span><span class="s">&quot;native&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/id&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;username&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">column=</span><span class="s">&quot;USERNAME&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;balance&quot;</span> <span class="na">type=</span><span class="s">&quot;int&quot;</span> <span class="na">column=</span><span class="s">&quot;BALANCE&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/class&gt;</span>
+    <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">&quot;Book&quot;</span> <span class="na">table=</span><span class="s">&quot;BOOK&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;id</span> <span class="na">name=</span><span class="s">&quot;id&quot;</span> <span class="na">type=</span><span class="s">&quot;integer&quot;</span> <span class="na">column=</span><span class="s">&quot;BOOK_ID&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generator</span> <span class="na">class=</span><span class="s">&quot;native&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/id&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;bookName&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">column=</span><span class="s">&quot;BOOK_NAME&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;isbn&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">column=</span><span class="s">&quot;ISBN&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;price&quot;</span> <span class="na">type=</span><span class="s">&quot;integer&quot;</span> <span class="na">column=</span><span class="s">&quot;PRICE&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;stock&quot;</span> <span class="na">type=</span><span class="s">&quot;integer&quot;</span> <span class="na">column=</span><span class="s">&quot;STOCK&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/class&gt;</span>
+<span class="nt">&lt;/hibernate-mapping&gt;</span>
+</pre></div>
+<p>以上是所有的配置文件， 包括持久化层的映射模型、持久化层的全局配置、Spring IOC 的整合配置文件（供服务层调用），此外，还有 Spring MVC 的控制层配置文件。</p>
+<h1 id="&#22522;&#20110;-Hibernate-&#30340;&#26381;&#21153;&#23618;&#30340;&#23454;&#29616;">&#22522;&#20110; Hibernate &#30340;&#26381;&#21153;&#23618;&#30340;&#23454;&#29616;<a class="anchor-link" href="#&#22522;&#20110;-Hibernate-&#30340;&#26381;&#21153;&#23618;&#30340;&#23454;&#29616;">&#182;</a></h1>
+<pre><code>java
+|--- entities
+|     |--- Account.java
+|     |--- Book.java
+|--- dao
+|     |--- BookShopDao.java
+|--- service
+|     |--- BookShopService.java
+|     |--- Cashier.java
+|--- exception
+|     |--- AccountMoneyException.java
+|     |--- BookStockException.java
+|--- controller
+|     |--- HomeController.java</code></pre>
+<p>其中持久化层为 entities 和 dao，服务层为 service，其错误信息为 exception，控制层为 controller。</p>
+<h2 id="&#25345;&#20037;&#21270;-POJO-&#31867;&#30340;&#23454;&#29616;">&#25345;&#20037;&#21270; POJO &#31867;&#30340;&#23454;&#29616;<a class="anchor-link" href="#&#25345;&#20037;&#21270;-POJO-&#31867;&#30340;&#23454;&#29616;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">com</span><span class="o">.</span><span class="na">mazhangjing</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">entities</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Account</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">balance</span><span class="o">;</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Book</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">bookName</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">isbn</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">price</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">stock</span><span class="o">;</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</pre></div>
+<h2 id="&#25345;&#20037;&#21270;&#23618;-DAO-&#30340;&#23454;&#29616;">&#25345;&#20037;&#21270;&#23618; DAO &#30340;&#23454;&#29616;<a class="anchor-link" href="#&#25345;&#20037;&#21270;&#23618;-DAO-&#30340;&#23454;&#29616;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">com</span><span class="o">.</span><span class="na">mazhangjing</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">dao</span>
+<span class="nd">@Repository</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookShopDao</span> <span class="o">{</span>
+
+    <span class="nd">@Autowired</span> <span class="kd">private</span> <span class="n">SessionFactory</span> <span class="n">sessionFactory</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="n">Session</span> <span class="nf">getSession</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">sessionFactory</span><span class="o">.</span><span class="na">getCurrentSession</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">BookShopDao</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">getClass</span><span class="o">().</span><span class="na">getSimpleName</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot;is init.....&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">findBookPriceByIsbn</span><span class="o">(</span><span class="n">String</span> <span class="n">isbn</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">hql</span> <span class="o">=</span> <span class="s">&quot;select b.price from Book b where b.isbn = ?1&quot;</span><span class="o">;</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="n">getSession</span><span class="o">().</span><span class="na">createQuery</span><span class="o">(</span><span class="n">hql</span><span class="o">).</span><span class="na">setParameter</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="n">isbn</span><span class="o">);</span>
+        <span class="k">return</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">query</span><span class="o">.</span><span class="na">uniqueResult</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">updateBookStock</span><span class="o">(</span><span class="n">String</span> <span class="n">isbn</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">hql_s</span> <span class="o">=</span> <span class="s">&quot;select b.stock from Book b where b.isbn = ?1&quot;</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">stock</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">getSession</span><span class="o">().</span><span class="na">createQuery</span><span class="o">(</span><span class="n">hql_s</span><span class="o">).</span><span class="na">setParameter</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="n">isbn</span><span class="o">).</span><span class="na">uniqueResult</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">stock</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">BookStockException</span><span class="o">(</span><span class="s">&quot;库存不足&quot;</span><span class="o">);</span>
+        <span class="n">String</span> <span class="n">hql</span> <span class="o">=</span> <span class="s">&quot;update Book b set b.stock = b.stock - 1 where b.isbn = ?1&quot;</span><span class="o">;</span>
+        <span class="n">getSession</span><span class="o">().</span><span class="na">createQuery</span><span class="o">(</span><span class="n">hql</span><span class="o">).</span><span class="na">setParameter</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="n">isbn</span><span class="o">).</span><span class="na">executeUpdate</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">updateUserAccount</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="kt">int</span> <span class="n">price</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">check</span> <span class="o">=</span> <span class="s">&quot;select a.balance from Account a where a.username = ?1&quot;</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">balance</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">getSession</span><span class="o">().</span><span class="na">createQuery</span><span class="o">(</span><span class="n">check</span><span class="o">).</span><span class="na">setParameter</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="n">username</span><span class="o">).</span><span class="na">uniqueResult</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">balance</span> <span class="o">&lt;</span> <span class="n">price</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">AccountMoneyException</span><span class="o">(</span><span class="s">&quot;余额不足&quot;</span><span class="o">);</span>
+
+        <span class="n">String</span> <span class="n">hql</span> <span class="o">=</span> <span class="s">&quot;update Account a set a.balance = a.balance - ?1 where a.username = ?2&quot;</span><span class="o">;</span>
+        <span class="n">Query</span> <span class="n">query</span> <span class="o">=</span> <span class="n">getSession</span><span class="o">().</span><span class="na">createQuery</span><span class="o">(</span><span class="n">hql</span><span class="o">).</span><span class="na">setParameter</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">price</span><span class="o">).</span><span class="na">setParameter</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">username</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">executeUpdate</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<p>对于持久化层，需要添加为 bean，此层保留 sessionFactory 的类实例，通过自动注入获得。其提供和数据进行交互的各种方法，在内部采用 Hibernate 提供的 API 来进行数据操作，这里不需要捕获异常。</p>
+<p>需要注意，此层和 Hibernate 耦合，但是不要和 Service、Spring 进行耦合。这样方便数据存储层的复用和移植。注意，这里使用了 <code>sessionFactory.getCurrentSession();</code> 来获取 Session，其等同于 基于 thread 的 Session 获取方式，不过不同的是，基于 thread 的 Session 获取是为 JDBC 服务的，我们需要将 Session 交给 Spring，让其负责进行事务管理。因此，这里默认不写 Session 获取方式的配置，如果实在要配，其实是这个：</p>
+
+<pre><code>&lt;property name="hibernate.current_session_context_class"&gt;
+        org.springframework.orm.hibernate5.SpringSessionContext&lt;/property&gt;</code></pre>
+<p>这里通过本地线程从 IOC 容器初始化好的 SessionFactory 的 getCurrentSession 拿到 Session 对象，进行持久化层的操作。</p>
+<h2 id="&#26381;&#21153;&#23618;&#30340;&#23454;&#29616;">&#26381;&#21153;&#23618;&#30340;&#23454;&#29616;<a class="anchor-link" href="#&#26381;&#21153;&#23618;&#30340;&#23454;&#29616;">&#182;</a></h2><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">com</span><span class="o">.</span><span class="na">mazhangjing</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">service</span>
+<span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookShopService</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">BookShopDao</span> <span class="n">bookShopDao</span><span class="o">;</span>
+
+    <span class="nd">@Autowired</span> <span class="kd">public</span> <span class="nf">BookShopService</span><span class="o">(</span><span class="n">BookShopDao</span> <span class="n">bookShopDao</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">bookShopDao</span> <span class="o">=</span> <span class="n">bookShopDao</span><span class="o">;</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">getClass</span><span class="o">().</span><span class="na">getSimpleName</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot;is init.....&quot;</span><span class="o">);}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">purchase</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="n">String</span> <span class="n">isbn</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">price</span> <span class="o">=</span> <span class="n">bookShopDao</span><span class="o">.</span><span class="na">findBookPriceByIsbn</span><span class="o">(</span><span class="n">isbn</span><span class="o">);</span>
+        <span class="n">bookShopDao</span><span class="o">.</span><span class="na">updateBookStock</span><span class="o">(</span><span class="n">isbn</span><span class="o">);</span>
+        <span class="n">bookShopDao</span><span class="o">.</span><span class="na">updateUserAccount</span><span class="o">(</span><span class="n">username</span><span class="o">,</span> <span class="n">price</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<p>这里的服务层调用持久层的 DAO API 进行数据操纵，在这里进行了 DAO 的 bean 注入。注意，服务层不涉及任何涉及持久层的代码和配置，包括任何 Hibernate 的代码。此处将会被自动切入，并且提供事务支持（在配置文件中设置了为 service 包添加事务切面）。</p>
+<p>注意，这里也可以不使用 tx:advice 配置事务，而是采用 @Transactional 注解提供事务支持，如果采用后者，需要提供 <code>&lt;tx:annotation-driven /&gt;</code> 标签。</p>
 
 </div>
 </div>
@@ -11797,41 +12010,62 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="MVC-&#20351;&#29992;&#27010;&#35272;">MVC &#20351;&#29992;&#27010;&#35272;<a class="anchor-link" href="#MVC-&#20351;&#29992;&#27010;&#35272;">&#182;</a></h2><p><strong>WEB.XML配置</strong></p>
-<p>Web.xml 文件需要配置如下的 Servlet，完成拦截，需要指明类为 DispatcherServlet，此外，需要传入 Spring MVC 的 xml 格式配置，放置在 Servlet 的上下文中，名称为 ContextConfigLocation，如果这里没有配置，则默认寻找 <code>/WEB-INF/{serlvet-name}-servlet.xml</code> 文件作为配置。</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;servlet&gt;</span>
-    <span class="nt">&lt;servlet-name&gt;</span>springDispatcherServlet<span class="nt">&lt;/servlet-name&gt;</span>
-    <span class="nt">&lt;servlet-class&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="nt">&lt;/servlet-class&gt;</span>
-    <span class="nt">&lt;init-param&gt;</span>
+<h1 id="IOC-&#23481;&#22120;&#21644;&#25511;&#21046;&#23618;&#30340;&#25972;&#21512;">IOC &#23481;&#22120;&#21644;&#25511;&#21046;&#23618;&#30340;&#25972;&#21512;<a class="anchor-link" href="#IOC-&#23481;&#22120;&#21644;&#25511;&#21046;&#23618;&#30340;&#25972;&#21512;">&#182;</a></h1><p>我们需要在 WEB 服务启动的时候自动装入 Spring IOC，采用监听器即可完成。Spring 默认提供了一个监听器，只用传入 Spring 配置文件，即可自动在 WEB 服务启动时加载 Spring IOC 容器。</p>
+<div class="highlight"><pre><span></span>/WEB-INF/web.xml
+<span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;web-app</span> <span class="na">xmlns=</span><span class="s">&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;</span>
+         <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+         <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://xmlns.jcp.org/xml/ns/javaee</span>
+<span class="s">                      http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd&quot;</span>
+         <span class="na">version=</span><span class="s">&quot;4.0&quot;</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;context-param&gt;</span>
         <span class="nt">&lt;param-name&gt;</span>contextConfigLocation<span class="nt">&lt;/param-name&gt;</span>
-        <span class="nt">&lt;param-value&gt;</span>springmvc.cfg.xml<span class="nt">&lt;/param-value&gt;</span>
-    <span class="nt">&lt;/init-param&gt;</span>
-<span class="nt">&lt;/servlet&gt;</span>
-<span class="nt">&lt;servlet-mapping&gt;</span>
-    <span class="nt">&lt;servlet-name&gt;</span>springDispatcherServlet<span class="nt">&lt;/servlet-name&gt;</span>
-    <span class="nt">&lt;url-pattern&gt;</span>/<span class="nt">&lt;/url-pattern&gt;</span>
-<span class="nt">&lt;/servlet-mapping&gt;</span>
+        <span class="nt">&lt;param-value&gt;</span>classpath:spring.cfg.xml<span class="nt">&lt;/param-value&gt;</span>
+    <span class="nt">&lt;/context-param&gt;</span>
+    <span class="nt">&lt;listener&gt;</span>
+        <span class="nt">&lt;listener-class&gt;</span>org.springframework.web.context.ContextLoaderListener<span class="nt">&lt;/listener-class&gt;</span>
+    <span class="nt">&lt;/listener&gt;</span>
+
+    <span class="nt">&lt;filter&gt;</span>
+        <span class="nt">&lt;filter-name&gt;</span>methodFilter<span class="nt">&lt;/filter-name&gt;</span>
+        <span class="nt">&lt;filter-class&gt;</span>org.springframework.web.filter.HiddenHttpMethodFilter<span class="nt">&lt;/filter-class&gt;</span>
+    <span class="nt">&lt;/filter&gt;</span>
+    <span class="nt">&lt;filter-mapping&gt;</span>
+        <span class="nt">&lt;filter-name&gt;</span>methodFilter<span class="nt">&lt;/filter-name&gt;</span>
+        <span class="nt">&lt;url-pattern&gt;</span>/*<span class="nt">&lt;/url-pattern&gt;</span>
+    <span class="nt">&lt;/filter-mapping&gt;</span>
+
+    <span class="nt">&lt;servlet&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>mvc<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;servlet-class&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="nt">&lt;/servlet-class&gt;</span>
+        <span class="nt">&lt;init-param&gt;</span>
+            <span class="nt">&lt;param-name&gt;</span>contextConfigLocation<span class="nt">&lt;/param-name&gt;</span>
+            <span class="nt">&lt;param-value&gt;</span>classpath*:spring-mvc.cfg.xml<span class="nt">&lt;/param-value&gt;</span>
+        <span class="nt">&lt;/init-param&gt;</span>
+    <span class="nt">&lt;/servlet&gt;</span>
+    <span class="nt">&lt;servlet-mapping&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>mvc<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;url-pattern&gt;</span>/<span class="nt">&lt;/url-pattern&gt;</span>
+    <span class="nt">&lt;/servlet-mapping&gt;</span>
+    <span class="nt">&lt;jsp-config&gt;</span>
+        <span class="nt">&lt;jsp-property-group&gt;</span>
+            <span class="nt">&lt;url-pattern&gt;</span>*.jsp<span class="nt">&lt;/url-pattern&gt;</span>
+            <span class="nt">&lt;trim-directive-whitespaces&gt;</span>true<span class="nt">&lt;/trim-directive-whitespaces&gt;</span>
+        <span class="nt">&lt;/jsp-property-group&gt;</span>
+    <span class="nt">&lt;/jsp-config&gt;</span>
+<span class="nt">&lt;/web-app&gt;</span>
 </pre></div>
-<p>为了支持 Restful 风格 URL 格式，推荐添加如下过滤器, HiddenHttpMethodFilter 过滤器可以对请求进行过滤，根据隐藏字段，将 POST, GET 请求转换成 POST, GET, PUT, DELETE 四种原生的 HTTP 方法。</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;filter&gt;</span>
-    <span class="nt">&lt;filter-name&gt;</span>methodFilter<span class="nt">&lt;/filter-name&gt;</span>
-    <span class="nt">&lt;filter-class&gt;</span>org.springframework.web.filter.HiddenHttpMethodFilter<span class="nt">&lt;/filter-class&gt;</span>
-<span class="nt">&lt;/filter&gt;</span>
-<span class="nt">&lt;filter-mapping&gt;</span>
-    <span class="nt">&lt;filter-name&gt;</span>methodFilter<span class="nt">&lt;/filter-name&gt;</span>
-    <span class="nt">&lt;url-pattern&gt;</span>/*<span class="nt">&lt;/url-pattern&gt;</span>
-<span class="nt">&lt;/filter-mapping&gt;</span>
-</pre></div>
-<p>Ps. 使用 jsp 设置组来去除空白字符需要注意，映射为 <code>*.jsp</code> 而不要写成 <code>/*</code>,否则所有 serlvet 均会失效。</p>
-<p>PPs. 这里的 Spring Servlet 的 URL 是 <code>/</code> 最好，而不要是 <code>/*</code>, 否则将会自动处理任意 .jsp 文件，当然，如果你在 SPRING-MVC 的配置文件中指定了如果处理不了，交还应用服务器进行处理这一选项 <code>default-serlvet</code> 的话，怎样写无所谓。</p>
-<p><strong>SPRING-SERVLET.XML配置</strong></p>
-<p>一个基本的 springmvc.cfg.xml 配置文件如下：</p>
+<p>以上是基本的 web.xml 配置，包括了 RESTFUL 风格的 CRUD 的 HTTP 方法过滤器，自动加载 Spring IOC 的监听器，注意这里我们提供了 context-param，传递了 Spring 的配置文件，这里尤其需要注意 classpath 的问题。之后就是传统的 URL 截获，交给 DispatcherServlet 进行所有控制层的 URL 处理。</p>
+<p>Ps. 这里需要注意，启用 jsp 配置文件过滤空白符后，jsp 配置组的 <code>/*</code> URL 路径将会影响 Servlet 的映射，应当为 <code>*.jsp</code>。</p>
+<p>以下是 控制层的配置文件：</p>
+<p>为了简化起见，这里的控制层仅仅配置了注解自动扫描，映射自动扫描，静态文件过滤，添加了基本的 JSP 视图层处理器。这里需要注意，Spring MVC IOC 容器是 Spring IOC 容器的子容器，因此，需要关闭默认过滤器，只允许 Controller 和 ControllerAdvice 注解加载为子容器的 beans。</p>
 <div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.springframework.org/schema/beans&quot;</span>
        <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
        <span class="na">xmlns:beans=</span><span class="s">&quot;http://www.springframework.org/schema/beans&quot;</span>
        <span class="na">xmlns:context=</span><span class="s">&quot;http://www.springframework.org/schema/context&quot;</span>
-       <span class="na">xmlns:mvc=</span><span class="s">&quot;http://www.springframework.org/schema/mvc&quot;</span>
+       <span class="na">xmlns:mvc=</span><span class="s">&quot;http://www.springframework.org/schema/mvc&quot;</span> <span class="na">xmlns:p=</span><span class="s">&quot;http://www.springframework.org/schema/p&quot;</span>
        <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.springframework.org/schema/beans</span>
 <span class="s">       http://www.springframework.org/schema/beans/spring-beans.xsd</span>
 <span class="s">       http://www.springframework.org/schema/context</span>
@@ -11839,225 +12073,37 @@ div#notebook {
 <span class="s">       http://www.springframework.org/schema/mvc</span>
 <span class="s">       http://www.springframework.org/schema/mvc/spring-mvc.xsd</span>
 <span class="s">&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">&quot;com.mazhangjing.mvc.hello&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">&quot;com.mazhangjing.learn.temp.*&quot;</span> <span class="na">use-default-filters=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;context:include-filter</span> <span class="na">type=</span><span class="s">&quot;annotation&quot;</span> <span class="na">expression=</span><span class="s">&quot;org.springframework.stereotype.Controller&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;context:include-filter</span> <span class="na">type=</span><span class="s">&quot;annotation&quot;</span> <span class="na">expression=</span><span class="s">&quot;org.springframework.web.bind.annotation.ControllerAdvice&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/context:component-scan&gt;</span>
+    <span class="nt">&lt;mvc:default-servlet-handler</span> <span class="nt">/&gt;</span>
     <span class="nt">&lt;mvc:annotation-driven</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;</span> 
-          <span class="na">p:prefix=</span><span class="s">&quot;/WEB-INF/views/&quot;</span> <span class="na">p:suffix=</span><span class="s">&quot;.jsp&quot;</span><span class="nt">/&gt;</span>
-
-    <span class="c">&lt;!--或者可以不经过 Handler，直接完成 View-Controller 和 View 的对应。此种情况下需要添加 mvc 注解驱动--&gt;</span>
-    <span class="nt">&lt;mvc:view-controller</span> <span class="na">path=</span><span class="s">&quot;/success&quot;</span> <span class="na">view-name=</span><span class="s">&quot;success&quot;</span> <span class="nt">/&gt;</span>
-
+    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;</span> <span class="na">id=</span><span class="s">&quot;resourceViewResolver&quot;</span>
+          <span class="na">p:suffix=</span><span class="s">&quot;.jsp&quot;</span> <span class="na">p:prefix=</span><span class="s">&quot;/WEB-INF/views/&quot;</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/beans&gt;</span>
 </pre></div>
-<p>注意这里面较为重要的一些设置：</p>
-<ul>
-<li><p>【基于注解扫描的 Handler】：启用 context:component-scan 和 mvc:annotation-driven, 这两个选项能够保证指定位置的包中的注解能够被被配置为 bean，并且能够作为 Handler 进行映射。</p>
-</li>
-<li><p>【ViewResolver 页面解析器】：一般使用的是 InternalResourceViewResolver，传入 suffix 配置 .jsp 作为后缀，perfix 作为前缀，之后，你可以在 Handler 中返回字符串，然后 ViewResolver 会自动进行前缀+字符串+后缀的拼接，然后找到指定位置的 jsp 并进行解析。</p>
-<ul>
-<li><p>尤其需要注意，此处的 perfix 前缀需要以 <code>/</code> 结尾，否则拼接出来的地址会是错误的！！！</p>
-</li>
-<li><p>除了使用 Handler 进行映射，也可以直接使用 mvc:view-controller 映射指定 URL 到指定的 view，这里的 view-name 会拼接 ViewResolver 找到对应位置的视图引擎自动解析并且返回 HttpResponse 流。</p>
-</li>
-</ul>
-</li>
-</ul>
-<p><strong>CONTROLLER HANDLER 配置</strong></p>
-<div class="highlight"><pre><span></span><span class="nd">@Controller</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="o">{</span>
-    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/helloworld&quot;</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">sayHello</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Controller get sayHello request from SpringMVC Servlet&quot;</span><span class="o">);</span>
-        <span class="k">return</span> <span class="s">&quot;success&quot;</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
-<p>为了让 Spring 添加 bean，需要添加 @Controller 注解，为了指定映射的 URL，需要指定类或者方法的 @RequestMapping 注解，提供 URL 和处理的 Http 方法即可。签名随意，返回值为 String 会自动被视图解析器拼接，找到视图层，进行返回。之后访问 <code>localhost:port/helloworld</code> 即可调用此处的 Handler 进行处理。</p>
-<p><strong>Spring MVC 具体工作流程</strong></p>
-<p>1、【找到 DispatcherServlet】</p>
-<p>启动 TOMCAT 后会自动在 web.xml 找到 Servlet 进行请求响应。而在 XML 中，我们使用了 Spring 内置的 servlet
-  处理所有的发送请求，这个 servlet class 是 org.springframework.web.servlet.DispatcherServlet. 相当于 Structs 的
-  巨型 Dispatcher。此 Servlet 默认会处理 WBE-INF 下的 servlet_name + "-servlet.xml" 结尾的描述文件，用作配置。此外，
-  也可以传递 configLocation 参数为指定 classpath 或者 文件路径下的 xml Spring 配置文件。</p>
-<p>2、【找到 HandlerMapping】</p>
-<p>Spring 配置文件规定了这个 Servlet 如何处理相应。区别于直接在 web.xml 写 URL 转发规则， Spring 使用注解来决定
-  转发，因此启用 component-scan 注解扫描，Spring 会自动扫描 @Controller 注解类型 以及 其内部的 @RequestMapping 方法
-  用来进行转发，@RequestMapping 需要提供 value 和 method 以声明自身可以处理何种转发。</p>
-<p>1-2步即是 TOMCAT 找到 Spring Dispatcher ， 然后 SD 通过 xml 配置找到匹配注解的 RequestMapping 方法进行转发。这里完成了
-  传统 Servlet 从 URL 到 Java 类方法的过程。</p>
-<p>3、【找到 ViewResolver】</p>
-<p>接下来可以直接像 Servlet 一样分派一个 JSP 处理 URL 请求，这里使用的是一个更好玩的类，叫做 org.springframework.web.
-  servlet.view.InternalResourceViewResolver。这个 ViewResolver 在 Spring xml 中进行了声明，提供了 prefix 和 suffix
-  属性，这里不通过交给 jsp 进行分派，而是返回一个 String，因此交给了此 ViewResolver 获得指定 prefix + String value + suffix
-  位置的 jsp 文件进行自动。最后由此处的 jsp 处理视图相应。
-  这里的好处是，可以通过替换 ViewResolver 来达到前后端分离，或直接处理前端内容，更加灵活。此外，对于超级多的 jsp 页面逻辑支持也更好。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="RequestMapping-&#35814;&#35299;">RequestMapping &#35814;&#35299;<a class="anchor-link" href="#RequestMapping-&#35814;&#35299;">&#182;</a></h2><p>RequestMapping 用来解析 URL 到指定的 Handler，除了修饰方法以外，还可以修饰类。使用基于类 + 基于方法的 RequestMapping 可以用来分级的解析地址：<code>/springmvc/abc</code> 。这样的话，类注解对应高一级的地址层级，而方法注解对应稍低一级的地址层级，这样比直接在 web.xml 根据 * 和 后缀过滤  URL 方便很多。</p>
-<div class="highlight"><pre><span></span><span class="nd">@Controller</span>
-<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/springmvc&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MVCTest</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">SUCCESS</span> <span class="o">=</span> <span class="s">&quot;success&quot;</span><span class="o">;</span>
-    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/abc&quot;</span><span class="o">)</span> <span class="kd">public</span> <span class="n">String</span> <span class="nf">testMapping</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">SUCCESS</span><span class="o">;</span> <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
-<p><strong>过滤方法、地址匹配</strong></p>
-<p>可以指定 Mapping 的 method 参数指定解析的 HTTP 方法，如果没有对应的方法被 Handle，则报错。</p>
-<p>可以通过星号通配符匹配任意字符：其中 <code>*</code> 表示任意字符（单层路径）， <code>？</code> 表示一个字符， <code>**</code> 表示多层路径</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/testMethod&quot;</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">testMethod</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">SUCCESS</span><span class="o">;</span> <span class="o">}</span>
-<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/testAnt*&quot;</span><span class="o">)</span> <span class="kd">public</span> <span class="n">String</span> <span class="nf">testAnt</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">SUCCESS</span><span class="o">;</span> <span class="o">}</span>
-</pre></div>
-<p><strong>过滤URL参数、请求头</strong></p>
-<p>可以通过 params 指定 URL 参数的匹配，可选 有/无某参数，参数等于、不等于某值 这四种情况。</p>
-<p>可以通过 headers 指定针对仅含有某请求头匹配情况进行相应，比如下面仅对 keep-alive 的 Connection 的 headers，URL 参数包含 ursename，passwd，school，并且 passwd 不等于 10，school 必须等于 ccnu，没有 superuser 这个参数的 URL 进行相应，比如: <code>testParameter/?username=tom&amp;passwd=233&amp;school=ccnu&amp;nosuperuser</code></p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="s">&quot;testParameter&quot;</span><span class="o">,</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="o">{</span><span class="s">&quot;username&quot;</span><span class="o">,</span><span class="s">&quot;passwd!=10&quot;</span><span class="o">,</span><span class="s">&quot;school=ccnu&quot;</span><span class="o">,</span><span class="s">&quot;!superuser&quot;</span><span class="o">},</span>
-        <span class="n">headers</span> <span class="o">=</span> <span class="o">{</span><span class="s">&quot;Connection: keep-alive&quot;</span><span class="o">}</span>
-<span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">testParam</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">SUCCESS</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></div>
-<p><strong>从 URL 获取变量</strong></p>
-<p>我们可以从 URL 中获得某些数据，而不是从 URL 的参数中获取：</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/testPathVar/{id}&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">testPathVar</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;id is &quot;</span> <span class="o">+</span> <span class="n">id</span><span class="o">);</span> <span class="k">return</span> <span class="n">SUCCESS</span><span class="o">;</span> <span class="o">}</span>
-</pre></div>
-<p>这样的话，id 会被作为 String 从 URL 上匹配并且获取，然后传递给签名入参的 Interger id（进行了类型自动转换），然后获取了此 URL 上的信息。</p>
-<p>为了做到从 URL 上提取数据，作为入参传递，必须指定此入参为 <code>@PathVariable('name_in_url')</code>，传入的参数为其在 URL 上双括号包裹起来的名称。注意，这种情况下，<code>/testPathVar/</code> 将不会匹配此条记录。</p>
-<p><strong>RESTFUL URL 支持</strong></p>
-<p>PathVariable 为 RESTFUL 风格的 URL 提供了支持，具体如下：RESTFUL 风格通过 URL + HTTP METHOD 达到 CRUD 的效果</p>
-<ul>
-<li>新增： /order POST   add</li>
-<li>修改： /order/1 PUT  update?id=1</li>
-<li>获取： /order/1 GET  get?id=1</li>
-<li>删除： /order/1 DELETE  delete?id=1</li>
-</ul>
-<p>因为浏览器一般不支持 PUT 和 DELETE，因此需要配置 Servlet Listener，并且对于所有 URL 请求都启用<code>org.springframework.web.filter.HiddenHttpMethodFilter</code> 以将带有隐含域的 POST 请求转换为 DELETE 和 PUT，具体做法如下：</p>
-<p>对于 PUT 和 delete 请求，在 form 需要添加一个 hidden type 的 name 为 _method 的输入，value 为 DELETE/PUT。</p>
-<p>具体的 HTML 为：</p>
-<div class="highlight"><pre><span></span>POST 新建对象: 
-<span class="p">&lt;</span><span class="nt">form</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;/springmvc/testRest&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;post it&quot;</span> <span class="p">/&gt;</span>
-<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-GET 获取某对象: 
-<span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/springmvc/testRest/1&quot;</span><span class="p">&gt;</span> Test REST Get <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> <span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-PUT 更新某对象:
-<span class="p">&lt;</span><span class="nt">form</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;/springmvc/testRest/1&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;_method&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;PUT&quot;</span><span class="p">/&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;put it&quot;</span> <span class="p">/&gt;</span>
-<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-DELETE 删除某对象:
-<span class="p">&lt;</span><span class="nt">form</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;/springmvc/testRest/1&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;_method&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;DELETE&quot;</span><span class="p">/&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;delete it&quot;</span> <span class="p">/&gt;</span>
-<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-</pre></div>
-<p>此外，PUT 和 DELETE 在 Dispatcher Mapping 中需要指定 method = <code>RequestMethod.PUT/DELETE</code>. 对于 get、put、delete 需要启用 {} 和 @PathVariable 注解。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/testRest/{id}&quot;</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">testRestGET</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;rest GET id &quot;</span> <span class="o">+</span> <span class="n">id</span><span class="o">);</span>
-    <span class="k">return</span> <span class="n">SUCCESS</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/testRest&quot;</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">testRestPOST</span><span class="o">()</span> <span class="o">{</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;rest POST&quot;</span><span class="o">);</span>
-    <span class="k">return</span> <span class="n">SUCCESS</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/testRest/{id}&quot;</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">DELETE</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">testRestDEL</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;rest DEL id &quot;</span> <span class="o">+</span> <span class="n">id</span><span class="o">);</span>
-    <span class="k">return</span> <span class="n">SUCCESS</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/testRest/{id}&quot;</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">PUT</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">testRestPUT</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;rest PUT id &quot;</span> <span class="o">+</span> <span class="n">id</span><span class="o">);</span>
-    <span class="k">return</span> <span class="n">SUCCESS</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></div>
-<p><strong>获取参数、Header、Cookie</strong></p>
-<p>通过设置 RequestParam 来要求输入某一参数信息或者设置默认值、获取此参数信息。</p>
-<p>通过设置 RequestHeader 来获取头部信息</p>
-<p>通过设置 CookieValue 来绑定/获取 Cookie 值。</p>
-<p>有时候可能没有对应的值或者记录，可以使用 required 来设置是否必须有此值/记录才能解析，使用 defaultValue 来设置如果没有，且 required = false 的情况下使用的替换值。</p>
-<p>需要注意，获取的值必须和入参参数的类型匹配，或者起码可以转换，如果不能转换，则报错。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/testPara&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">testPara</span><span class="o">(</span>
-        <span class="nd">@RequestParam</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;username&quot;</span><span class="o">,</span> <span class="n">required</span> <span class="o">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">defaultValue</span> <span class="o">=</span> <span class="s">&quot;Guest&quot;</span><span class="o">)</span> <span class="n">String</span> <span class="n">username</span><span class="o">,</span>
-        <span class="nd">@RequestHeader</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;Accept-Language&quot;</span><span class="o">,</span> <span class="n">required</span> <span class="o">=</span> <span class="kc">false</span><span class="o">)</span> <span class="n">String</span> <span class="n">al</span><span class="o">,</span>
-        <span class="nd">@CookieValue</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;JSESSIONID&quot;</span><span class="o">,</span><span class="n">required</span> <span class="o">=</span> <span class="kc">false</span><span class="o">)</span> <span class="n">String</span> <span class="n">sessionId</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;username is &quot;</span> <span class="o">+</span> <span class="n">username</span><span class="o">);</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Accept language is &quot;</span> <span class="o">+</span><span class="n">al</span><span class="o">);</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;session id is &quot;</span> <span class="o">+</span><span class="n">sessionId</span><span class="o">);</span>
-    <span class="k">return</span> <span class="n">SUCCESS</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></div>
-<p><strong>获取 Servlet 原生 API</strong></p>
-<p>下面展示了入参使用传统 ServletAPI 的情景，将这些类型放置在入参处即可，不需要加注解。Spring MVC 具体支持 HSRequest/Response、Session、Input/OutputStream、Reader/Writer、Principal 这些原生 API 作为入参传递。</p>
-<p>注意，返回值可以不为 String，不交给视图解析器，而是直接向输出 write 数据。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/testServlet&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">testServletAPI</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span>
-                             <span class="n">Writer</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">request</span> <span class="o">+</span> <span class="s">&quot;&quot;</span> <span class="o">+</span>  <span class="n">response</span><span class="o">);</span>
-    <span class="n">out</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s">&quot;Hello from Servlet API&quot;</span><span class="o">);</span>
-<span class="o">}</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="ModelAndView-&#23545;&#35937;">ModelAndView &#23545;&#35937;<a class="anchor-link" href="#ModelAndView-&#23545;&#35937;">&#182;</a></h2><p><strong>手动返回 ModelAndView 对象传递 RequestAttr</strong></p>
-<p>一般来说，通过 String 返回找到 view 层即可完成响应。但是，如果需要向 view 层写数据，就需要使用 modelAndView 对象作为返回。返回 String 则视图解析器返回视图 View，也可以返回 ModelAndView 对象，此对象包括了模型和 View 层信息，可以向 View 层传递数据。区别于直接返回 String 并直接返回 view 层，视图解析器将会将 modelAndView 对象中找到对应的 view 层，将 model 的键值对解析到 view 层的 rS 域中，然后再返回 view 层。</p>
-<div class="highlight"><pre><span></span><span class="c1">//Controller.java</span>
-<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/testModelAndView&quot;</span><span class="o">)</span> <span class="kd">public</span> <span class="n">ModelAndView</span> <span class="nf">testModelAndView</span><span class="o">()</span> <span class="o">{</span>
-    <span class="n">String</span> <span class="n">viewName</span> <span class="o">=</span> <span class="n">SUCCESS</span><span class="o">;</span>
-    <span class="n">ModelAndView</span> <span class="n">modelAndView</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ModelAndView</span><span class="o">(</span><span class="n">viewName</span><span class="o">);</span>
-    <span class="n">modelAndView</span><span class="o">.</span><span class="na">addObject</span><span class="o">(</span><span class="s">&quot;time&quot;</span><span class="o">,</span><span class="k">new</span> <span class="n">Date</span><span class="o">());</span>
-    <span class="k">return</span> <span class="n">modelAndView</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="c1">//success.jsp</span>
-<span class="n">$</span><span class="o">{</span><span class="n">requestScope</span><span class="o">.</span><span class="na">time</span><span class="o">}</span>
-</pre></div>
-<p>如上所示，我们可以在 ModelAndView 对象中添加 key-value，然后这些 key-value 会被自动 set 到 Request Attribute 中，在 View 层可以直接取出。需要注意，手动返回 MAV 的时候，需要设置到何处找到 view 层的信息（一般通过构造器直接传入）。</p>
-<p>不论 Mapping 返回的是 String，还是 ModelAndView，都会被装配成 ModelAndView 对象，其包含了逻辑名和模型对象的视图。ViewResolver 用来将 此对象 变为真正的 View 视图对象。视图可以是 JSP，可以是 Excel、JFreeChat等。InternalResourceViewResolver 对应的是 InternalResourceView 对应的是 JSP 视图。</p>
-<p><strong>使用 Map 入参传递 RequestAttr 数据</strong></p>
-<p>MAV 方式过于手动且繁琐，实际情况下有一种简写方式，可以使用 Map 作为入参，然后在 Map 中放置键值对，然后从 rS 域或者直接取出。入参除了 Map 类型，还可以使用 ModelMap、Model 类型。</p>
-<p>这种方式其实是自动的将 Map 的数据放置到了 ModelAndView 的 ModelMap 中，然后通过处理 ModelAndView 进行的处理。视图解析器对 ModelAndView 的处理方法是：通过将 MAV 中 ModelMap 的 k-v 对 设置为请求域的属性，然后去解析 View 层，将 HTML 作为结果返回。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/testMap&quot;</span><span class="o">)</span> <span class="kd">public</span> <span class="n">String</span> <span class="nf">testMap</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;names&quot;</span><span class="o">,</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="s">&quot;A&quot;</span><span class="o">,</span><span class="s">&quot;B&quot;</span><span class="o">,</span><span class="s">&quot;C&quot;</span><span class="o">));</span>
-    <span class="k">return</span> <span class="n">SUCCESS</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="c1">//success.jsp</span>
-<span class="n">$</span><span class="o">{</span><span class="n">requestScope</span><span class="o">.</span><span class="na">names</span><span class="o">}</span>
-</pre></div>
-<p><strong>将 RequestAttr 的 K-V对 同时添加到 SessionAttr 上</strong></p>
-<p>放置在 Map 入参处的值，可以通过 rs 或者 key 直接取出。通过设置：@SessionAttributes({"user"}) 可以同时放置到 SessionAttributes 域中。此域的 value 属性仅允许设置过的 key 保存，如果没有设置，则不允许。此域的 type 属性可以允许按照 class 类型来讲 rs 域值放置到 sa 中。比如：@SessionAttributes(type={String.class}) 这样将会让所有 rs 域中 String 类型的数据放置到 SessionAttribute 上。</p>
-<div class="highlight"><pre><span></span><span class="nd">@SessionAttributes</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="o">{</span><span class="s">&quot;user&quot;</span><span class="o">},</span><span class="n">types</span> <span class="o">=</span> <span class="o">{</span><span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
+<p>以下是控制层的映射的实现：</p>
+<div class="highlight"><pre><span></span><span class="o">/</span><span class="n">com</span><span class="o">.</span><span class="na">mazhangjing</span><span class="o">.</span><span class="na">spring</span><span class="o">.</span><span class="na">controller</span>
 <span class="nd">@Controller</span>
-<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/springmvc&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MVCTest</span> <span class="o">{</span>
-    <span class="o">...</span>
-    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/testSession&quot;</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">testSessionAttribute</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="s">&quot;corkine&quot;</span><span class="o">,</span><span class="s">&quot;123456&quot;</span><span class="o">,</span><span class="s">&quot;c@cm.cn&quot;</span><span class="o">,</span><span class="mi">15</span><span class="o">);</span>
-        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;user&quot;</span><span class="o">,</span><span class="n">user</span><span class="o">);</span>
-        <span class="k">return</span> <span class="n">SUCCESS</span><span class="o">;</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HomeController</span> <span class="o">{</span>
+    <span class="nd">@Autowired</span> <span class="n">ApplicationContext</span> <span class="n">context</span><span class="o">;</span>
+    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">home</span><span class="o">(){</span>
+        <span class="n">BookShopService</span> <span class="n">bookShopService</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="n">BookShopService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">bookShopService</span><span class="o">.</span><span class="na">purchase</span><span class="o">(</span><span class="s">&quot;TEST&quot;</span><span class="o">,</span><span class="s">&quot;1001&quot;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="s">&quot;index&quot;</span><span class="o">;</span>
     <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<p>可以看到，我们自动加入的 Spring IOC 容器，可以通过 @Autowire 被 Spring MVC IOC 容器进行自动装配，这非常方便。此外，如果不希望自动装配，通过 WebApplicationContextUtils 的 getWebApplicaitonContext 获取此 context，然后进一步获取对象即可。</p>
+<div class="highlight"><pre><span></span>/WEB-INF/views/index.jsp
+<span class="k">&lt;%</span> <span class="n">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="n">WebApplicationContextUtils</span><span class="o">.</span><span class="na">getWebApplicationContext</span><span class="o">(</span><span class="n">application</span><span class="o">);</span>
+<span class="n">DataSource</span> <span class="n">bean</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="n">DataSource</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">&quot;bean&quot;</span><span class="o">,</span><span class="n">bean</span><span class="o">);</span> <span class="k">%&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>Your data source is: ${bean}<span class="nt">&lt;/p&gt;</span>
 </pre></div>
 
 </div>
@@ -12067,761 +12113,130 @@ DELETE 删除某对象:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Model-&#25968;&#25454;&#32465;&#23450;">Model &#25968;&#25454;&#32465;&#23450;<a class="anchor-link" href="#Model-&#25968;&#25454;&#32465;&#23450;">&#182;</a></h2><p><strong>从 FORM 到 POJO</strong></p>
-<p>SpringMVC 支持直接 POST 参数到一个 POJO 中，还支持级联属性。以下是两个 POJO 类：</p>
-<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">age</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">Address</span> <span class="n">address</span><span class="o">;</span>
-    <span class="o">...</span>
-<span class="o">}</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Address</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">province</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">city</span><span class="o">;</span>
-    <span class="o">...</span>
-<span class="o">}</span>
+<h1 id="SSH-&#30340;-MAVEN-&#20381;&#36182;">SSH &#30340; MAVEN &#20381;&#36182;<a class="anchor-link" href="#SSH-&#30340;-MAVEN-&#20381;&#36182;">&#182;</a></h1><p>SSH 的依赖问题可以分为几个方面：</p>
+<h2 id="Java-WEB-&#30340;&#20381;&#36182;">Java WEB &#30340;&#20381;&#36182;<a class="anchor-link" href="#Java-WEB-&#30340;&#20381;&#36182;">&#182;</a></h2><p>包括 Servlet、JSP、JSTL、EL 等，需要注意，因为此处的包，如果和 TOMCAT 的包不一致，则极其容易造成冲突，因此，此处的作用域只应当为 provied。</p>
+<div class="highlight"><pre><span></span><span class="c">&lt;!--JavaEE Web Support--&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>javax.servlet<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>javax.servlet-api<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>4.0.1<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/javax.servlet.jsp/javax.servlet.jsp-api --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>javax.servlet.jsp<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>javax.servlet.jsp-api<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.3.3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/javax.servlet.jsp.jstl/jstl --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>javax.servlet.jsp.jstl<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>jstl<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.2<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/javax.el/javax.el-api --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>javax.el<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>javax.el-api<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>3.0.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
-<p>注意，POJO 必须提供无参构造器和 get/set 方法。</p>
-<p>以下是 HTML 调用，需要使用 post 方法，此外，form 的 name 需要对应 pojo 的属性名称， pojo 需要提供 set 方法，支持级联属性，比如 address.city 表示 address 对象 的 city 属性。直接在 name 中设置  'address.city' 即可。如果获取不到则设置为 null；</p>
-<div class="highlight"><pre><span></span>/springmvc/testPOJO
-<span class="p">&lt;</span><span class="nt">form</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">&gt;</span>
-    username : <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;name&quot;</span> <span class="p">/&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
-    password : <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;password&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;password&quot;</span> <span class="p">/&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
-    email : <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;email&quot;</span> <span class="p">/&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
-    age : <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;age&quot;</span> <span class="p">/&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
-    province : <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;address.province&quot;</span> <span class="p">/&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
-    city : <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;address.city&quot;</span> <span class="p">/&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;Submit&quot;</span> <span class="p">/&gt;</span>
-<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+<h2 id="Spring-IOC/AOP-&#30340;&#20381;&#36182;">Spring IOC/AOP &#30340;&#20381;&#36182;<a class="anchor-link" href="#Spring-IOC/AOP-&#30340;&#20381;&#36182;">&#182;</a></h2><p>最大的问题就是 AspectJ 两件套了(aspectjweaver, aspectjrt)</p>
+<div class="highlight"><pre><span></span><span class="c">&lt;!--Spring IOC/AOP--&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/org.springframework/spring-context --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-context<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${spring_version}<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/org.springframework/spring-core --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-core<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${spring_version}<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.aspectj<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>aspectjrt<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${aspectj_version}<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.aspectj<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>aspectjweaver<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${aspectj_version}<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
-<p>之后直接在入参处写一个此类型的入参即可调用获得构造好的对象。注意，不要写 @RequestVariable，直接 POST 即可。这一套从 HTML 到 Bean 的方式类似于 Servlet 的 Stand Action Use-Bean。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/testPOJO&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">testPojo</span><span class="o">(</span><span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">&quot;user&quot;</span><span class="o">)</span> <span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">user</span><span class="o">);</span> <span class="k">return</span> <span class="n">SUCCESS</span><span class="o">;</span> <span class="o">}</span>
+<h2 id="SpringMVC-&#30340;&#20381;&#36182;">SpringMVC &#30340;&#20381;&#36182;<a class="anchor-link" href="#SpringMVC-&#30340;&#20381;&#36182;">&#182;</a></h2><p>如果控制层还需要使用 Hibernate Valiator 验证等，还需要添加相应的 jar 包。</p>
+<div class="highlight"><pre><span></span><span class="c">&lt;!--Spring MVC--&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/org.springframework/spring-web --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-web<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${spring_version}<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-webmvc<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${spring_version}<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
-<p>这里获取到的 user 会被同样放置到 requestScope 中，通过入参的 @ModelAttribute(value) 设置 requestScope 中获取此 user 的方式，比如 @ModelAttribute（value = "user"） 在  JSP 渲染页面的 ${requestScope.user} 通过这种方式获取此对象。如果不提供此注解，则默认以类名第一个字母小写作为变量放置到 requestScope 中。</p>
-<div class="highlight"><pre><span></span>/success.jsp
-requestScope user: ${requestScope.user}
+<h2 id="Hibernate-&#30340;&#20381;&#36182;">Hibernate &#30340;&#20381;&#36182;<a class="anchor-link" href="#Hibernate-&#30340;&#20381;&#36182;">&#182;</a></h2><p>Hibernate 需要提供 其自身、数据库、数据源的配置</p>
+<div class="highlight"><pre><span></span><span class="c">&lt;!--Hibernate in Spring with C3PO and MySQL--&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/org.springframework/spring-orm --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-orm<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${spring_version}<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/org.springframework/spring-tx --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-tx<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${spring_version}<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>mysql<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>mysql-connector-java<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${mysql_version}<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/com.mchange/c3p0 --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.mchange<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>c3p0<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.9.5.2<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="c">&lt;!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.hibernate<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>hibernate-core<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${hibernate_version}<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
-<p>很显然的，Spring MVC 完成了从 FORM 到 POJO 的工作，那么它是如何完成的呢？</p>
-<p>在上面我们说过，ModelAndView 对象负责用来传递 RequestAttribute 属性和 SessionAttribute 属性，并且自动完成 View 层的查找和交接工作。</p>
-<p>这里的过程分为两步，其一是从 FORM 表单提交到构建 User 对象，到作为入参的 User 对象引用，其二是作为入参的 User 对象到 ModelAndView 对象的 ModelMap 集合，然后到 RequestAttribute 属性，以至于在 View 层能够从 requestScope 获取此对象。</p>
-<p><strong>从数据库+表单到 POJO</strong></p>
-<p>在一些情况下，我们并不想让表单填写所有的字段，有一些字段我们希望从数据库加载，然后只提供有限的字段以供表单修改，然后将其合并成为 POJO 作为入参传递到 Controller 的对应 Mapping 的方法中的入参中。为做到这一点，我们需要添加一个带有 @ModelAttribute 注解的方法，以完成从数据库到 FORM 调用前这一段的 User 对象的构建。</p>
-<p>从数据库获取记录首先要从表单找到某个字段，作为查找的基础进行查找，然后获取到此记录后，再将表单剩余的字段更新此对象，最后作为入参进行设置。因此，这里需要提供一个用作查找数据的入参。找到数据后，需要将数据传递出去，这里使用的是 Map 的入参，根据前面的介绍，我们知道这里的含义是创建一个 ModelAndView，然后填入 ModelMap 的一个字段的意思。</p>
-<p>之后，SpringMVC 会自动进行此对象根据表单的更新，然后再 Controller 的对应 Mapping 方法的入参中，使用 @ModelAttribute 注解按照 key 的名称取出即可。</p>
-<p>一般来说，我们使用类名第一个字母小写作为 key 的名称，那样的话，这里的入参其实可以省略 @ModelAndView 注解。</p>
-<div class="highlight"><pre><span></span><span class="nd">@ModelAttribute</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">getUser</span><span class="o">(</span><span class="nd">@RequestParam</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;id&quot;</span><span class="o">,</span> <span class="n">required</span> <span class="o">=</span> <span class="kc">false</span><span class="o">)</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">,</span>
-                    <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">id</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="s">&quot;tom&quot;</span><span class="o">,</span><span class="s">&quot;123456&quot;</span><span class="o">,</span><span class="s">&quot;tom@tom.com&quot;</span><span class="o">,</span><span class="mi">12</span><span class="o">);</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Get&quot;</span> <span class="o">+</span> <span class="n">user</span><span class="o">);</span>
-        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;form_user&quot;</span><span class="o">,</span><span class="n">user</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/testModelAttribute&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">testModelAttribute</span><span class="o">(</span><span class="nd">@ModelAttribute</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;form_user&quot;</span><span class="o">)</span> <span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Edit &quot;</span> <span class="o">+</span> <span class="n">user</span><span class="o">);</span>
-    <span class="k">return</span> <span class="n">SUCCESS</span><span class="o">;</span>
-<span class="o">}</span>
+<p>最后是 JUnit：</p>
+<div class="highlight"><pre><span></span><span class="c">&lt;!-- https://mvnrepository.com/artifact/junit/junit --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>junit<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>junit<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>4.12<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
-<p><strong>内部原理详解</strong></p>
-<p>具体的 ModelAttribute 调用方法如下：</p>
-<p>首先，当 form 进行提交的时候，首先创建了一个叫做 WebDataBinder 的对象，此对象具有两个关键属性，target 和 objectName。target
-用来获取模型现有对象，作为数据的入口，objName 用来指定一个字符串，用来作为更新表单数据后的数据出口标识符。</p>
-<p>首先要获取模型数据，具体而言，先找到有 @ModelAttribute 注解的方法，将 FORM 指定字段作为参数传入，执行这段代码以更新入参的 Map 对象，并且将其放置在一个叫做 implicitModel 对象中。然后从 implicitModel 中查找对应的属性值，如果存在，ok。如果不存在，则验证当前 Handler 是否采用了 @SessionAttributes 修饰，然后从中寻找 attrName 对应的属性值，如果有此修饰符，并且有 key，但是获取不到 value，则抛出异常。如果没有此修饰符，则通过反射创建 POJO 对象。</p>
-<p>数据的辨识名称首先如果在 Mapping 的入参 User 前没有 @ModelAttribute 修饰的话，那么我们使用类的第一个字母小写。如果有修饰的话，
-使用 value 值作为 ObjName。</p>
-<p>当得到模型的数据后，现在的 target 已经从 @ModelAttribute 的 implicitModel 中通过数据辨识名称或者 @SessionAttribute 中通关数据辨识名称获取到对象了。然后从 form 获取字段，复写 target 对象。完成之后，将数据重新传回给 implicitModel 对应字段，进而传递给 requestScope 中。而把 target 作为参数传递给目标方法的入参（Mapping 方法的 User user）。</p>
-<p>注意，如果在 Mapping 中规定的数据标识符必须可以和 数据库取出后放置到 Map 的 Key 对上。否则的话，会创建新的 POJO 对象。</p>
-<p>注意，如果启用了 @SessionAttribute 但是在 @MA 无法找到，在 @SA 找到但是无值 的话，抛出异常而不是新建 POJO 对象。</p>
-<p>注意，通过 ModelAttribute 方法创建的对象最后会用 objName 作为 requestScope 的变量可供视图层调用。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Controller-&#26041;&#27861;&#20837;&#21442;&#27880;&#35299;&#24635;&#32467;">Controller &#26041;&#27861;&#20837;&#21442;&#27880;&#35299;&#24635;&#32467;<a class="anchor-link" href="#Controller-&#26041;&#27861;&#20837;&#21442;&#27880;&#35299;&#24635;&#32467;">&#182;</a></h2><p>对于所有的入参，这些入参可以在方法体内被设置后，被放置到 view 层的 requestScope 中。此外还有一些较为特殊的入参，比如</p>
-<ul>
-<li>标记有 @PathVariable 的入参，其在方法体之前，从URL中得到了参数。</li>
-</ul>
-<ul>
-<li>标记有 @RequestParam/Header/CookieValue 的入参，其在方法体之前，从请求中得到了参数/Header/Cookie。</li>
-</ul>
-<ul>
-<li>作为 POST 方法的入参，POST 必定会得到一个 POJO 对象，如果入参标记了 @ModelAttribute，则传递给对应的入参。如果入参没有标记，则传递给类型匹配的入参。注意，当入参标记了 @ModelAttribute，MVC默认查找所有 @ModelAttribute 方法所返回的 Map中是否具有相同引用的 POJO，如果有，则使用此 POJO 填充字段，然后再作为入参使用。</li>
-</ul>
-<ul>
-<li>如果入参是 ModelMap 或者 Map 类型，区别于别的入参整个放置到 request 域中，Map 类型自动将这些 key-value 解包，然后逐个放置到 request 域中。</li>
-</ul>
-<ul>
-<li>HttpRequest、Response、Session、Writer 等原生 Servlet API 作为入参，以供在方法体中调用。</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="View-&#21644;-ViewResolver-&#35270;&#22270;&#35299;&#26512;">View &#21644; ViewResolver &#35270;&#22270;&#35299;&#26512;<a class="anchor-link" href="#View-&#21644;-ViewResolver-&#35270;&#22270;&#35299;&#26512;">&#182;</a></h2><p><strong>InternalResourceView 的 JSP 转发</strong></p>
-<p>不论 Mapping 返回的是 String，还是 ModelAndView，都会被装配成 ModelAndView 对象，其包含了逻辑名和模型对象的视图。ViewResolver 用来将 此对象 变为真正的 View 视图对象。视图可以是 JSP，可以是 Excel、JFreeChat等。InternalResourceViewResolver 对应的是 InternalResourceView 对应的是 JSP 视图。</p>
-<p>视图是线程安全的，每次都会重新创建。视图规定了用来解析页面的不同策略，对于URL资源视图来说，将JSP封装成了 InternalResourceView。如果需要使用国际化功能，则启用 JstlView。此外，还有 AbstractExcelView 返回文档视图。</p>
-<p><strong>JstlView 和国际化</strong></p>
-<p>添加 JSTL 标签库，自动使用 JSTLView，在类路径下设置 i18n_properties 配置翻译表，通过将其配置到 messageSource 的 bean 中来指定国际化文件配置。在 JSP 页面中启用 taglib 的 fmt:message 来设置 key。</p>
-<ul>
-<li>首先需要启用 messageSource Bean，指定翻译文件名称。</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.context.support.ResourceBundleMessageSource&quot;</span> <span class="na">p:basename=</span><span class="s">&quot;i18n&quot;</span><span class="nt">/&gt;</span>
+<p>目前最新的配置为：</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;properties&gt;</span>
+    <span class="nt">&lt;spring_version&gt;</span>5.1.1.RELEASE<span class="nt">&lt;/spring_version&gt;</span>
+    <span class="nt">&lt;aspectj_version&gt;</span>1.9.1<span class="nt">&lt;/aspectj_version&gt;</span>
+    <span class="nt">&lt;mysql_version&gt;</span>8.0.13<span class="nt">&lt;/mysql_version&gt;</span>
+    <span class="nt">&lt;hibernate_version&gt;</span>5.3.7.Final<span class="nt">&lt;/hibernate_version&gt;</span>
+<span class="nt">&lt;/properties&gt;</span>
 </pre></div>
-<ul>
-<li>需要提供翻译文件，创建几个 i18n.properties 即可。</li>
-</ul>
-
-<pre><code>/i18n.properties
-i18n.username=Username
-i18n.password=Password
-
-/i18n_en_US.properties
-i18n.username=Username
-i18n.password=Password
-
-/i18n_zh_CN.properites
-i18n.username=用户名
-i18n.password=密码</code></pre>
-<ul>
-<li>在 JSP 中使用 fmt:message 标签，声明 key 即可根据系统语言来自动调用 JstlView 来设置界面语言的标签。</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="nt">&lt;fmt:message</span> <span class="na">key=</span><span class="s">&quot;i18n.username&quot;</span> <span class="nt">/&gt;</span>
-</pre></div>
-<p><strong>自定义 View 和 BeanNamedViewRsolver</strong></p>
-<p>除了使用默认的 View，我们可以指定 BeanNamedViewResolver 来解析自定义 View。需要添加 bean，并且指定一个较高的解析优先级(数值越低越优先)：</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.web.servlet.view.BeanNameViewResolver&quot;</span> <span class="na">p:order=</span><span class="s">&quot;100&quot;</span> <span class="nt">/&gt;</span>
-</pre></div>
-<p>此外，需要自定义 bean view，此 view 类需要继承自 View 接口，提供返回文档的类型，提供返回的内容，之后需要添加到 BeanFactory 中去，启用注解和注解扫描，这样的话，当我们返回一个 String，会先去找这个 String 是否对应一个 自定义 view 类，如果找不到，则换用InternalResourceViewResolver 到指定位置寻找 jsp/jstl view 进行解析。</p>
-<div class="highlight"><pre><span></span><span class="nd">@Component</span><span class="o">(</span><span class="s">&quot;helloView&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloView</span> <span class="kd">implements</span> <span class="n">View</span> <span class="o">{</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getContentType</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="s">&quot;text/html&quot;</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">render</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">map</span><span class="o">,</span> <span class="n">HttpServletRequest</span> <span class="n">httpServletRequest</span><span class="o">,</span> 
-                       <span class="n">HttpServletResponse</span> <span class="n">httpServletResponse</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-        <span class="n">httpServletResponse</span><span class="o">.</span><span class="na">getWriter</span><span class="o">().</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Hello view, time: &quot;</span> <span class="o">+</span> <span class="k">new</span> <span class="n">Date</span><span class="o">());</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
-<p>注意，这个 View 也是需要作为 bean 注入的，此外，需要提供 bean Name，这个 bean Name 会对应你 Handler 返回的那个字符串：</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/testView&quot;</span><span class="o">)</span> <span class="kd">public</span> <span class="n">String</span> <span class="nf">testView</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="s">&quot;helloView&quot;</span><span class="o">;</span> <span class="o">}</span>
-</pre></div>
-<p>注意，自定义 View 一般需要提供 getContentType 实现返回文档类型，提供 render 实现以进行对页面的操作。</p>
-<p><strong>RedirectView 跳转</strong></p>
-<p><strong>InternalResourceView 手动转发</strong></p>
-<p>在之前的介绍中，我们已经讲过 Handler 返回 void、String 的不同情况。其中 String 会通过各种 ViewResolver 来解析视图层，比如用于 JSPView 和 JSTLView 的 InternalResourceResolver，还有用于自定义View 的 BeanNameResolver。</p>
-<p>除此之外，还可以进行 HTTP 的链接跳转，注意，区分 forward 和 redirect，前者是分派，后者是 HTTP 跳转。当返回值为 redirect: 或者 forward: 开头，则调用 RedirectView 或者 InternalResourceView 进行重定向或者转发</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/testRedirect&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">testRedirect</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="s">&quot;redirect:/index.jsp&quot;</span><span class="o">;</span>
-    <span class="c1">//return &quot;forward:/index.jsp&quot;;</span>
-<span class="o">}</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="CRUD&#31034;&#20363;">CRUD&#31034;&#20363;<a class="anchor-link" href="#CRUD&#31034;&#20363;">&#182;</a></h1><h2 id="Entry-and-Service">Entry and Service<a class="anchor-link" href="#Entry-and-Service">&#182;</a></h2><p>我们有如下持久化类以及其 Data Access Object，下面将会以此为基础创建 CRUD 示例：</p>
-<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Employee</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">lastName</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">gender</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">Date</span> <span class="n">birth</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">Float</span> <span class="n">salary</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">Department</span> <span class="n">department</span><span class="o">;</span>
-    <span class="o">...</span>
-<span class="o">}</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Department</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">departmentName</span><span class="o">;</span>
-    <span class="o">...</span>
-<span class="o">}</span>
-<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">EmployeeDao</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">save</span><span class="o">(</span><span class="n">Employee</span> <span class="n">employee</span><span class="o">);</span>
-    <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;</span> <span class="nf">getAll</span><span class="o">();</span>
-    <span class="kd">public</span> <span class="n">Employee</span> <span class="nf">get</span><span class="o">(</span><span class="n">Integer</span> <span class="n">id</span><span class="o">);</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">delete</span><span class="o">(</span><span class="n">Integer</span> <span class="n">id</span><span class="o">);</span>
-<span class="o">}</span>
-<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">DepartmentDao</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Department</span><span class="o">&gt;</span> <span class="nf">getDepartments</span><span class="o">();</span>
-    <span class="kd">public</span> <span class="n">Department</span> <span class="nf">getDepartment</span><span class="o">(</span><span class="n">Integer</span> <span class="n">id</span><span class="o">);</span>
-<span class="o">}</span>
-</pre></div>
-<h2 id="GET-&#33719;&#21462;">GET &#33719;&#21462;<a class="anchor-link" href="#GET-&#33719;&#21462;">&#182;</a></h2><p>在 /emps URL 请求中，展示所有的员工信息：</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;emps&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">list</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;employees&quot;</span><span class="o">,</span> <span class="n">employeeDao</span><span class="o">.</span><span class="na">getAll</span><span class="o">());</span>
-    <span class="k">return</span> <span class="s">&quot;list&quot;</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></div>
-<p>JSP 实现如下：</p>
-
-<pre><code>&lt;c:if test="${empty requestScope.employees}"&gt;没有任何员工信息&lt;/c:if&gt;
-&lt;c:if test="${!empty requestScope.employees}"&gt;
-    &lt;table border="1" cellpadding="10" cellspacing="0"&gt;
-        &lt;tr&gt;
-            &lt;th&gt;ID&lt;/th&gt;
-            &lt;th&gt;LastName&lt;/th&gt;
-            &lt;th&gt;Email&lt;/th&gt;
-            &lt;th&gt;Gender&lt;/th&gt;
-            &lt;th&gt;Deps&lt;/th&gt;
-            &lt;th&gt;Edit&lt;/th&gt;
-            &lt;th&gt;Delete&lt;/th&gt;
-        &lt;/tr&gt;
-        &lt;c:forEach items="${requestScope.employees}" var="emp"&gt;
-            &lt;tr&gt;
-                &lt;td&gt;${emp.id}&lt;/td&gt;
-                &lt;td&gt;${emp.lastName}&lt;/td&gt;
-                &lt;td&gt;${emp.email}&lt;/td&gt;
-                &lt;td&gt;${emp.gender == 0 ? 'Female' : 'Male'}&lt;/td&gt;
-                &lt;td&gt;${emp.department.departmentName}&lt;/td&gt;
-                &lt;td&gt;&lt;a href=""&gt;Edit&lt;/a&gt;&lt;/td&gt;
-                &lt;td&gt;&lt;a class="delete" href=""&gt;Delete&lt;/a&gt;&lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;/c:forEach&gt;
-    &lt;/table&gt;
-&lt;/c:if&gt;</code></pre>
-<h2 id="Create-&#21019;&#24314;">Create &#21019;&#24314;<a class="anchor-link" href="#Create-&#21019;&#24314;">&#182;</a></h2><p>一个 CRUD 的 Create 需要 POST 请求，但是 POST 请求首先要求有一个基本的表单以供填写，然后对此表单执行 POST。因此需要为 Create 操作分别添加 GET 和 POST 两套方法， GET 用于从服务器请求需要填写的字段，然后提供表单页 POST 用于将此表单页上的内容在不重定向的基础上，进行 POST。</p>
-<h3 id="Create-GET">Create GET<a class="anchor-link" href="#Create-GET">&#182;</a></h3><p><strong>提供表单基本信息:</strong> 如果提供的字段需要按照一定的要求进行，比如有下拉列表，则同时要在 GET 方法返回 view 层的时候将这些必要的枚举对象一并传递到 request 域中。</p>
-<p><strong>提供 FROM 更新的 POJO：</strong> 如果使用 Spring 的 FORM 标签库，则需要提供一个用来设置的 POJO，FORM 标签库不会创建一个 POJO，我们需要从数据库或者构造器创建一个 POJO，然后传入。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;emp&quot;</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">addEmployeeGET</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;department&quot;</span><span class="o">,</span><span class="n">departmentDao</span><span class="o">.</span><span class="na">getDepartments</span><span class="o">());</span>
-    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;newEmp&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">());</span>
-    <span class="k">return</span> <span class="s">&quot;add&quot;</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></div>
-<p>add.jsp 提供的实现如下，注意这里使用了 form 的标签库，这是 Spring MVC 提供的一个用于快速绑定数据对象的标签库。</p>
-
-<pre><code>&lt;%
-    Map&lt;String,String&gt; gender = new HashMap&lt;&gt;();
-    gender.put("1","Male");
-    gender.put("0","Female");
-    //pageContext.setAttribute("gender",gender);
-    request.setAttribute("genders",gender);
-%&gt;
-&lt;form:form action="" method="post" modelAttribute="newEmp" &gt;    
-    LastName: &lt;form:input path="lastName" /&gt;
-    Email: &lt;form:input path="email" /&gt;
-    Gender: &lt;form:radiobuttons path="gender" items="${genders}" /&gt;&lt;br&gt;
-    Department: &lt;form:select path="department.id" items="${department}" itemLabel="departmentName" itemValue="id" /&gt;&lt;br&gt;
-    Birth: &lt;form:input path="birth" /&gt;
-    Salary: &lt;form:input path="salary" /&gt;
-    &lt;input type="submit" value="submit" /&gt;
-&lt;/form:form&gt;</code></pre>
-<p>需要注意，form 前缀标签用来从 modelAttribute 属性获得的 POJO 中填充字段。需要注意，我们必须为 form 标签提供一个 modelAttribute POJO 并且放置在 requestScope 中（也就是在 Mapping 的方法中从数据库或者构造器创建一个对象传入 ModelMap），否则会报错。</p>
-<p>form 的 path 对应 pojo 的属性可选有 input 文字输入，radiobuttons 单选按钮，select 下拉按钮等。对于单选和下拉这种需要提供 key-value 的部件，从 items 传入 Map 以构造。或者传入 pojo 也可以，传入 pojo 需要提供 itemLabel 和 itemValue 分别对应的 pojo 属性 ,比如这里传入的是 department 变量，用它作为 select 的 iterator 来源，因此设置 <code>itemLabel="departmentName" itemValue="id"</code> 从每次遍历中获取 POJO 的属性填充 Select 下拉菜单。</p>
-<p>注意，path 对应 modelAttribute 引用的 pojo 的属性，支持级联。</p>
-<p>因为这里是 Restful Create，因此 action 指向相同的 URL，方法是 post。post 后会得到一个填充了 form 表单的 pojo。</p>
-<h3 id="Create-POST">Create POST<a class="anchor-link" href="#Create-POST">&#182;</a></h3><p>调用 DAO 进行保存，之后重定向到 emps，注意，这里不是转发，而是重定向，因为没有逻辑关系。</p>
-<p>POST 方法肯定会返回一个 Employee 对象，这里直接在入参处接受即可。注意，对于 GET 方法的入参，其含义为将此处的数据放置到 return 的 view 层的 request 域中。对于 POST 方法的入参，其不仅仅表示传递到下一个 view 的 request，还表示从 POST 源头接受一个对象。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;emp&quot;</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">addEmployeePOST</span><span class="o">(</span><span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">&quot;newEmp&quot;</span><span class="o">)</span> <span class="n">Employee</span> <span class="n">employee</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">)</span>  <span class="o">{</span>
-    <span class="n">employeeDao</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">employee</span><span class="o">);</span>
-    <span class="k">return</span> <span class="s">&quot;redirect:emps&quot;</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></div>
-<h2 id="Delete-&#21024;&#38500;&#23545;&#35937;">Delete &#21024;&#38500;&#23545;&#35937;<a class="anchor-link" href="#Delete-&#21024;&#38500;&#23545;&#35937;">&#182;</a></h2><p>删除操作是对于 <code>emp/{id}</code> 这种指定对象来说的。这里从 URL 中使用 @PathVariable 获取 id，然后调用 DAO 的 delete 方法进行删除，之后重定向到列表界面。注意：这里需要返回上级页面，以为这个 SpringMVC 对应的是 /crud 路径，因此不能使用根目录。要特别小心相对路径问题。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;emp/{id}&quot;</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">DELETE</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">deleteEmployee</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">employeeDao</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
-    <span class="k">return</span> <span class="s">&quot;redirect:../emps&quot;</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></div>
-<p>删除的实现比较困难，原因在于浏览器基本上不支持 DELETE 的 HTTP 操作。我们需要使用 POST，然后内置一个隐藏方法来实现删除：</p>
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;delete&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;emp/${emp.id}&quot;</span><span class="p">&gt;</span>Delete<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-</pre></div>
-<p>问题是，一般的删除是 GET，那么如何在调用 GET emp/27 的时候自动调用 form 表单的 post，然后进行 delete 呢？使用 JQuery：</p>
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;application/javascript&quot;</span><span class="p">&gt;</span>
-    <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.delete&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-                <span class="kd">var</span> <span class="nx">href</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;href&quot;</span><span class="p">);</span>
-                <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.delete_method&quot;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">,</span> <span class="nx">href</span><span class="p">).</span><span class="nx">submit</span><span class="p">();</span>
-                <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">)</span>
-    <span class="p">})</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">form</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;delete_method&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;_method&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;DELETE&quot;</span> <span class="p">/&gt;</span>
-<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-</pre></div>
-<p>当调用删除 GET 的时候，自动调用 FORM 的 POST(DELETE) 方法，将 GET 的 URL 传递给 FROM 的 ACTION，然后完成删除。注意，这里的 POST 使用了一个 hidden 的 input，此处的 name 必须是 <code>_method</code>, value 必须是 <code>DELETE</code>，之后必须为 TOMCAT 配置 HiddenMethodFilter 来过滤请求，之后才可以正常映射到 DELETE 方法的 Spring MVC Handler Mapping Method 上。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Edit-&#26356;&#26032;&#23545;&#35937;">Edit &#26356;&#26032;&#23545;&#35937;<a class="anchor-link" href="#Edit-&#26356;&#26032;&#23545;&#35937;">&#182;</a></h2><h2 id="Edit-GET">Edit GET<a class="anchor-link" href="#Edit-GET">&#182;</a></h2><p>因为我们 add 和 edit 用的是一个页面，因此 form 的 action 清空，默认为相同地址不同方法此外使用 if 标签判断 id，以确定是 add 还是 edit，如果是 edit，隐藏不允许修改字段，同时添加 <code>_method</code> 为 put，以进行修改而不是新建。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;emp/{id}&quot;</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">editEmployeeGET</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">,</span>
-                              <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">){</span>
-    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;newEmp&quot;</span><span class="o">,</span><span class="n">employeeDao</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">id</span><span class="o">));</span>
-    <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;department&quot;</span><span class="o">,</span><span class="n">departmentDao</span><span class="o">.</span><span class="na">getDepartments</span><span class="o">());</span>
-    <span class="k">return</span> <span class="s">&quot;add&quot;</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></div>
-<p>这里相比较 ADD，唯一的区别是，传入的不是空 Employee，而是从数据库获取的一个 Employee。</p>
-
-<pre><code>&lt;c:if test="${newEmp.id == null}"&gt;
-    LastName: &lt;form:input path="lastName" /&gt;
-&lt;/c:if&gt;
-&lt;c:if test="${newEmp.id != null}"&gt;
-    &lt;form:hidden path="id" /&gt;
-    &lt;input type="hidden" name="_method" value="PUT" /&gt;
-&lt;/c:if&gt;</code></pre>
-<p>注意，这里的核心代码是，如果有 id（更新操作），那么新建一个隐藏的 input，用于指定此 POST 为 PUT。因为更新不能更新 id，所以使用 hidden 标签隐藏 ID 字段不进行更新。这里用来指定方法的标签是 input，而不是 form:input, 原因是 form name 必须在pojo 中，因此不能用 form:input。</p>
-<p>注意，如果不希望更新某些字段，一定能够要使用 form:hidden，否则将会设置为 null。</p>
-<h3 id="Edit-PUT">Edit PUT<a class="anchor-link" href="#Edit-PUT">&#182;</a></h3><p>表单默认调用同 Create POST - URL 的 POST 方法，不过这里因为有了隐含的 <code>_method</code> 指定为 PUT，因此经过过滤器过滤后变成了 PUT 方法，顺利匹配此处 Mapping 方法。</p>
-<p>在方法中，将 FORM 提交的表单构造的 POJO 保存到 DAO，之后重定向到显示所有人的界面。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;emp/{id}&quot;</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">PUT</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">editEmployeePUT</span><span class="o">(</span><span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">&quot;newEmp&quot;</span><span class="o">)</span> <span class="n">Employee</span> <span class="n">employee</span><span class="o">){</span>
-    <span class="n">employeeDao</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">employee</span><span class="o">);</span>
-    <span class="k">return</span> <span class="s">&quot;redirect:../emps&quot;</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></div>
-<p>注意，这里的 Edit，我们不仅仅需要从 Form 表单中获取数据，而是需要从 Model 获取对象，然后由 Form 更新对象字段，然后返回，因此需要使用 @ModelAttribute：</p>
-<div class="highlight"><pre><span></span><span class="nd">@ModelAttribute</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">getEmp</span><span class="o">(</span><span class="nd">@RequestParam</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;id&quot;</span><span class="o">,</span> <span class="n">required</span> <span class="o">=</span> <span class="kc">false</span><span class="o">)</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">,</span>
-                     <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">id</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;newEmp&quot;</span><span class="o">,</span><span class="n">employeeDao</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">id</span><span class="o">));</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
-<p>这里尤其需要注意，因为 ADD 操作也会 POST 一个 Emp，因此也会自动寻找此 @ModelAttribute，然后试图更新此对象，而不是新建一个对象，最简单的方式是根据 id 区分，只对 Edit 的 POST 进行相应，而 Add，则自动创建一个新 POJO 即可。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Spring-MVC-&#25968;&#25454;&#32465;&#23450;">Spring MVC &#25968;&#25454;&#32465;&#23450;<a class="anchor-link" href="#Spring-MVC-&#25968;&#25454;&#32465;&#23450;">&#182;</a></h1><p>数据绑定指的是从 FROM 表单到 POJO 对象的转换过程，在上面我们简要的介绍过基于 ModelAttribute 的服务器获取 - 表单更新 - 数据保存流程。在  CRUD 的示例中也进行了实际情况的展示。但是问题是，如果我们有级联属性，或者是想要对某个属性进行自定义的解析，然后进行保存，这时候就要处理数据类型转换的问题。此外，数据应该被格式化后进行保存，再者，数据需要进行校验，如果不满足需要，则需要回显数据，这些要求需要深入了解 MVC 的数据绑定机制。</p>
-<p>我们说，数据绑定的核心问题有三，其一是数据类型转换，其二是数据格式化，其三是数据校验。</p>
-<p>其中， ServletRequest 对象被传递给 WebDataBinderFactory 实例，之后创建了 DataBinder 实例对象。</p>
-<p>DataBinder 对象得到需要处理方法的入参对象，准备对其进行绑定。</p>
-<p>DataBinder 对象调用 ConversionService bean 进行数据类型的转换和数据格式化的共组，将 Servlet 中的请求信息填充到入参对象上。</p>
-<p>调用 Validator 组件对于已经绑定了请求消息的入参对象进行数据合法性校验，并且最终生成数据绑定结果的 BindingData 对象，以及 BindingResult 对象。</p>
-<p>总而言之，这些步骤-绑定、校验均以 DataBinder 作为主体， DB 接受 POJO 和 Request 作为材料，采用 ConversionService 和 Validator 作为工具进行转换，将 request 中的 form 表单转换并赋值给 POJO 的属性。</p>
-<h2 id="ConversionService-&#36716;&#25442;&#26381;&#21153;">ConversionService &#36716;&#25442;&#26381;&#21153;<a class="anchor-link" href="#ConversionService-&#36716;&#25442;&#26381;&#21153;">&#182;</a></h2><p>ConversionService 用于数据类型转换，一般而言，在调用注解驱动标签的时候，会自动添加默认的数据转换服务，请求映射服务，错误处理服务，基于注解的数据验证服务：</p>
-<p>当启用了注解驱动的时候，会自动添加 RequestMappingHandlerAdapter，来解析注解处的 Mapping 请求。如果没有使用注解驱动，则仅仅有 SimpleControllerHandlerAdapter。注解驱动允许我们通过注解完成 URL 的映射和请求相应。此外， RequestMappingHandlerMapping、ExceptionHandlerExceptionResolver 也会在注解驱动时被自动添加到 IOC 中，以支持对于错误的处理。</p>
-<p>此外，注解驱动将会为表单数据转换、格式化、验证提供支持：使用 conversion-service 属性以自定格式转换（需要提供一个包含了 set converters 的 CSFactoryBean）。注解驱动也为 @NumberFormat @DateTimeFormat 注解提供了格式化支持，为 @Valid 提供了验证支持</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;mvc:annotation-driven</span> <span class="na">conversion-service=</span><span class="s">&quot;formattingBean&quot;</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;factoryBean&quot;</span>
-      <span class="na">class=</span><span class="s">&quot;org.springframework.context.support.ConversionServiceFactoryBean&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;converters&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;set&gt;&lt;ref</span> <span class="na">bean=</span><span class="s">&quot;converter&quot;</span><span class="nt">/&gt;&lt;/set&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/bean&gt;</span>
-<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;formattingBean&quot;</span>
-      <span class="na">class=</span><span class="s">&quot;org.springframework.format.support.FormattingConversionServiceFactoryBean&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;converters&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;set&gt;&lt;ref</span> <span class="na">bean=</span><span class="s">&quot;converter&quot;</span> <span class="nt">/&gt;&lt;/set&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/bean&gt;</span>
-</pre></div>
-<p>注意，最基本的自定义转换服务需要启用 <code>ConversionServiceFactoryBean</code>, 将其设置在 annotation-driven 的 conversion-service 标签中。对于需要除了数据类型转换，还需要启用基于注解的格式化的需求，则需要启用 <code>FormattingCnversionServiceFactoryBean</code> 此转换服务注册器。</p>
-<p>这些注册器需要提供 converters 属性的注入，将我们自己实现的转换器作为 set 传入即可。</p>
-<h2 id="&#20351;&#29992;-Converter-&#25509;&#21475;&#23454;&#29616;&#33258;&#23450;&#31867;&#22411;&#36716;&#25442;">&#20351;&#29992; Converter &#25509;&#21475;&#23454;&#29616;&#33258;&#23450;&#31867;&#22411;&#36716;&#25442;<a class="anchor-link" href="#&#20351;&#29992;-Converter-&#25509;&#21475;&#23454;&#29616;&#33258;&#23450;&#31867;&#22411;&#36716;&#25442;">&#182;</a></h2><p>在配置中，我们已经将下面这个自定义转换器添加到了配置文件中，转换器代码如下：</p>
-<div class="highlight"><pre><span></span><span class="nd">@Component</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Converter</span> <span class="kd">implements</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">core</span><span class="o">.</span><span class="na">convert</span><span class="o">.</span><span class="na">converter</span><span class="o">.</span><span class="na">Converter</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Employee</span><span class="o">&gt;</span> <span class="o">{</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">Employee</span> <span class="nf">convert</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">String</span><span class="o">[]</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">&quot;:::&quot;</span><span class="o">);</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">vals</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">vals</span><span class="o">.</span><span class="na">length</span> <span class="o">==</span> <span class="mi">4</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">String</span> <span class="n">lastName</span> <span class="o">=</span> <span class="n">vals</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
-                <span class="n">String</span> <span class="n">email</span> <span class="o">=</span> <span class="n">vals</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
-                <span class="n">Integer</span> <span class="n">gender</span> <span class="o">=</span> <span class="n">Integer</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">vals</span><span class="o">[</span><span class="mi">2</span><span class="o">]);</span>
-                <span class="n">Department</span> <span class="n">department</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Department</span><span class="o">();</span>
-                <span class="n">department</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">vals</span><span class="o">[</span><span class="mi">3</span><span class="o">]));</span>
-                <span class="n">Employee</span> <span class="n">employee</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="n">lastName</span><span class="o">,</span><span class="n">email</span><span class="o">,</span><span class="n">gender</span><span class="o">,</span><span class="n">department</span><span class="o">);</span>
-                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Convert done!&quot;</span> <span class="o">+</span> <span class="n">employee</span><span class="o">);</span>
-                <span class="k">return</span> <span class="n">employee</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">}</span> <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
-<p>我们自己实现的 Converter 需要实现 <code>Converter&lt;A,B&gt;</code> 接口，其含义为当出现 A 类型时，将其转换为 B 类型，实现 convert 方法来进行转换。</p>
-<p>下面是转换器的使用方法：</p>
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;/crud/testConverter&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;employee&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="p">/&gt;</span>
-<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;testConverter&quot;</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">testConverter</span><span class="o">(</span><span class="nd">@RequestParam</span><span class="o">(</span><span class="s">&quot;employee&quot;</span><span class="o">)</span> <span class="n">Employee</span> <span class="n">employee</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">employee</span><span class="o">);</span> <span class="n">employeeDao</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">employee</span><span class="o">);</span>
-    <span class="k">return</span> <span class="s">&quot;redirect:emps&quot;</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></div>
-<p>比如，输入： <code>Marvin:::cm@muninn.cn:::20:::10</code>，而在 Mapping 中需要一个 Employee 入参，则 SpringMVC 将会自动通过 Service 找到我们的转换器，调用 convert 进行转换。注意，自定义转换必须要求 SpringMVC 找到这两个类型，因此在入参处定义好 @RequestParam 的入参。注意，这里不是 @ModelAttribute 的入参，因为我们只想将 form 中的 employee 中获取数据，而不需要整个表单，表单提交时会将所有字段作为 Param 传入。</p>
-<h2 id="&#20351;&#29992;-ConverterFactory-&#36827;&#34892;&#22810;&#20010;-Converter-&#25972;&#21512;">&#20351;&#29992; ConverterFactory &#36827;&#34892;&#22810;&#20010; Converter &#25972;&#21512;<a class="anchor-link" href="#&#20351;&#29992;-ConverterFactory-&#36827;&#34892;&#22810;&#20010;-Converter-&#25972;&#21512;">&#182;</a></h2><p>除了使用 Converter 接口定义转换，还可以使用 ConverterFactory 将多个同质的 Converter 封装在一起，进行转换，比如 Number 以及 Number 的各个子类（Integer、Long、Double）。</p>
-<h2 id="&#20351;&#29992;-InitBinder-&#27880;&#35299;&#36827;&#34892;&#25968;&#25454;&#32465;&#23450;&#35774;&#32622;">&#20351;&#29992; InitBinder &#27880;&#35299;&#36827;&#34892;&#25968;&#25454;&#32465;&#23450;&#35774;&#32622;<a class="anchor-link" href="#&#20351;&#29992;-InitBinder-&#27880;&#35299;&#36827;&#34892;&#25968;&#25454;&#32465;&#23450;&#35774;&#32622;">&#182;</a></h2><p>除了使用Converter，还可以对方法添加 @InitBinder 注解，此注解可以对 WebDataBinder 进行初始化，在由 FORM 到 POJO 绑定过程中起到核心作用。此注解一般使用 WebDataBinder 作为入参，不能有返回值。</p>
-<p>在这里我们可以手动完成数据绑定，比如手工映射多个 radioBox 的 set 集合，或者使用 Editer 对象进行指定类型的数据转换<code>binder.registerCustomEditor(Class, Editor)</code>。这里等效于 Converter。</p>
-<p>此外，还可以设置某个 POJO 属性不允许更改的字段 <code>setDisallowedFields</code>。</p>
-<div class="highlight"><pre><span></span><span class="nd">@InitBinder</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">binder</span><span class="o">(</span><span class="n">WebDataBinder</span> <span class="n">binder</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">SimpleDateFormat</span> <span class="n">dateFormat</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleDateFormat</span><span class="o">(</span><span class="s">&quot;yyyy-MM-dd&quot;</span><span class="o">);</span>
-    <span class="n">dateFormat</span><span class="o">.</span><span class="na">setLenient</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
-    <span class="n">binder</span><span class="o">.</span><span class="na">registerCustomEditor</span><span class="o">(</span><span class="n">Date</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="k">new</span> <span class="n">CustomDateEditor</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">,</span> <span class="kc">false</span><span class="o">));*/</span>
-    <span class="n">binder</span><span class="o">.</span><span class="na">setDisallowedFields</span><span class="o">(</span><span class="s">&quot;lastName&quot;</span><span class="o">);</span>
-<span class="o">}</span>
-</pre></div>
-<h2 id="&#20351;&#29992;-FormattingCSFB-&#36827;&#34892;&#25968;&#25454;&#26684;&#24335;&#21270;">&#20351;&#29992; FormattingCSFB &#36827;&#34892;&#25968;&#25454;&#26684;&#24335;&#21270;<a class="anchor-link" href="#&#20351;&#29992;-FormattingCSFB-&#36827;&#34892;&#25968;&#25454;&#26684;&#24335;&#21270;">&#182;</a></h2><p>为了启用数据格式化支持，需要修改数据转换服务为 <code>FormattingConversionServiceFactoryBean</code>。如果在注解驱动的标签内什么也不写，默认是 <code>DefaultFormattingConversionService</code>。前者提供了对于数字和日期类型的支持：@NumberFormat, @DataTimeFormat</p>
-<p>对于日期而言，可以对  Date、Calendar、Long 类型的时间标注，pattern 属性定义数据模式，iso 属性定义 iso 模式，style 属性定义字符串类型。</p>
-<p>对于数字而言，pattern 指定数据模式，style 指定数字、货币还是百分数。</p>
-<div class="highlight"><pre><span></span><span class="nd">@DateTimeFormat</span><span class="o">(</span><span class="n">pattern</span> <span class="o">=</span> <span class="s">&quot;yyyy-MM-dd&quot;</span><span class="o">)</span>
-<span class="kd">private</span> <span class="n">Date</span> <span class="n">birth</span><span class="o">;</span>
-<span class="nd">@NumberFormat</span><span class="o">(</span><span class="n">pattern</span><span class="o">=</span><span class="s">&quot;#,###,###.#&quot;</span><span class="o">)</span>
-<span class="kd">private</span> <span class="n">Float</span> <span class="n">salary</span><span class="o">;</span>
-</pre></div>
-<h2 id="&#20351;&#29992;-BindingResult-&#33719;&#21462;&#38169;&#35823;&#28040;&#24687;">&#20351;&#29992; BindingResult &#33719;&#21462;&#38169;&#35823;&#28040;&#24687;<a class="anchor-link" href="#&#20351;&#29992;-BindingResult-&#33719;&#21462;&#38169;&#35823;&#28040;&#24687;">&#182;</a></h2><p>如下，可以在获取的属性之后，紧挨着添加 BindingResult 类型的入参，其包含了 Employee 绑定的结果。其API 为：</p>
-<p>Result.getErrirCount 可以获取错误条数。getFiledErrors 可以获取 FiledError 域映射错误列表，对其进行遍历，可以获得 域（getField）和错误信息（getDefaultMessage）。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;emp/{id}&quot;</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">PUT</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">editEmployeePUT</span><span class="o">(</span><span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">&quot;newEmp&quot;</span><span class="o">)</span> <span class="n">Employee</span> <span class="n">employee</span><span class="o">,</span>
-                                  <span class="n">BindingResult</span> <span class="n">result</span><span class="o">){</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="na">getErrorCount</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;出现错误!&quot;</span><span class="o">);</span>
-            <span class="k">for</span> <span class="o">(</span><span class="n">FieldError</span> <span class="n">error</span> <span class="o">:</span> <span class="n">result</span><span class="o">.</span><span class="na">getFieldErrors</span><span class="o">())</span> <span class="o">{</span>
-                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">error</span><span class="o">.</span><span class="na">getField</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot;:&quot;</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="na">getDefaultMessage</span><span class="o">());</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">...</span>
-<span class="o">}</span>
-</pre></div>
-<p>此外，可以使用 Errors 对象而不使用 BindingResult 对象获取错误。当绑定出错的时候，可以回显进行显示，回显需要指定 <code>&lt;form:error path='bean_attr' /&gt;</code> 来获取指定的域的错误信息，指定为 * 显示所有错误。如果出现错误的话，不提交，然后重新模拟 add 表单，不过现在已经自动填好了数据。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;emp&quot;</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">addEmployeePOST</span><span class="o">(</span><span class="nd">@Valid</span> <span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">&quot;newEmp&quot;</span><span class="o">)</span> <span class="n">Employee</span> <span class="n">employee</span><span class="o">,</span>
-                              <span class="n">BindingResult</span> <span class="n">result</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">)</span>  <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="na">getErrorCount</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;出现错误!&quot;</span><span class="o">);</span>
-        <span class="k">for</span> <span class="o">(</span><span class="n">FieldError</span> <span class="n">error</span> <span class="o">:</span> <span class="n">result</span><span class="o">.</span><span class="na">getFieldErrors</span><span class="o">())</span> <span class="o">{</span>
-            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">error</span><span class="o">.</span><span class="na">getField</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot;:&quot;</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="na">getDefaultMessage</span><span class="o">());</span>
-        <span class="o">}</span>
-        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;department&quot;</span><span class="o">,</span><span class="n">departmentDao</span><span class="o">.</span><span class="na">getDepartments</span><span class="o">());</span>
-        <span class="k">return</span> <span class="s">&quot;add&quot;</span><span class="o">;</span>
-    <span class="o">}</span>
-    <span class="n">employeeDao</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">employee</span><span class="o">);</span>
-    <span class="k">return</span> <span class="s">&quot;redirect:emps&quot;</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></div>
-<h2 id="&#20351;&#29992;-JSR303-&#36827;&#34892;&#25968;&#25454;&#26657;&#39564;">&#20351;&#29992; JSR303 &#36827;&#34892;&#25968;&#25454;&#26657;&#39564;<a class="anchor-link" href="#&#20351;&#29992;-JSR303-&#36827;&#34892;&#25968;&#25454;&#26657;&#39564;">&#182;</a></h2><p>JSR303 提供了验证标准，Hibernate validator 提供了验证框架，需要启用注解驱动的标签，然后自动会配置验证框架的 jar 包，在 bean 属性添加对应验证注解，在需要验证的入参处提供 @Valied 注解，即可完成验证，当出现错误的时候，默认放置在 BindingResult 中。</p>
-<div class="highlight"><pre><span></span><span class="nd">@NotEmpty</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">lastName</span><span class="o">;</span>
-<span class="nd">@Email</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
-<span class="nd">@DateTimeFormat</span><span class="o">(</span><span class="n">pattern</span> <span class="o">=</span> <span class="s">&quot;yyyy-MM-dd&quot;</span><span class="o">)</span> <span class="nd">@Past</span> <span class="kd">private</span> <span class="n">Date</span> <span class="n">birth</span><span class="o">;</span>
-<span class="nd">@NumberFormat</span><span class="o">(</span><span class="n">pattern</span><span class="o">=</span><span class="s">&quot;#,###,###.#&quot;</span><span class="o">)</span> <span class="kd">private</span> <span class="n">Float</span> <span class="n">salary</span><span class="o">;</span>
-</pre></div>
-<p>验证的类属于 javax.validation.constraints。</p>
-<p>此外还有 Null，必须为 null；NotNull 不为 null；AssertTrue/False 必须为 true/false；Min/Max 最大最小值；DecimalMin/Max 必须为数字，最小最大为多少；Size(a,b) 范围；Digits(a,b) 数字，在范围内；Past 过去日期；Future 将来日期；Pattern 满足正则表达式。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;emp&quot;</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">addEmployeePOST</span><span class="o">(</span><span class="nd">@Valid</span> <span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">&quot;newEmp&quot;</span><span class="o">)</span> <span class="n">Employee</span> <span class="n">employee</span><span class="o">,</span>
-                                  <span class="n">BindingResult</span> <span class="n">result</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">)</span>  <span class="o">{</span> <span class="o">...</span>  
-<span class="o">}</span>
-</pre></div>
-<h2 id="&#25552;&#31034;&#28040;&#24687;&#30340;&#22269;&#38469;&#21270;">&#25552;&#31034;&#28040;&#24687;&#30340;&#22269;&#38469;&#21270;<a class="anchor-link" href="#&#25552;&#31034;&#28040;&#24687;&#30340;&#22269;&#38469;&#21270;">&#182;</a></h2><p>同样的，需要先配置 messageSource，指定 i18n 文件名，作为属性传递进去。之后，定义各种注解情况下的错误翻译信息：</p>
-
-<pre><code>NotEmpty.employee.lastName=xxx
-Email.employee.email=xxx</code></pre>
-<p>格式为 <code>注解.bean的引用名.属性</code>。这样的话，制定名称的 bean 发生指定注解的错误后，会使用此处作为错误消息显示。</p>
-<p>除了注解，内部错误，需要参数，类型不匹配都可以进行消息国际化：</p>
-
-<pre><code>methodInvocation.xx.xxx 表明 SpringMVC 在调用处理方法时发生了错误
-required.xx.xxx 需要某参数
-typeMismatch.xx.xxx 类型不匹配</code></pre>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="HttpMessageConverter-&#36755;&#20837;&#36755;&#20986;&#36716;&#25442;">HttpMessageConverter &#36755;&#20837;&#36755;&#20986;&#36716;&#25442;<a class="anchor-link" href="#HttpMessageConverter-&#36755;&#20837;&#36755;&#20986;&#36716;&#25442;">&#182;</a></h1><h2 id="POJO-&#38598;&#21512;&#30452;&#25509;&#36755;&#20986;-JSON-&#25968;&#25454;">POJO &#38598;&#21512;&#30452;&#25509;&#36755;&#20986; JSON &#25968;&#25454;<a class="anchor-link" href="#POJO-&#38598;&#21512;&#30452;&#25509;&#36755;&#20986;-JSON-&#25968;&#25454;">&#182;</a></h2><p>毫无意外的，我们需要 Jackson 的 jar 包。此外，只需要为 Mapping 方法添加 @RequestBody 注解即可。注意，下面的方法返回的是一个 Collection 泛型的集合对象，添加注解后，自动被解析成了 Json 文件。</p>
-<div class="highlight"><pre><span></span><span class="nd">@ResponseBody</span> <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;testJson&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;</span> <span class="nf">testJson</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">employeeDao</span><span class="o">.</span><span class="na">getAll</span><span class="o">();</span>
-<span class="o">}</span>
-</pre></div>
-<p>在这个过程中，进行转换的核心类是 <code>HttpMessageConverter&lt;T&gt;</code>。</p>
-<p>请求报文首先被转换为 HttpInputMessage，然后被传入 HttpMessageConverter，之后变为 Java 对象交给 MVC 进行处理。反过来，MVC 交给 HttpMessageConverter Java 对象，然后此对象被其转换成 HttpOutputMessage，然后作为响应报文。HttpInputMessage 只有一个方法，获取请求的 InputStream，然后转给 HttpMessageConverter。反之也一样（HttpOutputMessage）。</p>
-<p>Spring 内置了一些 messageConverter，jackson 包加入后会自动启用此 converter。</p>
-<p>具体使用如下：@RequestBody（传入值处理） @ResponseBody（返回值处理），具体使用哪种 converter，取决于泛型/注解的类型。</p>
-<h2 id="&#22522;&#20110;-HMC-&#30340;&#19978;&#20256;&#21644;&#19979;&#36733;">&#22522;&#20110; HMC &#30340;&#19978;&#20256;&#21644;&#19979;&#36733;<a class="anchor-link" href="#&#22522;&#20110;-HMC-&#30340;&#19978;&#20256;&#21644;&#19979;&#36733;">&#182;</a></h2><p>下面这个方法，我们在入参使用了 @RequestBody 注解，此注解将会将此方法调用的所有信息传入 String 类型的 body 变量中，也就是我们在这里上传的文件。注意到，此处的 @RequestBody 进行了输入二进制流和 String 之间的转换。</p>
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;testUpload&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;multipart/form-data&quot;</span><span class="p">&gt;</span>
-    Files: <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;file&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;file&quot;</span> <span class="p">/&gt;</span>
-    Desc: <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;desc&quot;</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="p">/&gt;</span>
-<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="nd">@ResponseBody</span> <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;testUpload&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">testUpload</span><span class="o">(</span><span class="nd">@RequestBody</span> <span class="n">String</span> <span class="n">body</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">body</span><span class="o">);</span>
-    <span class="k">return</span> <span class="s">&quot;helloworld&quot;</span> <span class="o">+</span> <span class="k">new</span> <span class="n">Date</span><span class="o">();</span>
-<span class="o">}</span>
-</pre></div>
-<p>因此，通过打印，可以看到这个上传的文件信息。</p>
-<p>此外，还可以使用 @ResponseBody 注解处理回传的信息。默认情况下，返回字符串会去寻找 ViewResolver 和 View，完成渲染，这里返回的字符串不会通过 Mapping 去寻找 jsp，也不会去寻找静态资源，因为添加了 @ResponseBody 注解，因此直接按照 String 找到对应的 StringConverter 返回字符串。</p>
-<p>注意，这里也不是直接向 out.write 直接打印，而是经过了一些包装的。这就是 @ResponseBody 对于输出进行的转换。</p>
-<p>转换选用哪个 Converter，取决于参数类型（对于注解而言），或者泛型（对于 <code>HttpEntity&lt;T&gt; 和 ResponseEntity&lt;T&gt;</code>）</p>
-<p>下面的例子介绍了使用基于泛型的转换方式，这种方式需要提供数据转换的泛型信息。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;testDownload&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="kt">byte</span><span class="o">[]&gt;</span> <span class="nf">testDownload</span><span class="o">(</span><span class="n">HttpSession</span> <span class="n">session</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="kt">byte</span><span class="o">[]</span> <span class="n">body</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="n">ServletContext</span> <span class="n">context</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
-    <span class="n">InputStream</span> <span class="n">in</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="s">&quot;/files/mongo.txt&quot;</span><span class="o">);</span>
-    <span class="n">body</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="n">in</span><span class="o">.</span><span class="na">available</span><span class="o">()];</span>
-    <span class="n">in</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">body</span><span class="o">);</span>
-
-    <span class="n">HttpHeaders</span> <span class="n">headers</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpHeaders</span><span class="o">();</span>
-    <span class="n">headers</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;Content-Disposition&quot;</span><span class="o">,</span><span class="s">&quot;attachment;filename=mongo.txt&quot;</span><span class="o">);</span>
-
-    <span class="n">HttpStatus</span> <span class="n">statusCode</span> <span class="o">=</span> <span class="n">HttpStatus</span><span class="o">.</span><span class="na">OK</span><span class="o">;</span>
-
-    <span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="kt">byte</span><span class="o">[]&gt;</span> <span class="n">entity</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ResponseEntity</span><span class="o">&lt;&gt;(</span><span class="n">body</span><span class="o">,</span> <span class="n">headers</span><span class="o">,</span> <span class="n">statusCode</span><span class="o">);</span>
-    <span class="k">return</span> <span class="n">entity</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></div>
-<p>我们在这里由 session 得到了 ServletContext，然后由此 Context 得到了磁盘文件，然后作为输入流，放入 ResponseEntity 中，添加 Header 和 HttoStatus，进行返回，完成了简易的动态下载功能。</p>
-<h2 id="&#22522;&#20110;-MultipartResolver-&#30340;&#25991;&#20214;&#19978;&#20256;">&#22522;&#20110; MultipartResolver &#30340;&#25991;&#20214;&#19978;&#20256;<a class="anchor-link" href="#&#22522;&#20110;-MultipartResolver-&#30340;&#25991;&#20214;&#19978;&#20256;">&#182;</a></h2><p>SpringMVC 通过 MultipartResolver 提供对于上传文件的支持，相比较我们使用 HMC 进行简单的上传下载，MR 更加强大。默认的 MR 是基于 Jakarta Commons FileUpload 实现的 CommonsMultipartResolver，需要手动配置此 bean。</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.web.multipart.commons.CommonsMultipartResolver&quot;</span> 
-      <span class="na">id=</span><span class="s">&quot;multipartResolver&quot;</span> <span class="na">p:defaultEncoding=</span><span class="s">&quot;UTF-8&quot;</span> <span class="na">p:maxUploadSize=</span><span class="s">&quot;5242880&quot;</span> <span class="nt">/&gt;</span>
-</pre></div>
-<p>注意，此处的 id 必须为 multipartResolver，否则出错。</p>
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;testUpload&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&quot;multipart/form-data&quot;</span><span class="p">&gt;</span>
-    文件 : <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;file&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;file&quot;</span><span class="p">/&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
-    描述 : <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;desc&quot;</span><span class="p">/&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;提交 &quot;</span><span class="p">/&gt;</span>
-<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;testMUpload&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">testMUpload</span><span class="o">(</span><span class="nd">@RequestParam</span><span class="o">(</span><span class="s">&quot;file&quot;</span><span class="o">)</span> <span class="n">MultipartFile</span> <span class="n">file</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="n">InputStream</span> <span class="n">inputStream</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="na">getInputStream</span><span class="o">();</span>
-    <span class="k">return</span> <span class="s">&quot;success&quot;</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Spring-MVC-&#22269;&#38469;&#21270;">Spring MVC &#22269;&#38469;&#21270;<a class="anchor-link" href="#Spring-MVC-&#22269;&#38469;&#21270;">&#182;</a></h1><p>同样的，声明 i18n.properties 文件，提供 messageSourse 连接此文件，使用 fmt:message 来显示国际化标签。</p>
-<p>我们可以在 Java 类中获取国际化信息，需要先配置 ResourceBundleMessageSource，这就是我们配置的 mS bean，直接注入就好。在 Handler 中直接传入 Locale 参数，即可获取地区信息，使用 ms.getMessage 获取指定字段在指定 locale 的叫法。</p>
-<div class="highlight"><pre><span></span><span class="kd">private</span> <span class="kd">final</span> <span class="n">ResourceBundleMessageSource</span> <span class="n">messageSource</span><span class="o">;</span>
-
-    <span class="nd">@Autowired</span>
-    <span class="kd">public</span> <span class="nf">MoreTest</span><span class="o">(</span><span class="n">ResourceBundleMessageSource</span> <span class="n">messageSource</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">messageSource</span> <span class="o">=</span> <span class="n">messageSource</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;i18n&quot;</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">sayHello</span><span class="o">(</span><span class="n">Locale</span> <span class="n">locale</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">String</span> <span class="n">val</span> <span class="o">=</span> <span class="n">messageSource</span><span class="o">.</span><span class="na">getMessage</span><span class="o">(</span><span class="s">&quot;i18n.username&quot;</span><span class="o">,</span><span class="kc">null</span><span class="o">,</span><span class="n">locale</span><span class="o">);</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">val</span><span class="o">);</span>
-        <span class="k">return</span> <span class="s">&quot;i18n&quot;</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
-<p>此外，我们可以通过 <code>i18n2?locale=zh_CN</code> 这样的超链接切换地区。其实现原理为：</p>
-<p>默认情况下，是通过 Accept-Language 来判断 Local 类型的，当接受一个 Http 请求以后，SMVC 自动查找 LocalResolver，然后用它获得本地化的类型信息。我们可以通过装配一个动态更改本地化类型的拦截器拦截本地化调用，称之为 LocaleChangeInterceptor，此拦截器将会拦击 Locale 对象的创建，然后使用替代的 Locale 对象，之后通过它获取 LocalResolver 对象（SessionLocaleResolver），SLR 之后将自动 设置 Locale 为 Session 的属性，然后应用程序就会使用此 Locale 对象。</p>
-<p>为了进行拦截和使用新的 SLR，我们需要进行配置:</p>
-<div class="highlight"><pre><span></span><span class="c">&lt;!--配置基于Session的位置解析器和位置切换截获器--&gt;</span>
-<span class="nt">&lt;mvc:interceptors&gt;</span>
-    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.web.servlet.i18n.LocaleChangeInterceptor&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/mvc:interceptors&gt;</span>
-<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.web.servlet.i18n.SessionLocaleResolver&quot;</span> <span class="na">id=</span><span class="s">&quot;localeResolver&quot;</span><span class="nt">/&gt;</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Spring-MVC-&#25318;&#25130;&#22120;">Spring MVC &#25318;&#25130;&#22120;<a class="anchor-link" href="#Spring-MVC-&#25318;&#25130;&#22120;">&#182;</a></h1><h2 id="HandlerInterceptor-API">HandlerInterceptor API<a class="anchor-link" href="#HandlerInterceptor-API">&#182;</a></h2><p>拦截器需要手动在 xml 文件中添加 <code>&lt;mvc:interceptors&gt; &lt;bean class="com.mazhangjing.mvc.more.FirstInterceptor" /&gt; &lt;/mvc:interceptors&gt;</code>才可使用。拦截器需要实现三个方法：preHandle，postHandle，afterCompletion。</p>
-<p>preHandle 在目标方法请求前执行，如果返回 false，则不会调用后续其余的拦截器和目标方法（业务处理器）。如果是 true，则正常执行在调用目标方法之前调用，可以用来做权限和日志、事务等。</p>
-<p>postHandle 在调用目标方法（HandlerAdapter.handle）之后，但在渲染视图之前调用此方法可以用来对请求域中的属性或视图做出修改。</p>
-<p>afterCompletion 在完成视图渲染( DispatcherServlet.render)之后调用。进行一些清理工作。</p>
-<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FirstInterceptor</span> <span class="kd">implements</span> <span class="n">HandlerInterceptor</span> <span class="o">{</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">preHandle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">httpServletRequest</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">httpServletResponse</span><span class="o">,</span> <span class="n">Object</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;preHandle&quot;</span><span class="o">);</span>
-        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">postHandle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">httpServletRequest</span><span class="o">,</span> 
-                           <span class="n">HttpServletResponse</span> <span class="n">httpServletResponse</span><span class="o">,</span> <span class="n">Object</span> <span class="n">o</span><span class="o">,</span> <span class="n">ModelAndView</span> <span class="n">modelAndView</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;postHandle&quot;</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">afterCompletion</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">httpServletRequest</span><span class="o">,</span> 
-                                <span class="n">HttpServletResponse</span> <span class="n">httpServletResponse</span><span class="o">,</span> <span class="n">Object</span> <span class="n">o</span><span class="o">,</span> <span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;afterHandle&quot;</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
-<h2 id="&#37197;&#32622;-HandlerInterceptor">&#37197;&#32622; HandlerInterceptor<a class="anchor-link" href="#&#37197;&#32622;-HandlerInterceptor">&#182;</a></h2><p>除了配置能共应用于所有 URL 请求的拦截器，还可以使用 interceptor 标签配置只作用/不作用于某路径的拦截器：</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;mvc:interceptors&gt;</span>
-    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;com.mazhangjing.mvc.more.FirstInterceptor&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;mvc:interceptor&gt;</span>
-        <span class="nt">&lt;mvc:mapping</span> <span class="na">path=</span><span class="s">&quot;/more/sec&quot;</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;com.mazhangjing.mvc.more.SecondInterceptor&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/mvc:interceptor&gt;</span>
-<span class="nt">&lt;/mvc:interceptors&gt;</span>
-</pre></div>
-<p>多个 Interceptor 执行的顺序是，在三个阶段（HandlerAdaptor 之前、HandlerAdaptor - DispatcherServlet、DispatcherServlet 之后），分别是1-2,2-1,2-1执行。</p>
-<p>如图：</p>
-<p><img src="interceptor.png" alt=""></p>
-<p>注意，如果第二个拦截器返回 false，则会跳转到第一个拦截器，执行资源释放擦操作（实线部分）。</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Spring-MVC-&#24322;&#24120;&#22788;&#29702;">Spring MVC &#24322;&#24120;&#22788;&#29702;<a class="anchor-link" href="#Spring-MVC-&#24322;&#24120;&#22788;&#29702;">&#182;</a></h1><p>默认在 mvc 注解驱动的设置中，配置了异常处理类，如果没有显式指定，则 HandlerExceptionResolver 默认配置了 Exeption、ResponseStatus、Defalut 三个 ER。如果没有使用注解驱动，则配置了 AnnotationMethod、ResponseStatus、Defalut ER。</p>
-<h2 id="ExceptionHandlerExceptionResolver">ExceptionHandlerExceptionResolver<a class="anchor-link" href="#ExceptionHandlerExceptionResolver">&#182;</a></h2><p>EHResolver 负责解析 ExceptionHandler 提供的异常处理，然后进行响应：</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;handle&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">handleEx</span><span class="o">(</span><span class="nd">@RequestParam</span><span class="o">(</span><span class="s">&quot;i&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">i</span><span class="o">){</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;result is &quot;</span> <span class="o">+</span> <span class="mi">10</span><span class="o">/</span><span class="n">i</span><span class="o">);</span>
-    <span class="k">return</span> <span class="s">&quot;hello&quot;</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nd">@ExceptionHandler</span><span class="o">({</span><span class="n">ArithmeticException</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
-<span class="kd">public</span> <span class="n">ModelAndView</span> <span class="nf">handleArithmeticException</span><span class="o">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;ex = &quot;</span> <span class="o">+</span> <span class="n">ex</span><span class="o">);</span>
-    <span class="n">ModelAndView</span> <span class="n">error</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ModelAndView</span><span class="o">(</span><span class="s">&quot;error&quot;</span><span class="o">);</span>
-    <span class="n">error</span><span class="o">.</span><span class="na">addObject</span><span class="o">(</span><span class="s">&quot;err_info&quot;</span><span class="o">,</span><span class="n">ex</span><span class="o">);</span>
-    <span class="k">return</span> <span class="n">error</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></div>
-<p>当出现异常，自动去 Handler 找有 @ExceptionHandler 注解的方法，如果匹配有此注解，且异常类型匹配的方法，那么进入执行。此方法可传入 Exception 参数，用以接受错误信息。但是不可传入 Map 参数，向 view 层传递数据。为了展示 错误界面，应该返回 ModelAndView 对象，手动调用 addObject 来放入错误信息，传递给 view 层。</p>
-<p>对于注解，定义越详细的注解，优先级越高，会拿来进行相应，而忽略泛化那个（如果我们还有一个 RuntimeException 的 Handler 的话，RE 会被忽略）。</p>
-<p>此外，如果在 Handler 无法找到 ExceptionHandler 的时候，去寻找类路径下任意有 ControllerAdvice 注解的异常处理专用类，此注解会自动添加 beans 到 IOC。如下：</p>
-<div class="highlight"><pre><span></span><span class="nd">@ControllerAdvice</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HandleException</span> <span class="o">{</span>
-
-    <span class="nd">@ExceptionHandler</span><span class="o">({</span><span class="n">ArithmeticException</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
-    <span class="kd">public</span> <span class="n">ModelAndView</span> <span class="nf">handleArithmeticException</span><span class="o">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;ex = &quot;</span> <span class="o">+</span> <span class="n">ex</span><span class="o">);</span>
-        <span class="n">ModelAndView</span> <span class="n">error</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ModelAndView</span><span class="o">(</span><span class="s">&quot;error&quot;</span><span class="o">);</span>
-        <span class="n">error</span><span class="o">.</span><span class="na">addObject</span><span class="o">(</span><span class="s">&quot;err_info&quot;</span><span class="o">,</span><span class="n">ex</span><span class="o">);</span>
-        <span class="k">return</span> <span class="n">error</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
-<p>可以在此类中统一完成错误的处理，而不用分布在各个 Mapping 的 Controller 中。</p>
-<h2 id="ResponseStatusExceptionResolver">ResponseStatusExceptionResolver<a class="anchor-link" href="#ResponseStatusExceptionResolver">&#182;</a></h2><p>对于我们自己的异常类，可以添加 @ResponseStatus 注解，提供 value 和 reason，当出现异常，将会返回此 HTTP 状态码，并写入此 reason 信息。</p>
-<div class="highlight"><pre><span></span><span class="c1">//Handler.java</span>
-<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;handleS&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">handleStatusEx</span><span class="o">(</span><span class="nd">@RequestParam</span><span class="o">(</span><span class="s">&quot;i&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">i</span><span class="o">){</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">13</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IDoNotCareException</span><span class="o">();</span>
-    <span class="k">return</span> <span class="s">&quot;hello&quot;</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="c1">//IDoNotCareException.java</span>
-<span class="nd">@ResponseStatus</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">HttpStatus</span><span class="o">.</span><span class="na">FORBIDDEN</span><span class="o">,</span> <span class="n">reason</span> <span class="o">=</span> <span class="s">&quot;I don&#39;t care who you are&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">IDoNotCareException</span> <span class="kd">extends</span> <span class="n">RuntimeException</span> <span class="o">{</span>
-    <span class="o">...</span>
-<span class="o">}</span>
-</pre></div>
-<p>注意，使用 value 提供返回状态码，使用 reason 提供原因。执行访问 <code>http://localhost:8080/more/handleS?i=13</code>，异常结果为：HTTP 403。</p>
-<p>此外，还可以对任意的类方法添加此注解，造成的结果就是，原本没有错误的 Handler 也不能正常 Mapping，直接返回此错误代码。用于直接对某些 URL 访问不经处理，直接返回 HTTP 代码的情况。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/go&quot;</span><span class="o">,</span><span class="n">params</span> <span class="o">=</span> <span class="o">{</span><span class="s">&quot;name=trump&quot;</span><span class="o">})</span>
-<span class="nd">@ResponseStatus</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">HttpStatus</span><span class="o">.</span><span class="na">CONFLICT</span><span class="o">,</span> <span class="n">reason</span> <span class="o">=</span> <span class="s">&quot;Conflict!!!&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleSomething</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
-</pre></div>
-<p>访问此特定 URL（传入此 Param），则直接返回错误。</p>
-<h2 id="DefaultHandlerExceptionResolver">DefaultHandlerExceptionResolver<a class="anchor-link" href="#DefaultHandlerExceptionResolver">&#182;</a></h2><p>此异常解释器对于 Spring 特殊的异常进行处理，比如 GET 请求只有 POST 的 Mapping 这种情况。自动进行映射并且返回 Http 的异常。</p>
-<h2 id="SimpleMappingExceptionResolver">SimpleMappingExceptionResolver<a class="anchor-link" href="#SimpleMappingExceptionResolver">&#182;</a></h2><p>在 ExceptionHandlerExceptionResolver 的时候，如果出现异常，我们需要提供一个异常处理器，如果要转到 view 层，那么还需要手动构建 ModelAndView 对象，这样返回的页面是一个纯粹的错误页面。但是，有时候我们发现仅仅出了一点错误，希望正常返回，但是顺便把错误包含在这个页面上。</p>
-<p>对于 SimpleMappingExceptionResolver 而言，我们可以通过 XML 配置文件声明异常和其被注入的页面的 attribute。之后，在原来的 Mapping 中，直接返回正常页面，错误通过其页面的 exception（或者在 XML 定义的其他 exceptionAttribute 值）来获取。</p>
-<div class="highlight"><pre><span></span><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;handleM&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="n">String</span> <span class="nf">doHandlerMapping</span><span class="o">(</span><span class="nd">@RequestParam</span><span class="o">(</span><span class="s">&quot;i&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">i</span><span class="o">){</span>
-    <span class="n">String</span><span class="o">[]</span> <span class="n">vals</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">[</span><span class="mi">10</span><span class="o">];</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;vals = &quot;</span> <span class="o">+</span> <span class="n">vals</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
-    <span class="k">return</span> <span class="s">&quot;result&quot;</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></div>
-<div class="highlight"><pre><span></span><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.web.servlet.handler.SimpleMappingExceptionResolver&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;exceptionAttribute&quot;</span> <span class="na">value=</span><span class="s">&quot;aexception&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;exceptionMappings&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;props&gt;</span>
-            <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">&quot;java.lang.ArrayIndexOutOfBoundsException&quot;</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;/props&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/bean&gt;</span>
-</pre></div>
-
-<pre><code>/result.jsp
-&lt;c:if test="${aexception ne null}"&gt;
-You may have a problem: ${aexception}
-&lt;/c:if&gt;</code></pre>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Spring-MVC-&#36816;&#34892;&#27969;&#31243;">Spring MVC &#36816;&#34892;&#27969;&#31243;<a class="anchor-link" href="#Spring-MVC-&#36816;&#34892;&#27969;&#31243;">&#182;</a></h1><h2 id="&#20174;&#35831;&#27714;&#21040;&#21709;&#24212;">&#20174;&#35831;&#27714;&#21040;&#21709;&#24212;<a class="anchor-link" href="#&#20174;&#35831;&#27714;&#21040;&#21709;&#24212;">&#182;</a></h2><p><img src="spring-mvc.png" alt=""></p>
-<h2 id="Spring-MVC-&#25972;&#21512;-Spring">Spring MVC &#25972;&#21512; Spring<a class="anchor-link" href="#Spring-MVC-&#25972;&#21512;-Spring">&#182;</a></h2><p>比如 Hibernate 框架的 SessionFactory，或者其被包裹的 Data Access Object、包裹 DAO 的 Service，这些都应该放在 Spring 的 IOC 容器中。而不应该被放在 Spring MVC 的配置文件或者导入其配置文件中。</p>
-<p>为了配合工作，必须在 Web 服务器启动的时候加载 Spring IOC，采用监听器完成：</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;context-param&gt;</span>
-    <span class="nt">&lt;param-name&gt;</span>contextConfigLocation<span class="nt">&lt;/param-name&gt;</span>
-    <span class="nt">&lt;param-value&gt;</span>classpath:beans.xml<span class="nt">&lt;/param-value&gt;</span>
-<span class="nt">&lt;/context-param&gt;</span>
-<span class="nt">&lt;listener&gt;</span>
-    <span class="nt">&lt;listener-class&gt;</span>org.springframework.web.context.ContextLoaderListener<span class="nt">&lt;/listener-class&gt;</span>
-<span class="nt">&lt;/listener&gt;</span>
-</pre></div>
-<p>需要将配置加载到 web app 的 contextConfigLocation 参数中，提供 Spring 的配置文件，使用 ContextLoaderListener 来进行 IOC 加载。</p>
-<p>因为 Spring 和 MVC 都会进行包扫描，因此需要设置 MVC 只扫描指定注解：</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">&quot;com.mazhangjing.mvc.more&quot;</span> <span class="na">use-default-filters=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;context:include-filter</span> <span class="na">type=</span><span class="s">&quot;annotation&quot;</span> <span class="na">expression=</span><span class="s">&quot;org.springframework.stereotype.Controller&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;context:include-filter</span> <span class="na">type=</span><span class="s">&quot;annotation&quot;</span> <span class="na">expression=</span><span class="s">&quot;org.springframework.web.bind.annotation.ControllerAdvice&quot;</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/context:component-scan&gt;</span>
-</pre></div>
-<p>注意，需要使用注解类，此外，禁用默认过滤器。在 Spring 配置文件中 exclude 这两个注解。</p>
-<p>尤其需要注意，Spring 不能够使用 Spring MVC IOC 容器的 bean，但是 Spring MVC IOC 却可以引用 Spring 的 bean。其实 MVC 的 IOC 是 Spring IOC 的一个子容器，所有 MVC 的 bean 属于局部作用域，可以以来 Spring 的外部作用域，但是反向则不行。</p>
 
 </div>
 </div>
