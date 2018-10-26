@@ -207,6 +207,7 @@ COURSE_INFO = {
             ("hibernate_without_jpa","0","chapter9_hibernate_basic.html","c9"),
             ("spring_mvc","0","chapter10_spring_mvc.html","c10"),
             ("SSH","0","chapter11_ssh.html","c11"),
+            ("maven","0","chapter12_maven.html","c12"),
         ],
     },
     "database":
